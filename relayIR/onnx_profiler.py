@@ -20,9 +20,9 @@ def create_onnx_model_from_local_path(abs_path='resnet18.onnx'):
     onnx_model = onnx.load(abs_path)
     return onnx_model
 
-def generate_input_image_data(img_url = "https://s3.amazonaws.com/model-server/inputs/kitten.jpg", img_name="imagenet_cat.png", module="data",resize1 = (224, 224), resize2 = 256, crop = 224, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
+def generate_input_image_data_with_torchvision(img_url = "https://s3.amazonaws.com/model-server/inputs/kitten.jpg", img_name="imagenet_cat.png", module="data",resize1 = (224, 224), resize2 = 256, crop = 224, mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]):
     """
-    convert picture to tvm pinput.
+    convert picture to tvm input.
 
     Paramters:
     ----------
