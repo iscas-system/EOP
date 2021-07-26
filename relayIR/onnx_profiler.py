@@ -53,12 +53,13 @@ def generate_input_image_data_with_torchvision(img_url = "https://s3.amazonaws.c
     x = np.expand_dims(img, 0)
     return x
 
-def compile_onnx_model(x, target = "cuda", input_name = "input.1", device = tvm.cuda(0)):
+def compile_onnx_model(onnx_model, x, target = "cuda", input_name = "input.1", device = tvm.cuda(0)):
     """
     compile onnx model
 
     Paramters:
     ----------
+    :param onnx_model: target onnx model
     :param x: input data
     :param target: cuda, llvm, opencv
     :param input_name: onnx input key of x
@@ -78,12 +79,13 @@ def compile_onnx_model(x, target = "cuda", input_name = "input.1", device = tvm.
     print(mod)
     return mod, params,intrp
 
-def run_relay_mod(intrp, params, dtype="float32"):
+def run_relay_mod(x, intrp, params, dtype="float32"):
     """
     run compiled onnx model
 
     Paramters:
     ----------
+    :param x: input data
     :param intrp: model executor in tvm
     :param params: pre-trained parameters in onnx model
     :param dtype: the default is float32

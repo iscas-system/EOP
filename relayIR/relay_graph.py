@@ -21,7 +21,7 @@ class op_graph:
     :attr dictionary: store all op's meta data
     :attr call_nodes: store computation operations
     :attr var_nodes: store variable operations
-    "attr const_nodes: store const operations
+    "attr const_nodes: store constance operations
     """
     def __init__(self):
         self.dictionary = {}
@@ -53,7 +53,7 @@ class op_graph:
 
     def find_if_exist(self, current_op_node):
         for key in self.dictionary.keys():
-            if key == current_op_node.id or self.dictionary[key].op_instance == current_op_node.op_instance:
+            if self.dictionary[key].op_instance == current_op_node.op_instance:
                 return self.dictionary[key]
         return None
 
@@ -87,7 +87,7 @@ class op_graph:
         :param ir_params: a tvm relayIRModule's trained parameters
         :param x: a tvm relayIRModule's input data
         :param fw: weather to profile oepration's forward process. the default is true.
-        :param fw: weather to profile oepration's backward process. the default is false.
+        :param bw: weather to profile oepration's backward process. the default is false.
         """
         global profile_count
         available_op_queue = self.find_starting_ops()
@@ -287,6 +287,20 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, dtype="float32")
     :param ir_params: trained parameter from onnx or pytorch
     :param x: DL input data
     :param dtype: the default is float32
+
+    Examples
+    ----------
+    new_args:[Var(0, ty=TensorType([1, 32, 224, 224], float32)), Var(8, ty=TensorType([9, 32, 3, 3], float32))]
+    temp_body:  free_var %v0: Tensor[(1, 32, 224, 224), float32];
+                free_var %v8: Tensor[(9, 32, 3, 3), float32];
+                nn.conv2d(%v0, %v8, padding=[1, 1, 1, 1], kernel_size=[3, 3])
+                def @main(%v0: Tensor[(1, 32, 224, 224), float32], %v8: Tensor[(9, 32, 3, 3), float32]) {
+                    nn.conv2d(%v0, %v8, padding=[1, 1, 1, 1], kernel_size=[3, 3])
+                }
+
+    Tips:
+    ----------
+    the first param of tvm.relay.Function must be a list of Var.
     """
     global profile_count, profile_point
     if ready_op_node.type == "var" or ready_op_node.type == "const":
