@@ -241,6 +241,7 @@ def get_op_args(ready_op_node, dtype, params, x):
 def find_nd_array_args(ready_op_node, args_index):
     """
     check weathcher an operation node's args is ready
+
     Parameters
     ----------
     :param ready_op_node: an opertion that can run immendiately 
@@ -257,6 +258,8 @@ def find_nd_array_args(ready_op_node, args_index):
 def generate_intermediate_symbolic_args(ready_op_node):
     """
     get all symbolic arguments of an operations. Arguments may be replaced by var since these arguements calculated from other operations.
+
+    Parameters
     ----------
     :param ready_op_node: an opertion that can run immendiately  
     """
@@ -277,6 +280,8 @@ def generate_intermediate_symbolic_args(ready_op_node):
 def profile_forward_relay_operator(ready_op_node, ir_params, x, dtype="float32"):
     """
     Sequcently compile each operaion according to its dependencies without grad.
+
+    Parameters
     ----------
     :param ready_op_node: an opertion that can run immendiately
     :param ir_params: trained parameter from onnx or pytorch
@@ -316,6 +321,8 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, dtype="float32")
 def profile_backward_relay_operator(ready_op_node, ir_params, x, dtype="float32"):
     """
     Sequcently compile each operaion according to its dependencies with auto-grad.
+    
+    Parameters
     ----------
     :param ready_op_node: an opertion that can run immendiately
     :param ir_params: trained parameter from onnx or pytorch
