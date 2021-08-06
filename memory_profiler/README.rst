@@ -25,6 +25,11 @@ To install from source, download the package, extract and type::
 
     $ python setup.py install
 
+==============
+ Installation
+==============
+
+from memory_profile/memory_profiler import profile 
 
 =======
  Usage
