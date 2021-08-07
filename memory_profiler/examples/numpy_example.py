@@ -1,6 +1,7 @@
 import numpy as np
 import scipy.signal
 
+from memory_profiler import profile
 
 @profile
 def create_data():

@@ -12,25 +12,23 @@ programs. It is a pure python module which depends on the `psutil
 
 
 ==============
- Installation
+ Installation (deployment mode)
 ==============
-Install via pip::
-
-    $ pip install -U memory_profiler
-
-The package is also available on `conda-forge
-<https://github.com/conda-forge/memory_profiler-feedstock>`_.
 
 To install from source, download the package, extract and type::
 
     $ python setup.py install
 
 ==============
- Installation
+ Installation (debug mode)
 ==============
 
-from memory_profile/memory_profiler import profile 
+    $ vim ~/.bashrc
 
+export TVM_HOME=/root/github/tvm
+export PYTHONPATH=/root/github/TVMProfiler/memory_profiler:$TVM_HOME/python:${PYTHONPATH}
+
+    $ source ~/.bashrc
 =======
  Usage
 =======
