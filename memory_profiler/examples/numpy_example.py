@@ -1,9 +1,9 @@
 import numpy as np
 import scipy.signal
 
-from memory_profiler import profile
+from memory_profiler import operation_profile
 
-@profile
+@operation_profile
 def create_data():
     ret = []
     for n in range(70):
@@ -11,7 +11,7 @@ def create_data():
     return ret
 
 
-@profile
+@operation_profile
 def process_data(data):
     data = np.concatenate(data)
     detrended = scipy.signal.detrend(data, axis=0)
