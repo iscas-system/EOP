@@ -11,6 +11,16 @@ import tvm.relay as relay
 from tvm.contrib.download import download_testdata
 from torchvision import transforms
 
+def create_onnx_model_from_web(name="super_resolution.onnx", url="https://gist.github.com/zhreshold/bcda4716699ac97ea44f791c24310193/raw/93672b029103648953c4e5ad3ac3aadf346a4cdc/super_resolution_0.2.onnx"):
+    """
+    create onnx model from web URL.
+    ----------
+    :name: model name
+    :url: web URL
+    """
+    model_path = download_testdata(url, "super_resolution.onnx", module="onnx")
+    return onnx.load(model_path)
+
 def create_onnx_model_from_local_path(abs_path='resnet18.onnx'):
     """
     create onnx model from local absolute path.

@@ -7,7 +7,7 @@ import tvm
 from tvm import te
 import tvm.relay as relay
 from tvm.contrib.download import download_testdata
-from memory_profiler import profile
+from memory_profiler import operation_profile
 from tvm.relay.testing import check_grad, run_infer_type
 from tvm.relay.transform import gradient
 import time
@@ -277,6 +277,14 @@ def generate_intermediate_symbolic_args(ready_op_node):
         args_index+=1
     return new_args
 
+@operation_profile
+def op_forward_profile(call_interpreter, call_intput_args, ir_params):
+    t0 = time.perf_counter()
+    res = call_interpreter.evaluate()(*call_intput_args, **ir_params)
+    t1 = time.perf_counter()
+    print("running time: %s s" %(str(t1-t0)))
+    return res
+
 def profile_forward_relay_operator(ready_op_node, ir_params, x, dtype="float32"):
     """
     Sequcently compile each operaion according to its dependencies without grad.
@@ -314,22 +322,7 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, dtype="float32")
         call_interpreter = relay.build_module.create_executor("graph", call_ir_module, tvm.cuda(0), "cuda")
     call_intput_args = get_op_args(ready_op_node, dtype, ir_params, x)
     print(ready_op_node.id)
-    @profile
-    def op_forward_profile():
-        t0 = time.clock()
-        res = call_interpreter.evaluate()(*call_intput_args, **ir_params)
-        t1 = time.clock()
-        print("running time: %s s" %(str(t1-t0)))
-        return res
-    
-    def op_forward():
-        res = call_interpreter.evaluate()(*call_intput_args, **ir_params)
-        return res
-    
-    if profile_count == profile_point:
-        ready_op_node.performance_data["fw_value"] = op_forward_profile()
-    else:
-        ready_op_node.performance_data["fw_value"] = op_forward()
+    ready_op_node.performance_data["fw_value"] = op_forward_profile(call_interpreter,call_intput_args,ir_params)
     return 
 
 def profile_backward_relay_operator(ready_op_node, ir_params, x, dtype="float32"):
@@ -354,17 +347,5 @@ def profile_backward_relay_operator(ready_op_node, ir_params, x, dtype="float32"
     call_interpreter = relay.create_executor(device = tvm.cuda(0), target = "cuda")
     call_intput_args = get_op_args(ready_op_node, dtype, ir_params, x)
     print(ready_op_node.id)
-    @profile
-    def op_backward_profile():
-        res = call_interpreter.evaluate(bwd_func)(*call_intput_args, **ir_params)
-        return res
-    
-    def op_backward():
-        res = call_interpreter.evaluate(bwd_func)(*call_intput_args, **ir_params)
-        return res
-    
-    if profile_count == profile_point:
-        ready_op_node.performance_data["bw_value"] = op_backward_profile()
-    else:
-        ready_op_node.performance_data["bw_value"] = op_backward()
+    ready_op_node.performance_data["bw_value"] = res = call_interpreter.evaluate(bwd_func)(*call_intput_args, **ir_params)
     return 

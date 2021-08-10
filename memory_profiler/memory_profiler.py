@@ -1158,6 +1158,44 @@ def load_ipython_extension(ip):
     MemoryProfilerMagics.register_magics(ip)
 
 
+def operation_profile(func=None, stream=None, precision=1, backend='psutil'):
+    """
+    Decorator that will run the function and print a function/operation profile especially when function in a loop.
+    """
+    backend = choose_backend(backend)
+    if backend == 'tracemalloc' and has_tracemalloc:
+        if not tracemalloc.is_tracing():
+            tracemalloc.start()
+    if func is not None:
+        get_prof = partial(LineProfiler, backend=backend)
+        show_results_bound = partial(
+            show_results, stream=stream, precision=precision
+        )
+        if iscoroutinefunction(func):
+            @wraps(wrapped=func)
+            @coroutine
+            def wrapper(*args, **kwargs):
+                prof = get_prof()
+                val = yield from prof(func)(*args, **kwargs)
+                show_results_bound(prof)
+                return val
+        else:
+            @wraps(wrapped=func)
+            def wrapper(*args, **kwargs):
+                prof = get_prof()
+                val = prof(func)(*args, **kwargs)
+                show_results_bound(prof)
+                return val
+
+        return wrapper
+    else:
+        def inner_wrapper(f):
+            return profile(f, stream=stream, precision=precision,
+                           backend=backend)
+
+        return inner_wrapper
+
+
 def profile(func=None, stream=None, precision=1, backend='psutil'):
     """
     Decorator that will run the function and print a line-by-line profile
