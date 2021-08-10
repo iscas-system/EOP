@@ -347,5 +347,5 @@ def profile_backward_relay_operator(ready_op_node, ir_params, x, dtype="float32"
     call_interpreter = relay.create_executor(device = tvm.cuda(0), target = "cuda")
     call_intput_args = get_op_args(ready_op_node, dtype, ir_params, x)
     print(ready_op_node.id)
-    ready_op_node.performance_data["bw_value"] = res = call_interpreter.evaluate(bwd_func)(*call_intput_args, **ir_params)
+    ready_op_node.performance_data["bw_value"] = call_interpreter.evaluate(bwd_func)(*call_intput_args, **ir_params)
     return 
