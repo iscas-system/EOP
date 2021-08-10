@@ -305,7 +305,7 @@ def generate_intermediate_symbolic_args(ready_op_node):
         args_index+=1
     return new_args
 
-@operation_profile
+# @operation_profile
 def op_forward_profile(call_interpreter, call_intput_args, ir_params):
     t0 = time.perf_counter()
     res = call_interpreter.evaluate()(*call_intput_args, **ir_params)
