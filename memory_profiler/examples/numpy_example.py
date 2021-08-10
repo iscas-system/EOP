@@ -3,10 +3,9 @@ import scipy.signal
 
 from memory_profiler import operation_profile
 
-@operation_profile
-def create_data():
+def create_data(ra):
     ret = []
-    for n in range(70):
+    for n in range(ra):
         ret.append(np.random.randn(1, 70, 71, 72))
     return ret
 
@@ -19,5 +18,6 @@ def process_data(data):
 
 
 if __name__ == "__main__":
-    data1 = create_data()
-    data2 = process_data(data1)
+    for n in range(10):
+        data1 = create_data(np.random.randint(0,100))
+        data2 = process_data(data1)
