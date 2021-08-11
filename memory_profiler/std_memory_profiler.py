@@ -855,10 +855,11 @@ def operation_show_results(prof, stream=None, precision=1):
         float_format = u'{0}.{1}f'.format(precision + 4, precision)
         template_mem = u'{0:' + float_format + '} MiB'
         funtion_used_mem = 0.0
-        function_line = 0
+        function_line = -1
         for (lineno, mem) in lines:
             if mem:
-                function_line = lineno
+                if function_line == -1:     
+                    function_line = lineno
                 if mem[0] >0:
                     funtion_used_mem += mem[0]       
         funtion_used_mem = template_mem.format(funtion_used_mem)
