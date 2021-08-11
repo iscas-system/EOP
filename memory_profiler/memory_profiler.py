@@ -787,7 +787,7 @@ class LineProfiler(object):
                 self.disable()
 
     def trace_memory_usage(self, frame, event, arg):
-        """Callback for sys.settrace"""
+        """Callback for sys.settrace, key function to trace memory usage"""
         if frame.f_code in self.code_map:
             if event == 'call':
                 # "call" event just saves the lineno but not the memory
@@ -847,6 +847,23 @@ class LineProfiler(object):
     def disable(self):
         sys.settrace(self._original_trace_function)
 
+def operation_show_results(prof, stream=None, precision=1):
+    if stream is None:
+        stream = sys.stdout
+    for (filename, lines) in prof.code_map.items():
+        all_lines = linecache.getlines(filename)
+        float_format = u'{0}.{1}f'.format(precision + 4, precision)
+        template_mem = u'{0:' + float_format + '} MiB'
+        funtion_used_mem = 0.0
+        function_line = 0
+        for (lineno, mem) in lines:
+            if mem:
+                function_line = lineno
+                if mem[0] >0:
+                    funtion_used_mem += mem[0]       
+        funtion_used_mem = template_mem.format(funtion_used_mem)
+        stream.write("funtion_used_mem, " + all_lines[function_line].strip().replace(" ","") + funtion_used_mem)
+        stream.write(u'\n\n')
 
 def show_results(prof, stream=None, precision=1):
     if stream is None:
@@ -1169,7 +1186,7 @@ def operation_profile(func=None, stream=None, precision=1, backend='psutil'):
     if func is not None:
         get_prof = partial(LineProfiler, backend=backend)
         show_results_bound = partial(
-            show_results, stream=stream, precision=precision
+            operation_show_results, stream=stream, precision=precision
         )
         if iscoroutinefunction(func):
             @wraps(wrapped=func)
@@ -1200,7 +1217,6 @@ def profile(func=None, stream=None, precision=1, backend='psutil'):
     """
     Decorator that will run the function and print a line-by-line profile
     """
-    print("chagned by xuyuanjia2017@otcaix.iscas.ac.cn")
     backend = choose_backend(backend)
     if backend == 'tracemalloc' and has_tracemalloc:
         if not tracemalloc.is_tracing():
