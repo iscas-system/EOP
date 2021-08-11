@@ -2,12 +2,15 @@
 realy_graph: key class to construct RelayIR computation graph.
 :author {xuyuanjia2017,huyi19}@otcaix.iscas.ac.cn
 """
+import os
+import sys
+sys.path.append(os.path.dirname(os.getcwd()))
 import numpy as np
 import tvm
 from tvm import te
 import tvm.relay as relay
 from tvm.contrib.download import download_testdata
-from memory_profiler import operation_profile
+from std_memory_profiler import operation_profile
 from tvm.relay.testing import check_grad, run_infer_type
 from tvm.relay.transform import gradient
 import time
