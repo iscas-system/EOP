@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.signal
 
-from memory_profiler import operation_profile
+from std_memory_profiler import operation_profile
 
 def create_data(ra):
     ret = []
@@ -19,5 +19,5 @@ def process_data(data):
 
 if __name__ == "__main__":
     for n in range(10):
-        data1 = create_data(np.random.randint(0,100))
+        data1 = create_data(np.random.randint(10,100))
         data2 = process_data(data1)
