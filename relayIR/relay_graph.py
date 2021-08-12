@@ -2,15 +2,15 @@
 realy_graph: key class to construct RelayIR computation graph.
 :author {xuyuanjia2017,huyi19}@otcaix.iscas.ac.cn
 """
-import os
-import sys
+import numpy as np
 import tvm
+from tvm import te
 import tvm.relay as relay
-from tvm.relay.testing import run_infer_type
+from tvm.contrib.download import download_testdata
+from memory_profiler import profile
+from tvm.relay.testing import check_grad, run_infer_type
 from tvm.relay.transform import gradient
 import time
-
-sys.path.append(os.path.dirname(os.getcwd()))
 
 class op_graph:
     """
@@ -94,9 +94,14 @@ class op_graph:
         """
         global profile_count
         available_op_queue = self.find_starting_ops()
+        for p in available_op_queue:
+            print(p.id)
+            for key in p.prior.keys():
+                print("prev: %s" %(p.prior[key][1].id))
         profile_count = 0
         while len(available_op_queue) > 0 :
             temp_op = available_op_queue.pop(0)
+            #print("temp_op: %s" %(temp_op.id))
             if fw:
                 profile_forward_relay_operator(temp_op, ir_params, x)
             if bw:
@@ -342,6 +347,9 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, dtype="float32")
     global profile_count, profile_point
     if ready_op_node.type == "var" or ready_op_node.type == "const":
         return
+
+    print(ready_op_node.id)
+
     new_args = generate_intermediate_symbolic_args(ready_op_node)
     temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs)
     call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
