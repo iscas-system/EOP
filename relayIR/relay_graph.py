@@ -7,7 +7,7 @@ import tvm
 from tvm import te
 import tvm.relay as relay
 from tvm.contrib.download import download_testdata
-from memory_profiler import profile
+from std_memory_profiler import profile
 from tvm.relay.testing import check_grad, run_infer_type
 from tvm.relay.transform import gradient
 import time
