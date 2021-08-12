@@ -75,6 +75,7 @@ class op_graph:
     def check_op_ready(self, temp_op):
         for key in temp_op.prior.keys():
             if temp_op.prior[key][1].type == "call" or temp_op.prior[key][1].type == "tuplegetitem":
+                #to do 
                 if "fw_value" not in temp_op.prior[key][1].performance_data.keys():
                     return False
                 else:
@@ -139,6 +140,7 @@ class op_node:
             self.name = op.op.name
             self.attrs = attrs
         if self.type == "tuplegetitem":
+            #to do 
             self.name = "tuplegetitem"
             self.tuple_value = attrs[0]
             self.index = attrs[1]
@@ -206,6 +208,7 @@ def recursive_traverse_op(type, input, temp_op=None):
         next_op_node = op_node("call", op_index, temp_op, attrs = input['attrs'])
         args = input['args']
     if type == "tuplegetitem":
+        #to do 
         next_op_node = op_node("tuplegetitem", op_index, temp_op, attrs = input)
         args = input
     if computation_graph.find_if_exist(next_op_node) != None :
@@ -242,7 +245,7 @@ def recursive_traverse_op(type, input, temp_op=None):
     computation_graph.insert_op(next_op_node)
     return next_op_node
 
-def get_op_args(ready_op_node, dtype, params, x):
+def generate_intermediate_actual_args(ready_op_node, dtype, params, x):
     """
     get all actual arguments of an operations. Arguments may calcuate from others. 
 
@@ -275,9 +278,9 @@ def get_op_args(ready_op_node, dtype, params, x):
                 args_index+=1
     return intermeidiate_args
 
-def find_nd_array_args(ready_op_node, args_index):
+def find_call_value(ready_op_node, args_index):
     """
-    check weathcher an operation node's args is ready
+    find an operation' input calculated from other operation (relay call). Other kinds of input shold be considered from other methods.
 
     Parameters
     ----------
@@ -304,7 +307,7 @@ def generate_intermediate_symbolic_args(ready_op_node):
     new_args = []
     for tvm_arg in ready_op_node.op_instance.args:
         if isinstance(tvm_arg, tvm.relay.expr.Call):
-            s, d = find_nd_array_args(ready_op_node, args_index)
+            s, d = find_call_value(ready_op_node, args_index)
             temp_arg = tvm.relay.var(str(args_index), shape=s, dtype=d)
             new_args.append(temp_arg)
         if isinstance(tvm_arg, tvm.relay.expr.Var):
@@ -312,9 +315,10 @@ def generate_intermediate_symbolic_args(ready_op_node):
         if isinstance(tvm_arg, tvm.relay.expr.Constant):
             new_args.append(tvm_arg)
         if isinstance(tvm_arg, tvm.relay.expr.TupleGetItem):
-            s, d = find_nd_array_args(ready_op_node, args_index)
-            temp_arg = tvm.relay.var(str(args_index), shape=s, dtype=d)
-            new_args.append(temp_arg)
+            pass #to do
+            # s, d = find_nd_array_args(ready_op_node, args_index)
+            # temp_arg = tvm.relay.var(str(args_index), shape=s, dtype=d)
+            # new_args.append(temp_arg)
         args_index+=1
     return new_args
 
@@ -353,6 +357,7 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, device, target, 
     """
     global profile_count, profile_point
     if ready_op_node.type == "var" or ready_op_node.type == "const":
+        #to do
         return
     new_args = generate_intermediate_symbolic_args(ready_op_node)
     temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs)
@@ -361,7 +366,7 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, device, target, 
     call_ir_module = tvm.ir.IRModule(functions=call_functions)
     with tvm.transform.PassContext(opt_level=1):
         call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
-    call_intput_args = get_op_args(ready_op_node, dtype, ir_params, x)
+    call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, ir_params, x)
     #print(ready_op_node.id)
 
     '''
@@ -417,7 +422,7 @@ def profile_backward_relay_operator(ready_op_node, ir_params, x, device, target,
     call_function = run_infer_type(call_function)
     bwd_func = run_infer_type(gradient(call_function))
     call_interpreter = relay.create_executor(device = device, target = target)
-    call_intput_args = get_op_args(ready_op_node, dtype, ir_params, x)
+    call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, ir_params, x)
     print(ready_op_node.id)
     ready_op_node.performance_data["bw_value"] = call_interpreter.evaluate(bwd_func)(*call_intput_args, **ir_params)
     return 

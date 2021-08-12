@@ -1176,7 +1176,7 @@ def load_ipython_extension(ip):
     MemoryProfilerMagics.register_magics(ip)
 
 
-def operation_profile(func=None, stream=None, precision=1, backend='psutil'):
+def operation_profile(func=None, operation_meta=(), stream=None, precision=1, backend='psutil'):
     """
     Decorator that will run the function and print a function/operation profile especially when function in a loop.
     """
