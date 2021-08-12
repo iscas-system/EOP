@@ -189,7 +189,7 @@ def profile_memory(ir_params, x):
     computation_graph.traverse_and_calculate_per_op(ir_params, x, bw = False)
 
 
-def recursive_traverse_op(attrs, args, temp_op=None):
+def recursive_traverse_op(type, input, temp_op=None):
     """
     call node means current traverser is not end, var or const node means it can end now and need to traverse new operation branches. 
 
@@ -200,9 +200,15 @@ def recursive_traverse_op(attrs, args, temp_op=None):
     :param temp_op: IRModule instance of current operation
     """
     global op_index, computation_graph
+    args = []
     args_index = 0
-    next_op_node = op_node("call", op_index, temp_op, attrs = attrs)
-    if computation_graph.find_if_exist(next_op_node) is not None :
+    if type == "call":
+        next_op_node = op_node("call", op_index, temp_op, attrs = input['attrs'])
+        args = input['args']
+    if type == "tuplegetitem":
+        next_op_node = op_node("tuplegetitem", op_index, temp_op, attrs = input)
+        args = input
+    if computation_graph.find_if_exist(next_op_node) != None :
         return computation_graph.find_if_exist(next_op_node)
     op_index+=1
     for each_arg in args:
@@ -210,28 +216,29 @@ def recursive_traverse_op(attrs, args, temp_op=None):
             current_input = {}
             current_input['attrs'] = each_arg.attrs
             current_input['args'] = each_arg.args
-            current_node_op = recursive_traverse_op("call", current_input, temp_op=each_arg)
+            current_node_op = recursive_traverse_op("call", current_input, temp_op = each_arg)
             current_node_op.set_next(next_op_node, args_index)
-            args_index += 1
-        if isinstance(each_arg, tvm.relay.expr.Var):
+            args_index+=1
+        if isinstance(each_arg,tvm.relay.expr.Var):
             current_node_op = computation_graph.find_if_var(each_arg)
-            if current_node_op is None:
-                current_node_op = op_node("var", op_index, each_arg, attrs=None)
+            if current_node_op == None:
+                current_node_op = op_node("var", op_index, each_arg, attrs = None)
             current_node_op.set_next(next_op_node, args_index)
             computation_graph.insert_op(current_node_op)
-            args_index += 1
-        if isinstance(each_arg, tvm.relay.expr.Constant):
+            args_index+=1
+        if isinstance(each_arg,tvm.relay.expr.Constant):
             current_node_op = computation_graph.find_if_const(each_arg)
-            if current_node_op is None:
+            if current_node_op == None:
                 current_node_op = op_node("const", op_index, each_arg, attrs=None)
             current_node_op.set_next(next_op_node, args_index)
             computation_graph.insert_op(current_node_op)
             args_index += 1
-        if isinstance(each_arg, tvm.relay.expr.TupleGetItem):
-            current_input = [each_arg.tuple_value, each_arg.index]
-            current_node_op = recursive_traverse_op("tuplegetitem", current_input, temp_op=each_arg)
+        if isinstance(each_arg,tvm.relay.expr.TupleGetItem):
+            current_input = [each_arg.tuple_value,each_arg.index]
+            current_node_op = recursive_traverse_op("tuplegetitem", current_input, temp_op = each_arg)
             current_node_op.set_next(next_op_node, args_index)
             args_index += 1
+
     computation_graph.insert_op(next_op_node)
     return next_op_node
 
@@ -347,9 +354,6 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, dtype="float32")
     global profile_count, profile_point
     if ready_op_node.type == "var" or ready_op_node.type == "const":
         return
-
-    print(ready_op_node.id)
-
     new_args = generate_intermediate_symbolic_args(ready_op_node)
     temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs)
     call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
