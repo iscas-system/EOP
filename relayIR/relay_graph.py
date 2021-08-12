@@ -95,12 +95,12 @@ class op_graph:
         """
         global profile_count
         available_op_queue = self.find_starting_ops()
-        for p in available_op_queue:
-            print(p.id)
-            for key in p.prior.keys():
-                print("prev: %s" %(p.prior[key][1].id))
+        # for p in available_op_queue:
+        #     print(p.id)
+        #     for key in p.prior.keys():
+        #         print("prev: %s" %(p.prior[key][1].id))
         profile_count = 0
-        while len(available_op_queue) > 0 :
+        while len(available_op_queue) > 0 and profile_count < 2:
             temp_op = available_op_queue.pop(0)
             #print("temp_op: %s" %(temp_op.id))
             if fw:
@@ -162,21 +162,22 @@ class op_node:
     
     def print_self(self):
         #print(self.id, self.attrs, self.next, self.prior)
-        print("self.id: %s" %(self.id))
-        print("self.type: %s" %(self.type))
-        print("self.next: %r" %(self.next))
-        print("self.prior: %r" %(self.prior))
+        # print("self.id: %s" %(self.id))
+        # print("self.type: %s" %(self.type))
+        # print("self.next: %r" %(self.next))
+        # print("self.prior: %r" %(self.prior))
         #print("self.attrs: %r" %(self.attrs))
-        print("self.attrs:")
-        '''
-        global tmpcnt
-        if tmpcnt == 0:
-            help(self.attrs)
-            tmpcnt += 1
-        '''
-        for tmp in self.attrs.keys():
-            print("key: %r" %(tmp))
-            print("value: %r" %(self.attrs.get_str(tmp)))
+        # print("self.attrs:")
+        # '''
+        # global tmpcnt
+        # if tmpcnt == 0:
+        #     help(self.attrs)
+        #     tmpcnt += 1
+        # '''
+        # for tmp in self.attrs.keys():
+        #     print("key: %r" %(tmp))
+        #     print("value: %r" %(self.attrs.get_str(tmp)))
+        return
 
 
 def construct_op_graph(ir_module):
@@ -335,7 +336,6 @@ def generate_intermediate_symbolic_args(ready_op_node):
         args_index+=1
     return new_args
 
-# @operation_profile
 def op_forward_profile(call_interpreter, call_intput_args, ir_params):
     t0 = time.perf_counter()
     res = call_interpreter.evaluate()(*call_intput_args, **ir_params)
@@ -373,46 +373,40 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, device, target, 
         #to do
         return
     new_args = generate_intermediate_symbolic_args(ready_op_node)
-    temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs)
+    temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs, type_args=ready_op_node.op_instance.type_args)
     #print("attrs: %r" %(ready_op_node.op_instance.attrs))
     call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
-    call_functions = {"GlobalVar": None, "main": call_function}
+    call_functions = {"main": call_function}
     call_ir_module = tvm.ir.IRModule(functions=call_functions)
     with tvm.transform.PassContext(opt_level=1):
         call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
     call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, ir_params, x)
-    #print(ready_op_node.id)
-
-    '''
-            print("first: ")
-            print(*call_intput_args)
-            print("second: ")
-            print(**ir_params)
-            '''
-    #'''
-    ready_op_node.print_self()
-    '''
-    for key in ready_op_node.prior.keys():
-        print(ready_op_node.prior[key][1].name)
-    print("op_params:")
-    tmp_param = call_interpreter.mod["main"].params
-    cnt = 0
-    out = ""
-    for p in tmp_param:
-        out = out + str(p.name_hint) + ','
-        cnt = cnt + 1
-        if cnt % 10 == 0:
-            print(out)
-            out = ""
-    if cnt % 10 != 0:
-        print(out)
-    print("args:")
-    for p in call_intput_args:
-        print(p)
-    print("params:")
-    for p in ir_params:
-        print(p)
-    '''
+    # ready_op_node.print_self()
+    # print(dir(ready_op_node.op_instance))
+    # print("first: ")
+    # print(*call_intput_args)
+    # print("second: ")
+    # print(**ir_params)
+    # for key in ready_op_node.prior.keys():
+    #     print(ready_op_node.prior[key][1].name)
+    # print("op_params:")
+    # tmp_param = call_interpreter.mod["main"].params
+    # cnt = 0
+    # out = ""
+    # for p in tmp_param:
+    #     out = out + str(p.name_hint) + ','
+    #     cnt = cnt + 1
+    #     if cnt % 10 == 0:
+    #         print(out)
+    #         out = ""
+    # if cnt % 10 != 0:
+    #     print(out)
+    # print("args:")
+    # for p in call_intput_args:
+    #     print(p)
+    # print("params:")
+    # for p in ir_params:
+    #     print(p)
     #'''
 
     ready_op_node.performance_data["fw_value"] = op_forward_profile(call_interpreter,call_intput_args,ir_params)
