@@ -362,7 +362,37 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, device, target, 
     with tvm.transform.PassContext(opt_level=1):
         call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
     call_intput_args = get_op_args(ready_op_node, dtype, ir_params, x)
-    print(ready_op_node.id)
+    #print(ready_op_node.id)
+
+    '''
+            print("first: ")
+            print(*call_intput_args)
+            print("second: ")
+            print(**ir_params)
+            '''
+    #'''
+    ready_op_node.print_self()
+    for key in ready_op_node.prior.keys():
+        print(ready_op_node.prior[key][1].name)
+    print("op_params:")
+    tmp_param = call_interpreter.mod["main"].params
+    cnt = 0
+    out = ""
+    for p in tmp_param:
+        out = out + str(p.name_hint) + ','
+        cnt = cnt + 1
+        if cnt % 10 == 0:
+            print(out)
+            out = ""
+    if cnt % 10 != 0:
+        print(out)
+    print("args:")
+    for p in call_intput_args:
+        print(p)
+    print("params:")
+    for p in ir_params:
+        print(p)
+    #'''
 
     ready_op_node.performance_data["fw_value"] = op_forward_profile(call_interpreter,call_intput_args,ir_params)
     return 
