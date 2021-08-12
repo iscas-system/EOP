@@ -4,16 +4,13 @@ realy_graph: key class to construct RelayIR computation graph.
 """
 import os
 import sys
-sys.path.append(os.path.dirname(os.getcwd()))
-import numpy as np
 import tvm
-from tvm import te
 import tvm.relay as relay
-from tvm.contrib.download import download_testdata
-from std_memory_profiler import operation_profile
-from tvm.relay.testing import check_grad, run_infer_type
+from tvm.relay.testing import run_infer_type
 from tvm.relay.transform import gradient
 import time
+
+sys.path.append(os.path.dirname(os.getcwd()))
 
 class op_graph:
     """
@@ -34,7 +31,7 @@ class op_graph:
         self.tuplegetitem_nodes = []
 
     def insert_op(self, current_op_node):
-        if self.find_if_exist(current_op_node) == None:
+        if self.find_if_exist(current_op_node) is None:
             self.dictionary[current_op_node.id] = current_op_node
             if current_op_node.type == "call":
                 self.call_nodes.append(current_op_node)
@@ -53,7 +50,7 @@ class op_graph:
                 if temp_op.prior[key][1].type == "call" or temp_op.prior[key][1].type == "tuplegetitem":
                     if_started = False
                     break
-            if if_started == True:
+            if if_started is True:
                 result.append(temp_op)
         return result
 
@@ -98,7 +95,6 @@ class op_graph:
         global profile_count
         available_op_queue = self.find_starting_ops()
         profile_count = 0
-        N = 100
         while len(available_op_queue) > 0 :
             temp_op = available_op_queue.pop(0)
             if fw:
@@ -170,7 +166,6 @@ def construct_op_graph(ir_module):
     """
     global op_index, computation_graph
     entrance_tuple = ir_module.functions.items()[0]
-    global_var = entrance_tuple[0]
     main_function = entrance_tuple[1]
     for each_param in main_function.params:
         temp_op_node = op_node("var", op_index, each_param, attrs = None)
@@ -183,7 +178,7 @@ def construct_op_graph(ir_module):
     recursive_traverse_op(type, input, temp_op=main_function.body)
 
 def profile_memory(ir_params, x):
-    computation_graph.traverse_and_calculate_per_op( ir_params, x, bw = False)
+    computation_graph.traverse_and_calculate_per_op(ir_params, x, bw = False)
 
 
 def recursive_traverse_op(attrs, args, temp_op=None):
@@ -199,7 +194,7 @@ def recursive_traverse_op(attrs, args, temp_op=None):
     global op_index, computation_graph
     args_index = 0
     next_op_node = op_node("call", op_index, temp_op, attrs = attrs)
-    if computation_graph.find_if_exist(next_op_node) != None :
+    if computation_graph.find_if_exist(next_op_node) is not None :
         return computation_graph.find_if_exist(next_op_node)
     op_index+=1
     for each_arg in args:
@@ -212,14 +207,14 @@ def recursive_traverse_op(attrs, args, temp_op=None):
             args_index += 1
         if isinstance(each_arg, tvm.relay.expr.Var):
             current_node_op = computation_graph.find_if_var(each_arg)
-            if current_node_op == None:
+            if current_node_op is None:
                 current_node_op = op_node("var", op_index, each_arg, attrs=None)
             current_node_op.set_next(next_op_node, op_index - 1, args_index)
             computation_graph.insert_op(current_node_op)
             args_index += 1
         if isinstance(each_arg, tvm.relay.expr.Constant):
             current_node_op = computation_graph.find_if_const(each_arg)
-            if current_node_op == None:
+            if current_node_op is None:
                 current_node_op = op_node("const", op_index, each_arg, attrs=None)
             current_node_op.set_next(next_op_node, op_index - 1, args_index)
             computation_graph.insert_op(current_node_op)

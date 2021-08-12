@@ -6,7 +6,6 @@ import onnx
 import numpy as np
 from PIL import Image
 import tvm
-from tvm import te
 import tvm.relay as relay
 from tvm.contrib.download import download_testdata
 from torchvision import transforms
@@ -51,8 +50,7 @@ def generate_input_image_data_with_torchvision(img_url = "https://s3.amazonaws.c
     """
     img_path = download_testdata(img_url, img_name, module=module)
     img = Image.open(img_path).resize(resize1)
-    my_preprocess = transforms.Compose(
-    [
+    my_preprocess = transforms.Compose([
         transforms.Resize(resize2),
         transforms.CenterCrop(crop),
         transforms.ToTensor(),
