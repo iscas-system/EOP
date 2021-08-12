@@ -38,21 +38,23 @@ def conv2d(data, weight=None, **kwargs):
 
 def conv_block(data, name, channels, kernel_size=(3, 3), strides=(1, 1),
             padding=(1, 1), epsilon=1e-5):
-    conv = conv2d(
-        data=data,
-        channels=channels,
-        kernel_size=kernel_size,
-        strides=strides,
-        padding=padding,
-        data_layout='NCHW',
-        name=name+'_conv')
-    bn = batch_norm_infer(data=conv, epsilon=epsilon, name=name + '_bn')
-    act = relay.nn.relu(data=bn)
-    return act
+    # return conv2d(
+    #      data=data,
+    #      channels=channels,
+    #      kernel_size=kernel_size,
+    #      strides=strides,
+    #      padding=padding,
+    #      data_layout='NCHW',
+    #      name=name+'_conv')
+    return batch_norm_infer(data=data, epsilon=epsilon, name=name + '_bn')
+    # act = relay.nn.relu(data=bn)
+    # return act
+    
 
+# data_shape = (1, 3, 224, 224)
 
-data_shape = (1, 3, 224, 224)
 kernel_shape = (32, 3, 3, 3)
+data_shape = (32, 112, 112)
 dtype = "float32"
 data = relay.var("data", shape=data_shape, dtype=dtype)
 act = conv_block(data, "graph", 32, strides=(2, 2))
@@ -82,12 +84,32 @@ with relay.build_config(opt_level=3):
 # print("TVM graph:\n", graph)
 # print("TVM parameters:\n", params.keys())
 # print("TVM compiled target function:\n", lib.get_source())
+print(mod)
 module = graph_runtime.create(graph, lib, device)
-data_tvm = np.random.uniform(-1, 1, size=data_shape).astype(dtype)
+data_tvm = np.random.uniform(1000, 50, size=data_shape).astype(dtype)
+# batch_norm_input = np.random.uniform(-1, 1, size=(1, 32, 112, 112)).astype(dtype)
 module.set_input('data', data_tvm)
 module.set_input(**params)
 module.run()
 output = module.get_output(0)
+# construct_op_graph(mod)
+# profile_resource_usage(params,data_tvm, device=device, target = target)
 
-construct_op_graph(mod)
-profile_resource_usage(params,data_tvm, device=device, target = target)
+entrance_tuple = mod.functions.items()[0]
+main_function = entrance_tuple[1]
+
+temp_body2 = tvm.relay.Call(main_function.body.tuple_value.op, main_function.body.tuple_value.args, attrs=main_function.body.tuple_value.attrs, type_args=main_function.body.tuple_value.type_args)
+temp_body = tvm.relay.expr.TupleGetItem(temp_body2,0)
+call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
+call_functions = {"main": call_function}
+call_ir_module = tvm.ir.IRModule(functions=call_functions)
+with tvm.transform.PassContext(opt_level=1):
+    call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
+
+print(call_ir_module)
+input_args = []
+input_args.append(data_tvm)
+print(params.keys())
+res = call_interpreter.evaluate()(*input_args, **params)
+
+print(res)
