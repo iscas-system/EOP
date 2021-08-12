@@ -117,6 +117,8 @@ profile_point=21
 op_index = 0
 computation_graph = op_graph()
 
+tmpcnt = 0
+
 class op_node:
     """
     op_node is the node description class in op_graph.
@@ -164,6 +166,17 @@ class op_node:
         print("self.type: %s" %(self.type))
         print("self.next: %r" %(self.next))
         print("self.prior: %r" %(self.prior))
+        #print("self.attrs: %r" %(self.attrs))
+        print("self.attrs:")
+        '''
+        global tmpcnt
+        if tmpcnt == 0:
+            help(self.attrs)
+            tmpcnt += 1
+        '''
+        for tmp in self.attrs.keys():
+            print("key: %r" %(tmp))
+            print("value: %r" %(self.attrs.get_str(tmp)))
 
 
 def construct_op_graph(ir_module):
@@ -361,6 +374,7 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, device, target, 
         return
     new_args = generate_intermediate_symbolic_args(ready_op_node)
     temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs)
+    #print("attrs: %r" %(ready_op_node.op_instance.attrs))
     call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
     call_functions = {"GlobalVar": None, "main": call_function}
     call_ir_module = tvm.ir.IRModule(functions=call_functions)
@@ -377,6 +391,7 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, device, target, 
             '''
     #'''
     ready_op_node.print_self()
+    '''
     for key in ready_op_node.prior.keys():
         print(ready_op_node.prior[key][1].name)
     print("op_params:")
@@ -397,6 +412,7 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, device, target, 
     print("params:")
     for p in ir_params:
         print(p)
+    '''
     #'''
 
     ready_op_node.performance_data["fw_value"] = op_forward_profile(call_interpreter,call_intput_args,ir_params)
