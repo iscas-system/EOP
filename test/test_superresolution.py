@@ -3,12 +3,8 @@ import numpy as np
 import tvm
 
 from PIL import Image
-from tvm import te
-import tvm.relay as relay
 from tvm.contrib.download import download_testdata
-from tvm.relay.testing import check_grad, run_infer_type
-from tvm.relay.transform import gradient
-from relay_graph import construct_op_graph, profile_memory
+from relay_graph import construct_op_graph, profile_resource_usage
 from onnx_profiler import create_onnx_model_from_web,compile_onnx_model,run_relay_mod
 
 def get_superresolution_input():
@@ -26,5 +22,5 @@ mod, params, intrp = compile_onnx_model(onnx_model, input, target = "llvm", inpu
 run_relay_mod(input, intrp, params)
 
 construct_op_graph(mod)
-profile_memory(params, input)
+profile_resource_usage(params, input)
 

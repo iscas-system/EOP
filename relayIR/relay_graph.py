@@ -81,7 +81,7 @@ class op_graph:
                     return True
         return True
 
-    def traverse_and_calculate_per_op(self, ir_params, x, fw=True, bw=False):
+    def traverse_and_calculate_per_op(self, ir_params, x, device, target, fw=True, bw=False):
         """
         use wide-first traversial approaches to calculate each operator
 
@@ -103,9 +103,9 @@ class op_graph:
             temp_op = available_op_queue.pop(0)
             #print("temp_op: %s" %(temp_op.id))
             if fw:
-                profile_forward_relay_operator(temp_op, ir_params, x)
+                profile_forward_relay_operator(temp_op, ir_params, x, device, target)
             if bw:
-                profile_backward_relay_operator(temp_op, ir_params, x)
+                profile_backward_relay_operator(temp_op, ir_params, x,device, target)
             for key in temp_op.next.keys():
                 if self.check_op_ready(temp_op.next[key][1]):
                     available_op_queue.append(temp_op.next[key][1])
@@ -185,8 +185,8 @@ def construct_op_graph(ir_module):
     type = "call"
     recursive_traverse_op(type, input, temp_op=main_function.body)
 
-def profile_memory(ir_params, x):
-    computation_graph.traverse_and_calculate_per_op(ir_params, x, bw = False)
+def profile_resource_usage(ir_params, x, device=tvm.cuda(0), target="cuda"):
+    computation_graph.traverse_and_calculate_per_op(ir_params, x, device, target, bw = False)
 
 
 def recursive_traverse_op(attrs, args, temp_op=None):
@@ -319,7 +319,7 @@ def op_forward_profile(call_interpreter, call_intput_args, ir_params):
     print("running time: %s s" %(str(t1-t0)))
     return res
 
-def profile_forward_relay_operator(ready_op_node, ir_params, x, dtype="float32"):
+def profile_forward_relay_operator(ready_op_node, ir_params, x, device, target, dtype="float32"):
     """
     Sequcently compile each operaion according to its dependencies without grad.
 
@@ -356,14 +356,14 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, dtype="float32")
     call_functions = {"GlobalVar": None, "main": call_function}
     call_ir_module = tvm.ir.IRModule(functions=call_functions)
     with tvm.transform.PassContext(opt_level=1):
-        call_interpreter = relay.build_module.create_executor("graph", call_ir_module, tvm.cuda(0), "cuda")
+        call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
     call_intput_args = get_op_args(ready_op_node, dtype, ir_params, x)
     print(ready_op_node.id)
 
     ready_op_node.performance_data["fw_value"] = op_forward_profile(call_interpreter,call_intput_args,ir_params)
     return 
 
-def profile_backward_relay_operator(ready_op_node, ir_params, x, dtype="float32"):
+def profile_backward_relay_operator(ready_op_node, ir_params, x, device, target, dtype="float32"):
     """
     Sequcently compile each operaion according to its dependencies with auto-grad.
     
@@ -382,7 +382,7 @@ def profile_backward_relay_operator(ready_op_node, ir_params, x, dtype="float32"
     call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body), temp_body)
     call_function = run_infer_type(call_function)
     bwd_func = run_infer_type(gradient(call_function))
-    call_interpreter = relay.create_executor(device = tvm.cuda(0), target = "cuda")
+    call_interpreter = relay.create_executor(device = device, target = target)
     call_intput_args = get_op_args(ready_op_node, dtype, ir_params, x)
     print(ready_op_node.id)
     ready_op_node.performance_data["bw_value"] = call_interpreter.evaluate(bwd_func)(*call_intput_args, **ir_params)
