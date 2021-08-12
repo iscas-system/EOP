@@ -142,8 +142,11 @@ class op_node:
         self.next = {}
         self.prior = {}
         self.performance_data = {}
-    
-    def set_next(self, next_op_node, next_op_index, args_index):
+
+    def set_next(self, next_op_node, args_index):
+        '''
+        In the new version, the seconed arg <next_op_index> is abandoned to fix some bug!
+        '''
         next_op_id = next_op_node.id
         self.next[next_op_id] = (args_index, next_op_node)
         next_op_node.prior[self.id] = (args_index, self)
@@ -203,26 +206,26 @@ def recursive_traverse_op(attrs, args, temp_op=None):
             current_input['attrs'] = each_arg.attrs
             current_input['args'] = each_arg.args
             current_node_op = recursive_traverse_op("call", current_input, temp_op=each_arg)
-            current_node_op.set_next(next_op_node, op_index - 1, args_index)
+            current_node_op.set_next(next_op_node, args_index)
             args_index += 1
         if isinstance(each_arg, tvm.relay.expr.Var):
             current_node_op = computation_graph.find_if_var(each_arg)
             if current_node_op is None:
                 current_node_op = op_node("var", op_index, each_arg, attrs=None)
-            current_node_op.set_next(next_op_node, op_index - 1, args_index)
+            current_node_op.set_next(next_op_node, args_index)
             computation_graph.insert_op(current_node_op)
             args_index += 1
         if isinstance(each_arg, tvm.relay.expr.Constant):
             current_node_op = computation_graph.find_if_const(each_arg)
             if current_node_op is None:
                 current_node_op = op_node("const", op_index, each_arg, attrs=None)
-            current_node_op.set_next(next_op_node, op_index - 1, args_index)
+            current_node_op.set_next(next_op_node, args_index)
             computation_graph.insert_op(current_node_op)
             args_index += 1
         if isinstance(each_arg, tvm.relay.expr.TupleGetItem):
             current_input = [each_arg.tuple_value, each_arg.index]
             current_node_op = recursive_traverse_op("tuplegetitem", current_input, temp_op=each_arg)
-            current_node_op.set_next(next_op_node, op_index - 1, args_index)
+            current_node_op.set_next(next_op_node, args_index)
             args_index += 1
     computation_graph.insert_op(next_op_node)
     return next_op_node
