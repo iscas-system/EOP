@@ -1,9 +1,14 @@
+import sys
+sys.path.append('/root/huyi/TVMProfiler/relayIR')
+sys.path.append('/root/huyi/TVMProfiler/memory_profiler')
+
 import tvm
 from tvm.relay import transform
 import tvm.relay as relay
 import numpy as np
 from tvm.contrib import graph_runtime
 from relay_graph import construct_op_graph, profile_resource_usage
+
 
 def batch_norm_infer(data,
                     gamma=None,
