@@ -259,7 +259,7 @@ def recursive_traverse_op(type, input, temp_op=None):
     computation_graph.insert_op(next_op_node)
     return next_op_node
 
-def generate_intermediate_actual_args(ready_op_node, dtype, params, x):
+def generate_intermediate_actual_args(ready_op_node, dtype, x):
     """
     get all actual arguments of an operations. Arguments may calcuate from others. 
 
@@ -267,7 +267,6 @@ def generate_intermediate_actual_args(ready_op_node, dtype, params, x):
     ----------
     :param ready_op_node: an opertion that can run immendiately 
     :param dtype: argument types
-    :param params: to do or optimized, not used currrently
     :param dtype: input data of a tvm realy IR
     """
     intermeidiate_args = [] # input arguments calculated from prior operations
@@ -380,7 +379,7 @@ def profile_forward_relay_operator(ready_op_node, ir_params, x, device, target, 
     call_ir_module = tvm.ir.IRModule(functions=call_functions)
     with tvm.transform.PassContext(opt_level=1):
         call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
-    call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, ir_params, x)
+    call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, x)
     # ready_op_node.print_self()
     # print(dir(ready_op_node.op_instance))
     # print("first: ")
@@ -432,7 +431,7 @@ def profile_backward_relay_operator(ready_op_node, ir_params, x, device, target,
     call_function = run_infer_type(call_function)
     bwd_func = run_infer_type(gradient(call_function))
     call_interpreter = relay.create_executor(device = device, target = target)
-    call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, ir_params, x)
+    call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, x)
     print(ready_op_node.id)
     ready_op_node.performance_data["bw_value"] = call_interpreter.evaluate(bwd_func)(*call_intput_args, **ir_params)
     return 
