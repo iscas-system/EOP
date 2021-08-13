@@ -358,6 +358,16 @@ def generate_intermediate_symbolic_args(ready_op_node):
     #print(len(new_args))
     return new_args
 
+def generator_operation_profile_meta(temp_body):
+    temp_dict = {}
+    temp_body2 = temp_body
+    if isinstance(temp_body, tvm.relay.expr.TupleGetItem):
+        temp_body2 = temp_body.tuple_value
+    temp_dict["name"] = temp_body2.op
+    temp_dict["args"] = temp_body2.args
+    temp_dict["attrs"] = temp_body2.attrs
+    return temp_dict
+    
 def op_forward_profile(call_interpreter, call_intput_args, ir_params):
     print(len(call_intput_args))
     t0 = time.perf_counter()

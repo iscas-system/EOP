@@ -21,6 +21,7 @@ import sys
 import time
 import traceback
 import warnings
+import json
 
 if sys.platform == "win32":
     # any value except signal.CTRL_C_EVENT and signal.CTRL_BREAK_EVENT
@@ -847,7 +848,7 @@ class LineProfiler(object):
     def disable(self):
         sys.settrace(self._original_trace_function)
 
-def operation_show_results(prof, stream=None, precision=1):
+def operation_show_results(prof, stream=None, precision=1, operation_meta={}):
     if stream is None:
         stream = sys.stdout
     for (filename, lines) in prof.code_map.items():
@@ -863,7 +864,8 @@ def operation_show_results(prof, stream=None, precision=1):
                 if mem[0] >0:
                     funtion_used_mem += mem[0]       
         funtion_used_mem = template_mem.format(funtion_used_mem)
-        stream.write("funtion_used_mem, " + all_lines[function_line].strip().replace(" ","") + funtion_used_mem)
+        operation_meta["op_used_memory"] = funtion_used_mem
+        stream.write(json.dumps(operation_meta))
         stream.write(u'\n\n')
 
 def show_results(prof, stream=None, precision=1):
@@ -1176,7 +1178,7 @@ def load_ipython_extension(ip):
     MemoryProfilerMagics.register_magics(ip)
 
 
-def operation_profile(func=None, operation_meta=(), stream=None, precision=1, backend='psutil'):
+def operation_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
     """
     Decorator that will run the function and print a function/operation profile especially when function in a loop.
     """
@@ -1187,7 +1189,7 @@ def operation_profile(func=None, operation_meta=(), stream=None, precision=1, ba
     if func is not None:
         get_prof = partial(LineProfiler, backend=backend)
         show_results_bound = partial(
-            operation_show_results, stream=stream, precision=precision
+            operation_show_results, stream=stream, precision=precision, operation_meta = operation_meta
         )
         if iscoroutinefunction(func):
             @wraps(wrapped=func)
