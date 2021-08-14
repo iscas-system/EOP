@@ -1209,11 +1209,7 @@ def operation_profile(func=None, operation_meta={}, stream=None, precision=1, ba
 
         return wrapper
     else:
-        def inner_wrapper(f):
-            return profile(f, stream=stream, precision=precision,
-                           backend=backend)
-
-        return inner_wrapper
+        raise ValueError("Must be written before on a function")
 
 
 def profile(func=None, stream=None, precision=1, backend='psutil'):
