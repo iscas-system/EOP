@@ -1177,10 +1177,40 @@ def load_ipython_extension(ip):
 
     MemoryProfilerMagics.register_magics(ip)
 
-
-def operation_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
+def operation_cpu_time_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
     """
-    Decorator that will run the function and print a function/operation profile especially when function in a loop.
+    Decorator that will run the function and print a function/operation execution time profile especially when function in a loop.
+    """
+    backend = choose_backend(backend)
+    if backend == 'tracemalloc' and has_tracemalloc:
+        if not tracemalloc.is_tracing():
+            tracemalloc.start()
+    if func is not None:
+        get_prof = partial(TimeStamper, backend=backend)
+        if iscoroutinefunction(func):
+            @wraps(wrapped=func)
+            @coroutine
+            def wrapper(*args, **kwargs):
+                prof = get_prof()
+                val = yield from prof(func)(*args, **kwargs)
+                prof.show_results()
+                return val
+        else:
+            @wraps(wrapped=func)
+            def wrapper(*args, **kwargs):
+                prof = get_prof()
+                val = prof(func)(*args, **kwargs)
+                prof.show_results()
+                return val
+
+        return wrapper
+    else:
+        raise ValueError("Must be written before on a function")
+
+
+def operation_memory_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
+    """
+    Decorator that will run the function and print a function/operation cpu memory especially when function in a loop.
     """
     backend = choose_backend(backend)
     if backend == 'tracemalloc' and has_tracemalloc:
