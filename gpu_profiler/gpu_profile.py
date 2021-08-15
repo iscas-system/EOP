@@ -6,7 +6,6 @@ os.environ['CUDA_LAUNCH_BLOCKING']='1'
 
 #import pynvml3
 from py3nvml import py3nvml
-import torch
 import socket
 
 # different settings
@@ -52,17 +51,17 @@ def gpu_profile(frame, event, arg):
                             f"{line.rstrip()}\n")
 
                     last_meminfo_used = new_meminfo_used
-                    if print_tensor_sizes is True:
-                        for tensor in get_tensors():
-                            if not hasattr(tensor, 'dbg_alloc_where'):
-                                tensor.dbg_alloc_where = where_str
-                        new_tensor_sizes = {(type(x), tuple(x.size()), x.dbg_alloc_where)
-                                            for x in get_tensors()}
-                        for t, s, loc in new_tensor_sizes - last_tensor_sizes:
-                            f.write(f'+ {loc:<50} {str(s):<20} {str(t):<10}\n')
-                        for t, s, loc in last_tensor_sizes - new_tensor_sizes:
-                            f.write(f'- {loc:<50} {str(s):<20} {str(t):<10}\n')
-                        last_tensor_sizes = new_tensor_sizes
+                    # if print_tensor_sizes is True:
+                    #     for tensor in get_tensors():
+                    #         if not hasattr(tensor, 'dbg_alloc_where'):
+                    #             tensor.dbg_alloc_where = where_str
+                    #     new_tensor_sizes = {(type(x), tuple(x.size()), x.dbg_alloc_where)
+                    #                         for x in get_tensors()}
+                    #     for t, s, loc in new_tensor_sizes - last_tensor_sizes:
+                    #         f.write(f'+ {loc:<50} {str(s):<20} {str(t):<10}\n')
+                    #     for t, s, loc in last_tensor_sizes - new_tensor_sizes:
+                    #         f.write(f'- {loc:<50} {str(s):<20} {str(t):<10}\n')
+                    #     last_tensor_sizes = new_tensor_sizes
                 py3nvml.nvmlShutdown()
 
             # save details about line _to be_ executed
@@ -93,20 +92,3 @@ def gpu_profile(frame, event, arg):
             pass
 
     return gpu_profile
-
-
-def get_tensors(gpu_only=True):
-    import gc
-    for obj in gc.get_objects():
-        try:
-            if torch.is_tensor(obj):
-                tensor = obj
-            elif hasattr(obj, 'data') and torch.is_tensor(obj.data):
-                tensor = obj.data
-            else:
-                continue
-
-            if tensor.is_cuda:
-                yield tensor
-        except Exception as e:
-            pass
