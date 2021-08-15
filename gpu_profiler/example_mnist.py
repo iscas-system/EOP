@@ -1,6 +1,6 @@
 from __future__ import print_function
 import os
-os.environ['CUDA_VISIBLE_DEVICES']='2'
+os.environ['CUDA_VISIBLE_DEVICES']='1'
 os.environ['GPU_DEBUG']='2'
 
 import argparse
@@ -45,7 +45,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
                 epoch, batch_idx * len(data), len(train_loader.dataset),
                 100. * batch_idx / len(train_loader), loss.item()))
 
-        #gpu_profile(frame=sys._getframe(), event='line', arg=None)
+        # gpu_profile(frame=sys._getframe(), event='line', arg=None)
 
 def test(args, model, device, test_loader):
     model.eval()
@@ -71,7 +71,7 @@ def main():
                         help='input batch size for training (default: 64)')
     parser.add_argument('--test-batch-size', type=int, default=1000, metavar='N',
                         help='input batch size for testing (default: 1000)')
-    parser.add_argument('--epochs', type=int, default=10, metavar='N',
+    parser.add_argument('--epochs', type=int, default=1, metavar='N',
                         help='number of epochs to train (default: 10)')
     parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
                         help='learning rate (default: 0.01)')

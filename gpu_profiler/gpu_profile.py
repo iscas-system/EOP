@@ -14,7 +14,7 @@ use_incremental = False
 
 
 if 'GPU_DEBUG' in os.environ:
-    gpu_profile_fn = f"Host_{socket.gethostname()}_gpu{os.environ['GPU_DEBUG']}_mem_prof-{datetime.datetime.now():%d-%b-%y-%H-%M-%S}.prof.txt"
+    gpu_profile_fn = f"/root/Host_{socket.gethostname()}_gpu{os.environ['GPU_DEBUG']}_mem_prof-{datetime.datetime.now():%d-%b-%y-%H-%M-%S}.prof.txt"
     print('profiling gpu usage to ', gpu_profile_fn)
 
 
@@ -32,11 +32,12 @@ def gpu_profile(frame, event, arg):
     global last_tensor_sizes
     global last_meminfo_used
     global lineno, func_name, filename, module_name
-
+    event = 'line'
     if event == 'line':
         try:
             # about _previous_ line (!)
             if lineno is not None:
+                print("good")
                 py3nvml.nvmlInit()
                 handle = py3nvml.nvmlDeviceGetHandleByIndex(int(os.environ['GPU_DEBUG']))
                 meminfo = py3nvml.nvmlDeviceGetMemoryInfo(handle)
