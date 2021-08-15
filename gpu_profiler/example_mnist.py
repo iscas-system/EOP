@@ -115,5 +115,6 @@ def main():
 
 
 if __name__ == '__main__':
+    # typical python pinch.
     sys.settrace(gpu_profile)
     main()
