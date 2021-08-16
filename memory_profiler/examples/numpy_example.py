@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.signal
 
-from std_memory_profiler import operation_memory_profile
+from std_memory_profiler import operation_memory_profile, operation_time_profile
 
 def create_data(ra):
     ret = []
@@ -10,7 +10,7 @@ def create_data(ra):
     return ret
 
 
-@operation_memory_profile
+@operation_time_profile
 def process_data(data):
     data = np.concatenate(data)
     detrended = scipy.signal.detrend(data, axis=0)
