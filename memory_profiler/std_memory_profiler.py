@@ -120,11 +120,12 @@ def _get_memory(pid, backend, timestamps=False, include_children=False, filename
 
     def tracemalloc_tool():
         # .. cross-platform but but requires Python 3.4 or higher ..
+        print("tracemalloc")
         stat = next(filter(lambda item: str(item).startswith(filename),
                            tracemalloc.take_snapshot().statistics('filename')))
         mem = stat.size / _TWO_20
         if timestamps:
-            return mem, time.time()
+            return time.time_ns()
         else:
             return mem
 
@@ -132,6 +133,8 @@ def _get_memory(pid, backend, timestamps=False, include_children=False, filename
         # .. cross-platform but but requires psutil ..
         process = psutil.Process(pid)
         try:
+            if timestamps:
+                return 0, time.time_ns()
             # avoid using get_memory_info since it does not exists
             # in psutil > 2.0 and accessing it will cause exception.
             meminfo_attr = 'memory_info' if hasattr(process, 'memory_info') \
@@ -139,10 +142,7 @@ def _get_memory(pid, backend, timestamps=False, include_children=False, filename
             mem = getattr(process, meminfo_attr)()[0] / _TWO_20
             if include_children:
                 mem +=  sum(_get_child_memory(process, meminfo_attr))
-            if timestamps:
-                return mem, time.time()
-            else:
-                return mem
+            return mem
         except psutil.AccessDenied:
             pass
             # continue and try to get this from ps
@@ -152,6 +152,7 @@ def _get_memory(pid, backend, timestamps=False, include_children=False, filename
         # .. cross-platform but requires psutil > 4.0.0 ..
         process = psutil.Process(pid)
         try:
+            print("psutilfull")
             if not hasattr(process, 'memory_full_info'):
                 raise NotImplementedError("Backend `{}` requires psutil > 4.0.0".format(memory_metric))
 
@@ -194,6 +195,7 @@ def _get_memory(pid, backend, timestamps=False, include_children=False, filename
                                stdout=subprocess.PIPE
                                ).communicate()[0].split(b'\n')
         try:
+            print("posix_tool")
             vsz_index = out[0].split().index(b'RSS')
             mem = float(out[1].split()[vsz_index]) / 1024
             if timestamps:
@@ -201,6 +203,7 @@ def _get_memory(pid, backend, timestamps=False, include_children=False, filename
             else:
                 return mem
         except:
+            print("posix_tool_error")
             if timestamps:
                 return -1, time.time()
             else:
@@ -633,6 +636,15 @@ class TimeStamper:
             for ts, level in zip(timestamps, self.stack[func]):
                 stream.write("FUNC %s %.4f %.4f %.4f %.4f %d\n" % (
                     (function_name,) + ts[0] + ts[1] + (level,)))
+
+    def show_operation_results(self, operation_meta, stream=None, key="nano_cpu_time"):
+        if stream is None:
+            stream = sys.stdout  
+        for func, timestamps in self.functions.items():
+            for ts in zip(timestamps, self.stack[func]):
+                operation_meta[key] = ts[0][1][1] - ts[0][0][1]
+                stream.write(json.dumps(operation_meta))
+                stream.write(u'\n\n')
 
 
 class CodeMap(dict):
@@ -1177,7 +1189,7 @@ def load_ipython_extension(ip):
 
     MemoryProfilerMagics.register_magics(ip)
 
-def operation_cpu_time_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
+def operation_time_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
     """
     Decorator that will run the function and print a function/operation execution time profile especially when function in a loop.
     """
@@ -1186,6 +1198,7 @@ def operation_cpu_time_profile(func=None, operation_meta={}, stream=None, precis
         if not tracemalloc.is_tracing():
             tracemalloc.start()
     if func is not None:
+        print("get function")
         get_prof = partial(TimeStamper, backend=backend)
         if iscoroutinefunction(func):
             @wraps(wrapped=func)
@@ -1193,14 +1206,14 @@ def operation_cpu_time_profile(func=None, operation_meta={}, stream=None, precis
             def wrapper(*args, **kwargs):
                 prof = get_prof()
                 val = yield from prof(func)(*args, **kwargs)
-                prof.show_results()
+                prof.show_operation_results(operation_meta, stream = stream)
                 return val
         else:
             @wraps(wrapped=func)
             def wrapper(*args, **kwargs):
                 prof = get_prof()
                 val = prof(func)(*args, **kwargs)
-                prof.show_results()
+                prof.show_operation_results(operation_meta, stream = stream)
                 return val
 
         return wrapper
