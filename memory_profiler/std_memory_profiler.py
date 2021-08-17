@@ -738,12 +738,12 @@ class TimeStamper:
                 stream.write("FUNC %s %.4f %.4f %.4f %.4f %d\n" % (
                     (function_name,) + ts[0] + ts[1] + (level,)))
 
-    def show_operation_results(self, operation_meta, stream=None, key="nano_func_time"):
+    def show_operation_results(self, operation_meta, stream=None):
         if stream is None:
             stream = sys.stdout  
         for func, timestamps in self.functions.items():
             for ts in zip(timestamps, self.stack[func]):
-                operation_meta[key] = ts[0][1][1] - ts[0][0][1]
+                operation_meta["nano_op_time"] = ts[0][1][1] - ts[0][0][1]
                 stream.write(json.dumps(operation_meta))
                 stream.write(u'\n\n')
 
