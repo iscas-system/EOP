@@ -22,6 +22,7 @@ import time
 import traceback
 import warnings
 import json
+from py3nvml import py3nvml
 
 if sys.platform == "win32":
     # any value except signal.CTRL_C_EVENT and signal.CTRL_BREAK_EVENT
@@ -534,6 +535,106 @@ class _TimeStamperCM(object):
             _get_memory(os.getpid(), self.backend, timestamps=True,
                         include_children=self.include_children, filename=self.filename))
 
+class CudaStamper:
+    """ 
+    Similar to Time Stamper but use py3nvml to get cuda memory status
+    """
+
+    def __init__(self, backend, include_children=False):
+        self.functions = {}
+        self.backend = backend
+        self.include_children = include_children
+        self.current_stack_level = -1
+        self.stack = {}
+
+    def __call__(self, func=None, precision=None):
+        if func is not None:
+            if not callable(func):
+                raise ValueError("Value must be callable")
+
+            self.add_function(func)
+            f = self.wrap_function(func)
+            f.__module__ = func.__module__
+            f.__name__ = func.__name__
+            f.__doc__ = func.__doc__
+            f.__dict__.update(getattr(func, '__dict__', {}))
+            return f
+        else:
+            def inner_partial(f):
+                return self.__call__(f, precision=precision)
+
+            return inner_partial
+
+    def timestamp(self, name="<block>"):
+        """Returns a context manager for timestamping a block of code."""
+        # Make a fake function
+        func = lambda x: x
+        func.__module__ = ""
+        func.__name__ = name
+        self.add_function(func)
+        timestamps = []
+        self.functions[func].append(timestamps)
+        # A new object is required each time, since there can be several
+        # nested context managers.
+        try:
+            filename = inspect.getsourcefile(func)
+        except TypeError:
+            filename = '<unknown>'
+        return _TimeStamperCM(
+            timestamps,
+            filename,
+            self.backend,
+            timestamper=self,
+            func=func
+        )
+
+    def add_function(self, func):
+        if func not in self.functions:
+            self.functions[func] = []
+            self.stack[func] = []
+
+    def wrap_function(self, func):
+        """ Wrap a function to timestamp it.
+        """
+
+        def f(*args, **kwds):
+            # Start time
+            try:
+                filename = inspect.getsourcefile(func)
+            except TypeError:
+                filename = '<unknown>'
+            py3nvml.nvmlInit()
+            handle = py3nvml.nvmlDeviceGetHandleByIndex(0)
+            timestamps = [py3nvml.nvmlDeviceGetMemoryInfo(handle)]
+            self.functions[func].append(timestamps)
+            try:
+                with self.call_on_stack(func, *args, **kwds) as result:
+                    return result
+            finally:
+                # end time
+                timestamps.append(py3nvml.nvmlDeviceGetMemoryInfo(handle))
+                py3nvml.nvmlShutdown()
+        return f
+
+    @contextmanager
+    def call_on_stack(self, func, *args, **kwds):
+        self.current_stack_level += 1
+        self.stack[func].append(self.current_stack_level)
+
+        yield func(*args, **kwds)
+
+        self.current_stack_level -= 1
+
+    def show_operation_results(self, operation_meta, stream=None, key="cuda_memory"):
+        if stream is None:
+            stream = sys.stdout  
+        for func, timestamps in self.functions.items():
+            for ts in zip(timestamps, self.stack[func]):
+                operation_meta["before_byte"] = ts[0][0].used
+                operation_meta["after_byte"] = ts[0][1].used
+                operation_meta["used_byte"] = ts[0][1].used - ts[0][0].used
+                stream.write(json.dumps(operation_meta))
+                stream.write(u'\n\n')
 
 class TimeStamper:
     """ A profiler that just records start and end execution times for
@@ -637,7 +738,7 @@ class TimeStamper:
                 stream.write("FUNC %s %.4f %.4f %.4f %.4f %d\n" % (
                     (function_name,) + ts[0] + ts[1] + (level,)))
 
-    def show_operation_results(self, operation_meta, stream=None, key="nano_cpu_time"):
+    def show_operation_results(self, operation_meta, stream=None, key="nano_func_time"):
         if stream is None:
             stream = sys.stdout  
         for func, timestamps in self.functions.items():
@@ -1188,6 +1289,36 @@ def load_ipython_extension(ip):
     """This is called to load the module as an IPython extension."""
 
     MemoryProfilerMagics.register_magics(ip)
+
+def operation_cuda_memory_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
+    """
+    Decorator that will run the function and print a function/operation execution time profile especially when function in a loop.
+    """
+    backend = choose_backend(backend)
+    if backend == 'tracemalloc' and has_tracemalloc:
+        if not tracemalloc.is_tracing():
+            tracemalloc.start()
+    if func is not None:
+        get_prof = partial(CudaStamper, backend=backend)
+        if iscoroutinefunction(func):
+            @wraps(wrapped=func)
+            @coroutine
+            def wrapper(*args, **kwargs):
+                prof = get_prof()
+                val = yield from prof(func)(*args, **kwargs)
+                prof.show_operation_results(operation_meta, stream = stream)
+                return val
+        else:
+            @wraps(wrapped=func)
+            def wrapper(*args, **kwargs):
+                prof = get_prof()
+                val = prof(func)(*args, **kwargs)
+                prof.show_operation_results(operation_meta, stream = stream)
+                return val
+
+        return wrapper
+    else:
+        raise ValueError("Must be written before on a function")
 
 def operation_time_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
     """
