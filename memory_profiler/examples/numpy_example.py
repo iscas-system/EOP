@@ -1,7 +1,7 @@
 import numpy as np
 import scipy.signal
 
-from std_memory_profiler import operation_memory_profile, operation_time_profile
+from std_memory_profiler import operation_memory_profile, operation_time_profile,operation_cuda_memory_profile
 
 def create_data(ra):
     ret = []
