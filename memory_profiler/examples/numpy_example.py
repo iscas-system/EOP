@@ -10,7 +10,7 @@ def create_data(ra):
     return ret
 
 
-@operation_time_profile
+@operation_memory_profile
 def process_data(data):
     data = np.concatenate(data)
     detrended = scipy.signal.detrend(data, axis=0)

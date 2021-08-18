@@ -630,9 +630,9 @@ class CudaStamper:
             stream = sys.stdout  
         for func, timestamps in self.functions.items():
             for ts in zip(timestamps, self.stack[func]):
-                operation_meta["before_byte"] = ts[0][0].used
-                operation_meta["after_byte"] = ts[0][1].used
-                operation_meta["used_byte"] = ts[0][1].used - ts[0][0].used
+                operation_meta["op_before_cuda_byte_memory"] = ts[0][0].used
+                operation_meta["op_after_cuda_byte_memory"] = ts[0][1].used
+                operation_meta["op_used_cuda_byte_memory"] = ts[0][1].used - ts[0][0].used
                 stream.write(json.dumps(operation_meta))
                 stream.write(u'\n\n')
 
@@ -743,7 +743,7 @@ class TimeStamper:
             stream = sys.stdout  
         for func, timestamps in self.functions.items():
             for ts in zip(timestamps, self.stack[func]):
-                operation_meta["nano_op_time"] = ts[0][1][1] - ts[0][0][1]
+                operation_meta["op_nano_time"] = ts[0][1][1] - ts[0][0][1]
                 stream.write(json.dumps(operation_meta))
                 stream.write(u'\n\n')
 
@@ -971,13 +971,16 @@ def operation_show_results(prof, stream=None, precision=1, operation_meta={}):
         funtion_used_mem = 0.0
         function_line = -1
         for (lineno, mem) in lines:
+            print(lineno)
+            print(mem)
             if mem:
                 if function_line == -1:     
                     function_line = lineno
-                if mem[0] >0:
-                    funtion_used_mem += mem[0]       
-        funtion_used_mem = template_mem.format(funtion_used_mem)
-        operation_meta["op_used_memory"] = funtion_used_mem
+                    operation_meta["op_before_byte_memory"] = int(mem[1]*1024*1024)
+                elif mem[0] > 0:
+                    funtion_used_mem += mem[0]
+                operation_meta["op_after_byte_memory"] = int(mem[1]*1024*1024)     
+        operation_meta["op_used_byte_memory"] = int(funtion_used_mem*1024*1024)
         stream.write(json.dumps(operation_meta))
         stream.write(u'\n\n')
 
