@@ -369,12 +369,7 @@ def generator_operation_profile_meta(temp_body):
     return temp_dict
     
 def op_forward_profile(call_interpreter, call_intput_args, ir_params):
-    print(len(call_intput_args))
-    t0 = time.perf_counter()
-    res = call_interpreter.evaluate()(*call_intput_args, **ir_params)
-    t1 = time.perf_counter()
-    print("running time: %s s" %(str(t1-t0)))
-    return res
+    return call_interpreter.evaluate()(*call_intput_args, **ir_params)
 
 def profile_forward_relay_operator(ready_op_node_list, ir_params, x, device, target, dtype="float32"):
     """

@@ -971,8 +971,6 @@ def operation_show_results(prof, stream=None, precision=1, operation_meta={}):
         funtion_used_mem = 0.0
         function_line = -1
         for (lineno, mem) in lines:
-            print(lineno)
-            print(mem)
             if mem:
                 if function_line == -1:     
                     function_line = lineno
@@ -1321,7 +1319,11 @@ def operation_cuda_memory_profile(func=None, operation_meta={}, stream=None, pre
 
         return wrapper
     else:
-        raise ValueError("Must be written before on a function")
+        def inner_wrapper(f):
+            return operation_cuda_memory_profile(f, operation_meta=operation_meta, stream=stream, precision=precision,
+                           backend=backend)
+
+        return inner_wrapper
 
 def operation_time_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
     """
@@ -1352,7 +1354,11 @@ def operation_time_profile(func=None, operation_meta={}, stream=None, precision=
 
         return wrapper
     else:
-        raise ValueError("Must be written before on a function")
+        def inner_wrapper(f):
+            return operation_time_profile(f, operation_meta=operation_meta, stream=stream, precision=precision,
+                           backend=backend)
+
+        return inner_wrapper
 
 
 def operation_memory_profile(func=None, operation_meta={}, stream=None, precision=1, backend='psutil'):
@@ -1386,7 +1392,11 @@ def operation_memory_profile(func=None, operation_meta={}, stream=None, precisio
 
         return wrapper
     else:
-        raise ValueError("Must be written before on a function")
+        def inner_wrapper(f):
+            return operation_memory_profile(f, operation_meta=operation_meta, stream=stream, precision=precision,
+                           backend=backend)
+
+        return inner_wrapper
 
 
 def profile(func=None, stream=None, precision=1, backend='psutil'):
