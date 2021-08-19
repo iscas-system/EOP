@@ -159,6 +159,8 @@ class op_node:
         self.prior = {}
         self.performance_data = {}
         self.concentrate = False
+        self.fwmetadata = {}
+        self.bwmetadata = {}
 
     def set_next(self, next_op_node, args_index):
         '''
@@ -171,22 +173,22 @@ class op_node:
             self.concentrate = True
     
     def print_self(self):
-        #print(self.id, self.attrs, self.next, self.prior)
-        # print("self.id: %s" %(self.id))
-        # print("self.type: %s" %(self.type))
-        # print("self.next: %r" %(self.next))
-        # print("self.prior: %r" %(self.prior))
-        #print("self.attrs: %r" %(self.attrs))
-        # print("self.attrs:")
-        # '''
-        # global tmpcnt
-        # if tmpcnt == 0:
-        #     help(self.attrs)
-        #     tmpcnt += 1
-        # '''
-        # for tmp in self.attrs.keys():
-        #     print("key: %r" %(tmp))
-        #     print("value: %r" %(self.attrs.get_str(tmp)))
+        print(self.id, self.attrs, self.next, self.prior)
+        print("self.id: %s" %(self.id))
+        print("self.type: %s" %(self.type))
+        print("self.next: %r" %(self.next))
+        print("self.prior: %r" %(self.prior))
+        print("self.attrs: %r" %(self.attrs))
+        print("self.attrs:")
+        '''
+        global tmpcnt
+        if tmpcnt == 0:
+            help(self.attrs)
+            tmpcnt += 1
+        '''
+        for tmp in self.attrs.keys():
+            print("key: %r" %(tmp))
+            print("value: %r" %(self.attrs.get_str(tmp)))
         return
 
 
@@ -222,7 +224,7 @@ def construct_op_graph(ir_module):
     switch.get(type(main_function.body), default)()
 
 def profile_resource_usage(ir_params, x, device=tvm.cuda(0), target="cuda"):
-    computation_graph.traverse_and_calculate_per_op(ir_params, x, device, target, bw = False)
+    computation_graph.traverse_and_calculate_per_op(ir_params, x, device, target, bw = True)
 
 
 def recursive_traverse_op(type, input, temp_op=None):
@@ -367,9 +369,6 @@ def generator_operation_profile_meta(temp_body):
     temp_dict["args"] = temp_body2.args
     temp_dict["attrs"] = temp_body2.attrs
     return temp_dict
-    
-def op_forward_profile(call_interpreter, call_intput_args, ir_params):
-    return call_interpreter.evaluate()(*call_intput_args, **ir_params)
 
 def profile_forward_relay_operator(ready_op_node_list, ir_params, x, device, target, dtype="float32"):
     """
@@ -442,14 +441,21 @@ def profile_forward_relay_operator(ready_op_node_list, ir_params, x, device, tar
     # for p in ir_params:
     #     print(p)
     #'''
+    metadata = {}
+    @operation_time_profile(stream=sys.stdout, operation_meta=metadata)
+    def op_forward_profile(call_interpreter, call_intput_args, ir_params):
+        return call_interpreter.evaluate()(*call_intput_args, **ir_params)
 
     ready_op_node.performance_data["fw_value"] = op_forward_profile(call_interpreter,call_intput_args,ir_params)
     for i in range(1,op_list_len):
         ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
+    for i in range(op_list_len):
+        for key in metadata.keys():
+            ready_op_node_list[i].fwmetadata[key] = metadata[key]
     print(ready_op_node.id)
     return 
 
-def profile_backward_relay_operator(ready_op_node, ir_params, x, device, target, dtype="float32"):
+def profile_backward_relay_operator(ready_op_node_list, ir_params, x, device, target, dtype="float32"):
     """
     Sequcently compile each operaion according to its dependencies with auto-grad.
     
@@ -479,7 +485,16 @@ def profile_backward_relay_operator(ready_op_node, ir_params, x, device, target,
     call_interpreter = relay.create_executor(device = device, target = target)
     call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, x)
     print(ready_op_node.id)
-    ready_op_node.performance_data["bw_value"] = call_interpreter.evaluate(bwd_func)(*call_intput_args, **ir_params)
+
+    metadata = {}
+
+    @operation_time_profile(stream=sys.stdout, operation_meta=metadata)
+    def op_backward_profile(call_interpreter, call_intput_args, ir_params, bwd_func_):
+        return call_interpreter.evaluate(bwd_func_)(*call_intput_args, **ir_params)
+    ready_op_node.performance_data["bw_value"] = op_backward_profile(call_interpreter,call_intput_args,ir_params,bwd_func)
     for i in range(1,op_list_len):
         ready_op_node_list[i].performance_data["bw_value"] = ready_op_node.performance_data["bw_value"]
+    for i in range(op_list_len):
+        for key in metadata.keys():
+            ready_op_node_list[i].bwmetadata[key] = metadata[key]
     return 
