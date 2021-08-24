@@ -7,10 +7,12 @@ import tvm
 from tvm import te
 import tvm.relay as relay
 from tvm.contrib.download import download_testdata
-from std_memory_profiler import profile
+from std_memory_profiler import profile, operation_time_profile, operation_memory_profile, operation_cuda_memory_profile
 from tvm.relay.testing import check_grad, run_infer_type
 from tvm.relay.transform import gradient
 import time
+import sys
+import csv
 
 class op_graph:
     """
@@ -82,7 +84,7 @@ class op_graph:
                     return True
         return True
 
-    def traverse_and_calculate_per_op(self, ir_params, x, device, target, fw=True, bw=False):
+    def traverse_and_calculate_per_op(self, ir_params, x, device, target, fw=True, bw=False, output_file = "out.csv"):
         """
         use wide-first traversial approaches to calculate each operator
 
@@ -100,10 +102,12 @@ class op_graph:
         #     for key in p.prior.keys():
         #         print("prev: %s" %(p.prior[key][1].id))
         profile_count = 0
+        output_list = []
         while len(available_op_queue) > 0:
             temp_op = available_op_queue.pop(0)
             #print("temp_op: %s" %(temp_op.id))
             op_list = [temp_op]
+            output = {}
             while temp_op.concentrate != False:
                 for key1 in temp_op.next.keys():
                     op_list.append(temp_op.next[key1][1])
@@ -111,13 +115,30 @@ class op_graph:
                 temp_op = temp_op.next[tmp][1]
 
             if fw:
-                profile_forward_relay_operator(op_list, ir_params, x, device, target)
+                fw_id, fw_data = profile_forward_relay_operator(op_list, ir_params, x, device, target)
+                output['a_name'] = fw_id
+                for key2 in fw_data.keys():
+                    output['forward_' + key2] = fw_data[key2]
             if bw:
-                profile_backward_relay_operator(op_list, ir_params, x,device, target)
+                bw_id, bw_data = profile_backward_relay_operator(op_list, ir_params, x,device, target)
+                output['a_name'] = bw_id
+                for key2 in bw_data.keys():
+                    output['backward_' + key2] = bw_data[key2]
             for key in temp_op.next.keys():
                 if self.check_op_ready(temp_op.next[key][1]):
                     available_op_queue.append(temp_op.next[key][1])
             profile_count +=1
+            output_list.append(output)
+        if len(output_list) > 0:
+            a = []
+            dict = output_list[0]
+            for headers in sorted(dict.keys()):
+                a.append(headers)
+            header = a
+            with open(output_file, 'a', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=header)
+                writer.writeheader()
+                writer.writerows(output_list)
 
 profile_count=0
 profile_point=21
@@ -223,8 +244,8 @@ def construct_op_graph(ir_module):
               tvm.relay.expr.TupleGetItem:case2}
     switch.get(type(main_function.body), default)()
 
-def profile_resource_usage(ir_params, x, device=tvm.cuda(0), target="cuda"):
-    computation_graph.traverse_and_calculate_per_op(ir_params, x, device, target, bw = True)
+def profile_resource_usage(ir_params, x, device=tvm.cuda(0), target="cuda", output_file = "out.csv"):
+    computation_graph.traverse_and_calculate_per_op(ir_params, x, device, target, bw = False, output_file = output_file)
 
 
 def recursive_traverse_op(type, input, temp_op=None):
@@ -442,18 +463,43 @@ def profile_forward_relay_operator(ready_op_node_list, ir_params, x, device, tar
     #     print(p)
     #'''
     metadata = {}
+
+    if len(call_intput_args) > 0 :
+        metadata['fw_inputsize'] = 0
+        for p in call_intput_args:
+            metadata['fw_inputsize'] += sys.getsizeof(p)
+    else:
+        metadata['fw_inputsize'] = 0
+
+    if target == "llvm":
+        @operation_memory_profile(stream=sys.stdout, operation_meta=metadata)
+        def op_memory_forward_profile(call_interpreter, call_intput_args, ir_params):
+            return call_interpreter.evaluate()(*call_intput_args, **ir_params)
+
+        op_memory_forward_profile(call_interpreter, call_intput_args, ir_params)
+
+    if target == "cuda":
+        @operation_cuda_memory_profile(stream=sys.stdout, operation_meta=metadata)
+        def op_memory_forward_profile(call_interpreter, call_intput_args, ir_params):
+            return call_interpreter.evaluate()(*call_intput_args, **ir_params)
+
+        op_memory_forward_profile(call_interpreter, call_intput_args, ir_params)
+
     @operation_time_profile(stream=sys.stdout, operation_meta=metadata)
-    def op_forward_profile(call_interpreter, call_intput_args, ir_params):
+    def op_time_forward_profile(call_interpreter, call_intput_args, ir_params):
         return call_interpreter.evaluate()(*call_intput_args, **ir_params)
 
-    ready_op_node.performance_data["fw_value"] = op_forward_profile(call_interpreter,call_intput_args,ir_params)
+    ready_op_node.performance_data["fw_value"] = op_time_forward_profile(call_interpreter,call_intput_args,ir_params)
     for i in range(1,op_list_len):
         ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
+
     for i in range(op_list_len):
         for key in metadata.keys():
             ready_op_node_list[i].fwmetadata[key] = metadata[key]
+
     print(ready_op_node.id)
-    return 
+    #print(ready_op_node.fwmetadata)
+    return ready_op_node.id,metadata
 
 def profile_backward_relay_operator(ready_op_node_list, ir_params, x, device, target, dtype="float32"):
     """
@@ -484,17 +530,41 @@ def profile_backward_relay_operator(ready_op_node_list, ir_params, x, device, ta
     bwd_func = run_infer_type(gradient(call_function))
     call_interpreter = relay.create_executor(device = device, target = target)
     call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, x)
-    print(ready_op_node.id)
 
     metadata = {}
+    if len(call_intput_args) > 0 :
+        metadata['bw_inputsize'] = 0
+        for p in call_intput_args:
+            metadata['bw_inputsize'] += sys.getsizeof(p)
+    else:
+        metadata['bw_inputsize'] = 0
+
+    if target == "llvm":
+        @operation_memory_profile(stream=sys.stdout, operation_meta=metadata)
+        def op_memory_backward_profile(call_interpreter, call_intput_args, ir_params, bwd_func_):
+            return call_interpreter.evaluate(bwd_func_)(*call_intput_args, **ir_params)
+
+        op_memory_backward_profile(call_interpreter, call_intput_args, ir_params, bwd_func)
+
+    if target == "cuda":
+        @operation_cuda_memory_profile(stream=sys.stdout, operation_meta=metadata)
+        def op_memory_backward_profile(call_interpreter, call_intput_args, ir_params, bwd_func_):
+            return call_interpreter.evaluate(bwd_func_)(*call_intput_args, **ir_params)
+
+        op_memory_backward_profile(call_interpreter, call_intput_args, ir_params, bwd_func)
 
     @operation_time_profile(stream=sys.stdout, operation_meta=metadata)
-    def op_backward_profile(call_interpreter, call_intput_args, ir_params, bwd_func_):
+    def op_time_backward_profile(call_interpreter, call_intput_args, ir_params, bwd_func_):
         return call_interpreter.evaluate(bwd_func_)(*call_intput_args, **ir_params)
-    ready_op_node.performance_data["bw_value"] = op_backward_profile(call_interpreter,call_intput_args,ir_params,bwd_func)
+    ready_op_node.performance_data["bw_value"] = op_time_backward_profile(call_interpreter,call_intput_args,ir_params,bwd_func)
     for i in range(1,op_list_len):
         ready_op_node_list[i].performance_data["bw_value"] = ready_op_node.performance_data["bw_value"]
+
     for i in range(op_list_len):
         for key in metadata.keys():
             ready_op_node_list[i].bwmetadata[key] = metadata[key]
-    return 
+
+    print(ready_op_node.id)
+    #print(ready_op_node.bwmetadata)
+
+    return ready_op_node.id,metadata

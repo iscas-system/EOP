@@ -8,7 +8,7 @@ import tvm.relay as relay
 import numpy as np
 from tvm.contrib import graph_runtime
 from relay_graph import construct_op_graph, profile_resource_usage
-
+from std_memory_profiler import profile, operation_time_profile, operation_memory_profile, operation_cuda_memory_profile
 
 def batch_norm_infer(data,
                     gamma=None,
