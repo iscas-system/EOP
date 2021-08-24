@@ -8,7 +8,7 @@ import tvm.relay as relay
 import numpy as np
 from tvm.contrib import graph_runtime
 from relay_graph import construct_op_graph, profile_resource_usage
-from std_memory_profiler import profile, operation_time_profile, operation_memory_profile, operation_cuda_memory_profile
+from std_memory_profiler import operation_memory_profile, operation_time_profile,operation_cuda_memory_profile, profile
 
 def batch_norm_infer(data,
                     gamma=None,
@@ -43,23 +43,24 @@ def conv2d(data, weight=None, **kwargs):
 
 def conv_block(data, name, channels, kernel_size=(3, 3), strides=(1, 1),
             padding=(1, 1), epsilon=1e-5):
-    # return conv2d(
-    #      data=data,
-    #      channels=channels,
-    #      kernel_size=kernel_size,
-    #      strides=strides,
-    #      padding=padding,
-    #      data_layout='NCHW',
-    #      name=name+'_conv')
-    return batch_norm_infer(data=data, epsilon=epsilon, name=name + '_bn')
-    # act = relay.nn.relu(data=bn)
+    conv2d_value = conv2d(
+         data=data,
+         channels=channels,
+         kernel_size=kernel_size,
+         strides=strides,
+         padding=padding,
+         data_layout='NCHW',
+         name=name+'_conv')
+    return conv2d_value
+    # return batch_norm_infer(data=conv2d, epsilon=epsilon, name=name + '_bn')
+    # return relay.nn.relu(data=bn)
     # return act
     
 
-# data_shape = (1, 3, 224, 224)
+data_shape = (1, 3, 4480, 4480)
 
 kernel_shape = (32, 3, 3, 3)
-data_shape = (32, 112, 112)
+# data_shape = (32, 112, 112)
 dtype = "float32"
 data = relay.var("data", shape=data_shape, dtype=dtype)
 act = conv_block(data, "graph", 32, strides=(2, 2))
@@ -91,30 +92,42 @@ with relay.build_config(opt_level=3):
 # print("TVM compiled target function:\n", lib.get_source())
 print(mod)
 module = graph_runtime.create(graph, lib, device)
-data_tvm = np.random.uniform(1000, 50, size=data_shape).astype(dtype)
 # batch_norm_input = np.random.uniform(-1, 1, size=(1, 32, 112, 112)).astype(dtype)
-module.set_input('data', data_tvm)
-module.set_input(**params)
-module.run()
-output = module.get_output(0)
+
+#CPU: x and y scale from 64(1089088), 128(2842070),256(8853516),512(41937188),1024(157439060),2048(542466706),4096(1298424103)
+#GPU: 
+total_nano_time = 0
+for i in range(10):
+    data_tvm = np.random.uniform(1, 255, size=data_shape).astype(dtype)
+    module.set_input('data', data_tvm)
+    module.set_input(**params)
+    dict = {}
+    @operation_time_profile(operation_meta=dict)
+    def func(m):
+        m.run()
+    func(module)
+    total_nano_time +=dict["op_nano_time"]
+
+print(total_nano_time/10)
+
 # construct_op_graph(mod)
 # profile_resource_usage(params,data_tvm, device=device, target = target)
 
-entrance_tuple = mod.functions.items()[0]
-main_function = entrance_tuple[1]
+# entrance_tuple = mod.functions.items()[0]
+# main_function = entrance_tuple[1]
 
-temp_body2 = tvm.relay.Call(main_function.body.tuple_value.op, main_function.body.tuple_value.args, attrs=main_function.body.tuple_value.attrs, type_args=main_function.body.tuple_value.type_args)
-temp_body = tvm.relay.expr.TupleGetItem(temp_body2,0)
-call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
-call_functions = {"main": call_function}
-call_ir_module = tvm.ir.IRModule(functions=call_functions)
-with tvm.transform.PassContext(opt_level=1):
-    call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
+# temp_body2 = tvm.relay.Call(main_function.body.tuple_value.op, main_function.body.tuple_value.args, attrs=main_function.body.tuple_value.attrs, type_args=main_function.body.tuple_value.type_args)
+# temp_body = tvm.relay.expr.TupleGetItem(temp_body2,0)
+# call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
+# call_functions = {"main": call_function}
+# call_ir_module = tvm.ir.IRModule(functions=call_functions)
+# with tvm.transform.PassContext(opt_level=1):
+#     call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
 
-print(call_ir_module)
-input_args = []
-input_args.append(data_tvm)
-print(params.keys())
-res = call_interpreter.evaluate()(*input_args, **params)
+# print(call_ir_module)
+# input_args = []
+# input_args.append(data_tvm)
+# print(params.keys())
+# res = call_interpreter.evaluate()(*input_args, **params)
 
-print(res)
+# print(res)
