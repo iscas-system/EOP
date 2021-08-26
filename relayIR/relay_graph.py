@@ -188,6 +188,7 @@ class op_node:
         self.concentrate = False
         self.fwmetadata = {}
         self.bwmetadata = {}
+        self.body = None
 
     def set_next(self, next_op_node, args_index):
         '''
@@ -377,6 +378,15 @@ def find_call_value(ready_op_node, args_index):
     print("cannot find ", ready_op_node.id, "'s intermeidiate_arg in index :", args_index)
     return None, None
 
+def find_tuple_value(ready_op_node, args_index):
+    for id_key in ready_op_node.prior.keys():
+        temp_index = ready_op_node.prior[id_key][0]
+        temp_prior_node = ready_op_node.prior[id_key][1]
+        if temp_index == args_index:
+            return temp_prior_node.performance_data["fw_value"].shape, temp_prior_node.performance_data["fw_value"].dtype
+    print("cannot find ", ready_op_node.id, "'s intermeidiate_arg in index :", args_index)
+    return None, None
+
 def generate_intermediate_symbolic_args(ready_op_node):
     """
     get all symbolic arguments of an operations. Arguments may be replaced by var since these arguements calculated from other operations.
@@ -402,8 +412,8 @@ def generate_intermediate_symbolic_args(ready_op_node):
             temp_arg = tvm.relay.var(str(args_index), shape=s, dtype=d)
             new_args.append(temp_arg)
         if isinstance(tvm_arg, tvm.relay.expr.Tuple):
-            s, d = find_call_value(ready_op_node, args_index)
-            temp_arg = tvm.relay.var(str(args_index), shape=s, dtype=d)
+            find_tuple_value(ready_op_node,args_index)
+            temp_arg = ()
             new_args.append(temp_arg)
         args_index+=1
     #print(len(new_args))
@@ -453,10 +463,24 @@ def profile_forward_relay_operator(ready_op_node_list, ir_params, x, input_name,
             return
     new_args = generate_intermediate_symbolic_args(ready_op_node)
     temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs, type_args=ready_op_node.op_instance.type_args)
+    body_list = []
     for i in range(1,op_list_len):
-        temp_body = tvm.relay.expr.TupleGetItem(temp_body,ready_op_node_list[i].op_instance.index)
+        if i>1:
+            for tkey in ready_op_node_list[i].prior.keys():
+                if ready_op_node_list[i].prior[tkey][1].id == ready_op_node.id:
+                    body_list.append(tvm.relay.expr.TupleGetItem(temp_body,ready_op_node_list[i].op_instance.index))
+                else:
+                    body_list[0] = tvm.relay.expr.TupleGetItem(body_list[0],ready_op_node_list[i].op_instance.index)
+        else:
+            body_list.append(tvm.relay.expr.TupleGetItem(temp_body,ready_op_node_list[i].op_instance.index))
+        #temp_body = tvm.relay.expr.TupleGetItem(temp_body,ready_op_node_list[i].op_instance.index)
     #print("attrs: %r" %(ready_op_node.op_instance.attrs))
     #print(temp_body)
+    if len(body_list) == 1:
+        temp_body = body_list[0]
+    else:
+        temp_body = tvm.relay.expr.Tuple(body_list)
+
     call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
     call_functions = {"main": call_function}
     call_ir_module = tvm.ir.IRModule(functions=call_functions)
