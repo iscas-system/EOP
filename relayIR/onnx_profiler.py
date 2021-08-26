@@ -61,7 +61,7 @@ def generate_input_image_data_with_torchvision(img_url = "https://s3.amazonaws.c
     x = np.expand_dims(img, 0)
     return x
 
-def compile_onnx_model(onnx_model, x, target = "cuda", input_name = "input.1", device = tvm.cuda(0)):
+def compile_onnx_model(onnx_model, data, target = "cuda", input_name = "input.1", device = tvm.cuda(0)):
     """
     compile onnx model
 
@@ -79,7 +79,8 @@ def compile_onnx_model(onnx_model, x, target = "cuda", input_name = "input.1", d
     :return params: pre-trained parameters in onnx model
     :return intrp: model executor in tvm
     """
-    shape_dict = {input_name: x.shape}
+    #shape_dict = {input_name: x.shape}
+    shape_dict = {input_name[i] : data[i].shape for i in range(len(data))}
     mod, params = relay.frontend.from_onnx(onnx_model, shape_dict)
     with tvm.transform.PassContext(opt_level=1):
         intrp = relay.build_module.create_executor("graph", mod, device, target)
@@ -98,7 +99,7 @@ def run_interpreter(interpreter, x, params, dtype="float32"):
     print(top1_tvm.numpy())
     return top1_tvm
 
-def run_relay_mod(x, intrp, params, dtype="float32"):
+def run_relay_mod(data, intrp, params, dtype="float32"):
     """
     run compiled onnx model
 
@@ -113,7 +114,11 @@ def run_relay_mod(x, intrp, params, dtype="float32"):
     ----------
     :return top1_tvm: numpy tensor type
     """
-    top1_tvm = np.argmax(intrp.evaluate()(tvm.nd.array(x.astype(dtype)), **params).numpy())
+    input = []
+    for i in range(len(data)):
+        input.append(tvm.nd.array(data[i].astype(dtype)))
+    top1_tvm = intrp.evaluate()(*input, **params)
+    #top1_tvm = np.argmax(intrp.evaluate()(tvm.nd.array(x.astype(dtype)), **params).numpy())
     print("forward run value:")
     print(top1_tvm)
     return top1_tvm
