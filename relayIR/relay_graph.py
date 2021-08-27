@@ -14,6 +14,7 @@ import time
 import sys
 import csv
 from cnn_workload_generator import get_network, compile_without_log, create_graph_executor_on_single_device, evaluate_time_with_tvm_evaluator, create_operator_executor_on_single_device
+from op_statistics import put_op_time
 
 class op_graph:
     """
@@ -626,9 +627,9 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
 
     lib = compile_without_log(call_ir_module, target, ir_params)
     actual_module = create_operator_executor_on_single_device(lib, call_intput_args, target)
-    evaluate_time_with_tvm_evaluator(actual_module, device)
-
     print(ready_op_node.id)
+    put_op_time(ready_op_node.name, evaluate_time_with_tvm_evaluator(actual_module, device))
+
     return ready_op_node.id, {}
 
 def profile_backward_relay_operator(ready_op_node_list, ir_params, x, input_name, device, target, dtype="float32"):
