@@ -188,6 +188,7 @@ class op_node:
         self.prior = {}
         self.performance_data = {}
         self.concentrate = False
+        #self.tuplegetitem_cnt = 0
         self.fwmetadata = {}
         self.bwmetadata = {}
         self.body = None
@@ -200,6 +201,7 @@ class op_node:
         self.next[next_op_id] = (args_index, next_op_node)
         next_op_node.prior[self.id] = (args_index, self)
         if isinstance(next_op_node.op_instance, tvm.relay.expr.TupleGetItem):
+            #self.tuplegetitem_cnt += 1
             self.concentrate = True
     
     def print_self(self):
@@ -502,7 +504,13 @@ def profile_forward_relay_operator(ready_op_node_list, ir_params, x, input_name,
         if i>1:
             for tkey in ready_op_node_list[i].prior.keys():
                 if ready_op_node_list[i].prior[tkey][1].id == ready_op_node.id:
-                    body_list.append(tvm.relay.expr.TupleGetItem(temp_body,ready_op_node_list[i].op_instance.index))
+                    if ready_op_node_list[i].type == "tuplegetitem":
+                        body_list.append(tvm.relay.expr.TupleGetItem(temp_body,ready_op_node_list[i].op_instance.index))
+                    if ready_op_node_list[1].type == "call":
+                        body_list.append(tvm.relay.expr.Call(ready_op_node[i].op_instance.op,
+                                                             generate_intermediate_symbolic_args(ready_op_node)[i],
+                                                             attrs=ready_op_node[i].op_instance.attrs,
+                                                             type_args=ready_op_node[i].op_instance.type_args))
                 else:
                     body_list[0] = tvm.relay.expr.TupleGetItem(body_list[0],ready_op_node_list[i].op_instance.index)
         else:
@@ -549,6 +557,8 @@ def profile_forward_relay_operator(ready_op_node_list, ir_params, x, input_name,
     # for p in ir_params:
     #     print(p)
     #'''
+    print("break %r" %(ready_op_node.id))
+
     metadata = {}
 
     if len(call_intput_args) > 0 :
