@@ -17,7 +17,7 @@ def create_onnx_model_from_web(name="super_resolution.onnx", url="https://gist.g
     :name: model name
     :url: web URL
     """
-    model_path = download_testdata(url, "super_resolution.onnx", module="onnx")
+    model_path = download_testdata(url, name, module="onnx")
     return onnx.load(model_path)
 
 def create_onnx_model_from_local_path(abs_path='resnet18.onnx'):
@@ -61,7 +61,7 @@ def generate_input_image_data_with_torchvision(img_url = "https://s3.amazonaws.c
     x = np.expand_dims(img, 0)
     return x
 
-def compile_onnx_model(onnx_model, data, target = "cuda", input_name = "input.1", device = tvm.cuda(0)):
+def compile_onnx_model(onnx_model, data, target = "cuda", input_names = [], device = tvm.cuda(0)):
     """
     compile onnx model
 
@@ -80,7 +80,7 @@ def compile_onnx_model(onnx_model, data, target = "cuda", input_name = "input.1"
     :return intrp: model executor in tvm
     """
     #shape_dict = {input_name: x.shape}
-    shape_dict = {input_name[i] : data[i].shape for i in range(len(data))}
+    shape_dict = {input_names[i] : data[i].shape for i in range(len(data))}
     mod, params = relay.frontend.from_onnx(onnx_model, shape_dict)
     with tvm.transform.PassContext(opt_level=1):
         intrp = relay.build_module.create_executor("graph", mod, device, target)

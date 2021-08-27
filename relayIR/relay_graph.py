@@ -13,6 +13,7 @@ from tvm.relay.transform import gradient
 import time
 import sys
 import csv
+from cnn_workload_generator import get_network, compile_without_log, create_graph_executor_on_single_device, evaluate_time_with_tvm_evaluator, create_operator_executor_on_single_device
 
 class op_graph:
     """
@@ -118,7 +119,7 @@ class op_graph:
                 temp_op = temp_op.next[tmp][1]
 
             if fw:
-                fw_id, fw_data = profile_forward_relay_operator(op_list, ir_params, x, input_name, device, target)
+                fw_id, fw_data = profile_forward_relay_operator_time(op_list, ir_params, x, input_name, device, target)
                 output['a_name'] = fw_id
                 for key2 in fw_data.keys():
                     output['forward_' + key2] = fw_data[key2]
@@ -585,6 +586,50 @@ def profile_forward_relay_operator(ready_op_node_list, ir_params, x, input_name,
     print(ready_op_node.id)
     #print(ready_op_node.fwmetadata)
     return ready_op_node.id,metadata
+
+
+def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_name, device, target, dtype="float32"):
+    global profile_count, profile_point
+    op_list_len = len(ready_op_node_list)
+    ready_op_node = ready_op_node_list[0]
+    if op_list_len == 1:
+        if ready_op_node.type == "var" or ready_op_node.type == "const":
+            #to do
+            return
+    new_args = generate_intermediate_symbolic_args(ready_op_node)
+    temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs, type_args=ready_op_node.op_instance.type_args)
+    body_list = []
+    for i in range(1,op_list_len):
+        if i>1:
+            for tkey in ready_op_node_list[i].prior.keys():
+                if ready_op_node_list[i].prior[tkey][1].id == ready_op_node.id:
+                    body_list.append(tvm.relay.expr.TupleGetItem(temp_body,ready_op_node_list[i].op_instance.index))
+                else:
+                    body_list[0] = tvm.relay.expr.TupleGetItem(body_list[0],ready_op_node_list[i].op_instance.index)
+        else:
+            body_list.append(tvm.relay.expr.TupleGetItem(temp_body,ready_op_node_list[i].op_instance.index))
+    if len(body_list) == 1:
+        temp_body = body_list[0]
+    if len(body_list) > 1:
+        temp_body = tvm.relay.expr.Tuple(body_list)
+
+    call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
+    call_functions = {"main": call_function}
+    call_ir_module = tvm.ir.IRModule(functions=call_functions)
+    with tvm.transform.PassContext(opt_level=1):
+        call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
+    call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, x, input_name)
+
+    ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*call_intput_args, **ir_params)
+    for i in range(1,op_list_len):
+        ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
+
+    lib = compile_without_log(call_ir_module, target, ir_params)
+    actual_module = create_operator_executor_on_single_device(lib, call_intput_args, target)
+    evaluate_time_with_tvm_evaluator(actual_module, device)
+
+    print(ready_op_node.id)
+    return ready_op_node.id, {}
 
 def profile_backward_relay_operator(ready_op_node_list, ir_params, x, input_name, device, target, dtype="float32"):
     """

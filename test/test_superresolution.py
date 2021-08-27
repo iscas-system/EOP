@@ -18,9 +18,11 @@ def get_superresolution_input():
 
 onnx_model = create_onnx_model_from_web()
 input = get_superresolution_input()
-mod, params, intrp = compile_onnx_model(onnx_model, input, target = "llvm", input_name = "1", device = tvm.cpu(0))
+input_name = ["1"]
+data = [input]
+mod, params, intrp = compile_onnx_model(onnx_model, data, target = "llvm", input_names = input_name, device = tvm.cpu(0))
 run_relay_mod(input, intrp, params)
-
+tmp = {input_name[i]:data[i] for i in range(len(data))}
 construct_op_graph(mod)
-profile_resource_usage(params, input)
+profile_resource_usage(params, tmp, input_name, device=tvm.cpu(0), target="llvm")
 

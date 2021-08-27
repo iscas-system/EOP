@@ -80,9 +80,14 @@ def create_graph_executor_on_single_device(lib,input_shape,target,dtype="float32
     module.set_input("data", data_tvm)
     return module
 
-def evaluate_time_with_tvm_evaluator(module, target, device):
-    # Evaluate
-    dev = device
+def create_operator_executor_on_single_device(lib, input_args, target):
+    dev = tvm.device(str(target), 0)
+    module = graph_executor.GraphModule(lib["default"](dev))
+    for i in range(len(input_args)):
+        module.set_input(i, input_args[i])
+    return module
+
+def evaluate_time_with_tvm_evaluator(module, dev):
     print("Evaluate inference time cost...")
     ftimer = module.module.time_evaluator("run", dev, repeat=3, min_repeat_ms=500, number=1)
     prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
