@@ -85,8 +85,6 @@ class op_graph:
                 #to do 
                 if "fw_value" not in temp_op.prior[key][1].performance_data.keys():
                     return False
-                else:
-                    return True
         return True
 
     def traverse_and_calculate_per_op(self, ir_params, x, input_name, device, target, fw=True, bw=False, output_file = "out.csv"):
@@ -110,7 +108,7 @@ class op_graph:
         output_list = []
         while len(available_op_queue) > 0:
             temp_op = available_op_queue.pop(0)
-            #print("temp_op: %s" %(temp_op.id))
+            # print("temp_op: %s" %(temp_op.id))
             op_list = [temp_op]
             output = {}
             while temp_op.concentrate != False:
@@ -347,7 +345,12 @@ def generate_intermediate_actual_args(ready_op_node, dtype, x, input_name):
     while args_index <= max_index:
         for key in ready_op_node.prior.keys():
             if ready_op_node.prior[key][0] == args_index:
-                if ready_op_node.prior[key][1].type == "call" or ready_op_node.prior[key][1].type == "tuplegetitem" or ready_op_node.prior[key][1].type == "tuple":
+                if ready_op_node.prior[key][1].type == "tuple":
+                    if isinstance(ready_op_node.prior[key][1].performance_data["fw_value"], list):
+                        print("tuple item type:")
+                        for temp in ready_op_node.prior[key][1].performance_data["fw_value"]:
+                            intermeidiate_args.append(temp) 
+                if ready_op_node.prior[key][1].type == "call" or ready_op_node.prior[key][1].type == "tuplegetitem":
                     # need to append intermeidiate args:
                     intermeidiate_args.append(ready_op_node.prior[key][1].performance_data["fw_value"])
                 if ready_op_node.prior[key][1].type == "var":
@@ -410,7 +413,12 @@ def generate_intermediate_symbolic_args(ready_op_node):
     """
     args_index = 0
     new_args = []
-    for tvm_arg in ready_op_node.op_instance.args:
+    range_args = None
+    if isinstance(ready_op_node.op_instance, tvm.relay.expr.Tuple):
+        range_args = ready_op_node.op_instance.fields
+    else :
+        range_args = ready_op_node.op_instance.args
+    for tvm_arg in range_args:
         #print("tvm_arg: %r" %(tvm_arg))
         if isinstance(tvm_arg, tvm.relay.expr.Call):
             result = find_call_value(ready_op_node, args_index)
@@ -498,7 +506,11 @@ def profile_forward_relay_operator(ready_op_node_list, ir_params, x, input_name,
             #to do
             return
     new_args = generate_intermediate_symbolic_args(ready_op_node)
-    temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs, type_args=ready_op_node.op_instance.type_args)
+    temp_body = None
+    if isinstance(ready_op_node.op_instance, tvm.relay.expr.Tuple):
+        temp_body = tvm.relay.expr.Tuple(new_args)
+    else :
+        temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs, type_args=ready_op_node.op_instance.type_args)
     body_list = []
     for i in range(1,op_list_len):
         if i>1:
@@ -603,12 +615,24 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     global profile_count, profile_point
     op_list_len = len(ready_op_node_list)
     ready_op_node = ready_op_node_list[0]
+    print("current_op:"+ready_op_node.id)
+    print(type(ready_op_node.op_instance))
+    for temp in ready_op_node.prior.keys():
+        print(ready_op_node.prior[temp][1].id)
     if op_list_len == 1:
         if ready_op_node.type == "var" or ready_op_node.type == "const":
             #to do
             return
     new_args = generate_intermediate_symbolic_args(ready_op_node)
-    temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs, type_args=ready_op_node.op_instance.type_args)
+    print("symbolic args:")
+    for temp in new_args:
+        print(type(temp))
+    temp_body = None
+    if isinstance(ready_op_node.op_instance, tvm.relay.expr.Tuple):
+        temp_body = tvm.relay.expr.Tuple(new_args)
+    else :
+        temp_body = tvm.relay.Call(ready_op_node.op_instance.op, new_args, attrs=ready_op_node.op_instance.attrs, type_args=ready_op_node.op_instance.type_args)
+        
     body_list = []
     for i in range(1,op_list_len):
         if i>1:
@@ -630,14 +654,18 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     with tvm.transform.PassContext(opt_level=1):
         call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
     call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, x, input_name)
+    print("actual input args:")
+    for temp in call_intput_args:
+        print(type(temp))
+    print(call_ir_module)
 
     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*call_intput_args, **ir_params)
+    print("return value:")
+    print(type(ready_op_node.performance_data["fw_value"]))
     for i in range(1,op_list_len):
         ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
-
     lib = compile_without_log(call_ir_module, target, ir_params)
     actual_module = create_operator_executor_on_single_device(lib, call_intput_args, target)
-    print(ready_op_node.id)
     put_op_time(ready_op_node.name, evaluate_time_with_tvm_evaluator(actual_module, device))
 
     return ready_op_node.id, {}
