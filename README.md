@@ -31,3 +31,10 @@ def process_data(data):
     detrended = scipy.signal.detrend(data, axis=0)
     return detrended
 ```
+
+# roadmap
+
+1. support static DL graph analysis (using relay graph executor).
+2. support dynamic shape analysisi (using relay vm).
+3. dig more resource usage statistics.
+
