@@ -347,7 +347,6 @@ def generate_intermediate_actual_args(ready_op_node, dtype, x, input_name):
             if ready_op_node.prior[key][0] == args_index:
                 if ready_op_node.prior[key][1].type == "tuple":
                     if isinstance(ready_op_node.prior[key][1].performance_data["fw_value"], list):
-                        print("tuple item type:")
                         for temp in ready_op_node.prior[key][1].performance_data["fw_value"]:
                             intermeidiate_args.append(temp) 
                 if ready_op_node.prior[key][1].type == "call" or ready_op_node.prior[key][1].type == "tuplegetitem":
@@ -569,7 +568,7 @@ def profile_forward_relay_operator(ready_op_node_list, ir_params, x, input_name,
     # for p in ir_params:
     #     print(p)
     #'''
-    print("break %r" %(ready_op_node.id))
+    # print("break %r" %(ready_op_node.id))
 
     metadata = {}
 
@@ -600,7 +599,14 @@ def profile_forward_relay_operator(ready_op_node_list, ir_params, x, input_name,
 
     ready_op_node.performance_data["fw_value"] = op_time_forward_profile(call_interpreter,call_intput_args,ir_params)
     for i in range(1,op_list_len):
-        ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
+        if type(ready_op_node.performance_data["fw_value"]) is list:
+            if isinstance(ready_op_node_list[i].op_instance,tvm.relay.expr.TupleGetItem):
+                index = ready_op_node_list[i].op_instance.index
+                ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"][index]
+            else:
+                ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
+        else:
+            ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
 
     for i in range(op_list_len):
         for key in metadata.keys():
@@ -615,18 +621,22 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     global profile_count, profile_point
     op_list_len = len(ready_op_node_list)
     ready_op_node = ready_op_node_list[0]
-    print("current_op:"+ready_op_node.id)
-    print(type(ready_op_node.op_instance))
-    for temp in ready_op_node.prior.keys():
-        print(ready_op_node.prior[temp][1].id)
+    # print("current_op:"+ready_op_node.id)
+    # # print(type(ready_op_node.op_instance))
+    # print("father:")
+    # for temp in ready_op_node.prior.keys():
+    #     print(ready_op_node.prior[temp][1].id)
+    # print("son:")
+    # for temp in ready_op_node.next.keys():
+    #     print(ready_op_node.next[temp][1].id)
     if op_list_len == 1:
         if ready_op_node.type == "var" or ready_op_node.type == "const":
             #to do
             return
     new_args = generate_intermediate_symbolic_args(ready_op_node)
-    print("symbolic args:")
-    for temp in new_args:
-        print(type(temp))
+    # print("symbolic args:")
+    # for temp in new_args:
+    #     print(type(temp))
     temp_body = None
     if isinstance(ready_op_node.op_instance, tvm.relay.expr.Tuple):
         temp_body = tvm.relay.expr.Tuple(new_args)
@@ -654,20 +664,28 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     with tvm.transform.PassContext(opt_level=1):
         call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
     call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, x, input_name)
-    print("actual input args:")
-    for temp in call_intput_args:
-        print(type(temp))
-    print(call_ir_module)
+    # print("actual input args:")
+    # for temp in call_intput_args:
+    #     print(type(temp))
+    # print(call_ir_module)
 
     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*call_intput_args, **ir_params)
-    print("return value:")
-    print(type(ready_op_node.performance_data["fw_value"]))
-    for i in range(1,op_list_len):
-        ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
+    # print("return value:")
+    # print(type(ready_op_node.performance_data["fw_value"]))
+    for i in range(1, op_list_len):
+        if type(ready_op_node.performance_data["fw_value"]) is list:
+            if isinstance(ready_op_node_list[i].op_instance, tvm.relay.expr.TupleGetItem):
+                index = ready_op_node_list[i].op_instance.index
+                ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"][index]
+            else:
+                ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
+        else:
+            ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
     lib = compile_without_log(call_ir_module, target, ir_params)
     actual_module = create_operator_executor_on_single_device(lib, call_intput_args, target)
     put_op_time(ready_op_node.name, evaluate_time_with_tvm_evaluator(actual_module, device))
 
+    # print(ready_op_node.id)
     return ready_op_node.id, {}
 
 def profile_backward_relay_operator(ready_op_node_list, ir_params, x, input_name, device, target, dtype="float32"):
@@ -726,8 +744,15 @@ def profile_backward_relay_operator(ready_op_node_list, ir_params, x, input_name
     def op_time_backward_profile(call_interpreter, call_intput_args, ir_params, bwd_func_):
         return call_interpreter.evaluate(bwd_func_)(*call_intput_args, **ir_params)
     ready_op_node.performance_data["bw_value"] = op_time_backward_profile(call_interpreter,call_intput_args,ir_params,bwd_func)
-    for i in range(1,op_list_len):
-        ready_op_node_list[i].performance_data["bw_value"] = ready_op_node.performance_data["bw_value"]
+    for i in range(1, op_list_len):
+        if type(ready_op_node.performance_data["fw_value"]) is list:
+            if isinstance(ready_op_node_list[i].op_instance, tvm.relay.expr.TupleGetItem):
+                index = ready_op_node_list[i].op_instance.index
+                ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"][index]
+            else:
+                ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
+        else:
+            ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
 
     for i in range(op_list_len):
         for key in metadata.keys():
