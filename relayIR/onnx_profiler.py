@@ -61,7 +61,7 @@ def generate_input_image_data_with_torchvision(img_url = "https://s3.amazonaws.c
     x = np.expand_dims(img, 0)
     return x
 
-def compile_onnx_model(onnx_model, data, target = "cuda", input_names = [], device = tvm.cuda(0)):
+def compile_onnx_model(onnx_model, data, target = "cuda", input_names = [], freeze_params=False, device = tvm.cuda(0), tvm_mod = "graph"):
     """
     compile onnx model
 
@@ -81,9 +81,13 @@ def compile_onnx_model(onnx_model, data, target = "cuda", input_names = [], devi
     """
     #shape_dict = {input_name: x.shape}
     shape_dict = {input_names[i] : data[i].shape for i in range(len(data))}
-    mod, params = relay.frontend.from_onnx(onnx_model, shape_dict)
-    with tvm.transform.PassContext(opt_level=1):
-        intrp = relay.build_module.create_executor("graph", mod, device, target)
+    mod, params = relay.frontend.from_onnx(onnx_model, shape_dict,freeze_params=freeze_params)
+    if tvm_mod == "graph":
+        with tvm.transform.PassContext(opt_level=1):
+            intrp = relay.build_module.create_executor("graph", mod, device, target)
+    if tvm_mod == "vm":
+        with tvm.transform.PassContext(opt_level=1):
+            intrp = relay.create_executor("vm", mod=mod, device=device, target=target)
     print("relay IR:")
     print(mod)
     return mod, params,intrp
