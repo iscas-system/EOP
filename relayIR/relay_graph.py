@@ -169,6 +169,7 @@ class op_node:
             self.name = op.name_hint
         if self.type == "const":
             self.name = "const"
+            self.data = attrs
         if self.type == "call":
             self.name = op.op.name
             self.attrs = attrs
@@ -308,7 +309,7 @@ def recursive_traverse_op(type, input, temp_op=None):
         if isinstance(each_arg,tvm.relay.expr.Constant):
             current_node_op = computation_graph.find_if_const(each_arg)
             if current_node_op == None:
-                current_node_op = op_node("const", op_index, each_arg, attrs=None)
+                current_node_op = op_node("const", op_index, each_arg, attrs=each_arg.data)
             current_node_op.set_next(next_op_node, args_index)
             computation_graph.insert_op(current_node_op)
             args_index += 1
@@ -362,7 +363,11 @@ def generate_intermediate_actual_args(ready_op_node, dtype, x, input_name):
                     else:
                         # may be this is not necessary since its keywork arguments.
                         pass
-                args_index+=1
+                # if ready_op_node.prior[key][1].type == "const" and :
+                #     intermeidiate_args.append(ready_op_node.prior[key][1].data)
+                break
+        args_index+=1
+
     return intermeidiate_args
 
 def find_call_value(ready_op_node, args_index):
@@ -621,14 +626,16 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     global profile_count, profile_point
     op_list_len = len(ready_op_node_list)
     ready_op_node = ready_op_node_list[0]
-    # print("current_op:"+ready_op_node.id)
-    # # print(type(ready_op_node.op_instance))
-    # print("father:")
-    # for temp in ready_op_node.prior.keys():
-    #     print(ready_op_node.prior[temp][1].id)
-    # print("son:")
-    # for temp in ready_op_node.next.keys():
-    #     print(ready_op_node.next[temp][1].id)
+
+    print("current_op:"+ready_op_node.id)
+    # print(type(ready_op_node.op_instance))
+    print("father:")
+    for temp in ready_op_node.prior.keys():
+        print(ready_op_node.prior[temp][1].id)
+    print("son:")
+    for temp in ready_op_node.next.keys():
+        print(ready_op_node.next[temp][1].id)
+
     if op_list_len == 1:
         if ready_op_node.type == "var" or ready_op_node.type == "const":
             #to do
@@ -661,6 +668,7 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     call_function = tvm.relay.Function(relay.analysis.free_vars(temp_body),temp_body)
     call_functions = {"main": call_function}
     call_ir_module = tvm.ir.IRModule(functions=call_functions)
+    print(call_ir_module)
     with tvm.transform.PassContext(opt_level=1):
         call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
     call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, x, input_name)
@@ -668,7 +676,7 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     print("actual input args:")
     for temp in call_intput_args:
         print(type(temp))
-    print(call_ir_module)
+    # print(call_ir_module)
 
     # for key in ready_op_node.prior.keys():
     #     print(ready_op_node.prior[key][1].name)
