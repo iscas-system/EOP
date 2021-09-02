@@ -35,6 +35,24 @@ def process_data(data):
 # roadmap
 
 1. support static DL graph analysis (using relay graph executor).
-2. support dynamic shape analysisi (using relay vm).
+2. support dynamic shape analysis (using relay vm).
 3. dig more resource usage statistics.
+
+# current support DL model
+
+## from TVM test, Pytorch, MxNet, Keras and Tensorflow (CNN classification)
+
+resnet-*, resnet3d-*, mobilenet, squeezenet_v1.1, inception_v3, InceptionV1, vgg16
+
+## from darknet or yolort.models, pytorch classification (RCNN detection)
+
+yolov2, yolov3 or yolov3-tiny
+
+## from Onnx (RNN language)
+
+LSTM,transformers(e.g., Bert)
+
+## from Pytorch (GCN)
+
+DGL-PyTorch,
 

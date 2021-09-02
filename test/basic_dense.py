@@ -9,6 +9,7 @@ import numpy as np
 from tvm.contrib import graph_runtime
 from relay_graph import construct_op_graph, profile_resource_usage
 from std_memory_profiler import operation_memory_profile, operation_time_profile,operation_cuda_memory_profile, profile
+from cnn_workload_generator import get_network, compile_without_log, create_graph_executor_on_single_device, evaluate_time_with_tvm_evaluator, create_operator_executor_on_single_device
 
 def batch_norm_infer(data,
                     gamma=None,
@@ -51,24 +52,25 @@ def conv_block(data, name, channels, kernel_size=(3, 3), strides=(1, 1),
          padding=padding,
          data_layout='NCHW',
          name=name+'_conv')
-    return conv2d_value
-    # return batch_norm_infer(data=conv2d, epsilon=epsilon, name=name + '_bn')
-    # return relay.nn.relu(data=bn)
+    # return conv2d_value
+    bn = batch_norm_infer(data=conv2d_value, epsilon=epsilon, name=name + '_bn')
+    return relay.nn.relu(data=bn)
     # return act
     
 
-data_shape = (1, 3, 4480, 4480)
+data_shape = (1024, 3, 224, 224)
 
 kernel_shape = (32, 3, 3, 3)
 # data_shape = (32, 112, 112)
 dtype = "float32"
 data = relay.var("data", shape=data_shape, dtype=dtype)
-act = conv_block(data, "graph", 32, strides=(2, 2))
+act = conv_block(data, "graph", 64, strides=(2, 2))
 func = relay.Function(relay.analysis.free_vars(act),act)
 
 
 mod = tvm.ir.IRModule.from_expr(func)
 mod = relay.transform.InferType()(mod)
+print(mod)
 shape_dict = {
     v.name_hint : v.checked_type for v in mod["main"].params}
 np.random.seed(0)
@@ -81,6 +83,11 @@ for k, v in shape_dict.items():
 
 target = "llvm"
 device = tvm.cpu(0)
+
+# lib = compile_without_log(mod, target, params)
+# module = create_graph_executor_on_single_device(lib,data_shape,target)
+# print(evaluate_time_with_tvm_evaluator(module, device))
+
 # print("Relay module function:\n", mod.astext(show_meta_data=False))
 # print("TVM parameters:\n", params.keys())
 
@@ -90,7 +97,7 @@ with relay.build_config(opt_level=3):
 # print("TVM graph:\n", graph)
 # print("TVM parameters:\n", params.keys())
 # print("TVM compiled target function:\n", lib.get_source())
-print(mod)
+# print(mod)
 module = graph_runtime.create(graph, lib, device)
 # batch_norm_input = np.random.uniform(-1, 1, size=(1, 32, 112, 112)).astype(dtype)
 
@@ -105,7 +112,7 @@ for i in range(10):
     @operation_time_profile(operation_meta=dict)
     def func(m):
         m.run()
-    func(module)
+    print(func(module))
     total_nano_time +=dict["op_nano_time"]
 
 print(total_nano_time/10)
