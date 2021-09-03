@@ -57,7 +57,7 @@ def process_data(data):
 
 ## from TVM test, Pytorch, MxNet, Keras and Tensorflow (CNN classification)
 
-resnet-*, resnet3d-*, mobilenet, squeezenet_v1.1, inception_v3, InceptionV1, vgg-,
+resnet-*, resnet3d-*, mobilenet, squeezenet_v1.1, inception_v3, InceptionV1, vgg-,densenet-
 
 ## from darknet or yolort.models, pytorch classification (RCNN detection)
 
@@ -66,6 +66,10 @@ yolov2, yolov3 or yolov3-tiny
 ## from Onnx (RNN language)
 
 LSTM,GRU,transformers(e.g., Bert)
+
+## from TVM test (GAN)
+
+DCGAN
 
 ## from Pytorch (GCN)
 

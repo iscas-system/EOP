@@ -64,3 +64,24 @@ shape_list = [(input_name, input_shape)]
 mod, params = relay.frontend.from_pytorch(script_module, shape_list)
 
 print(mod)
+
+target = "llvm"
+
+with tvm.transform.PassContext(opt_level=3, disabled_pass=["FoldScaleAxis"]):
+    vm_exec = relay.vm.compile(mod, target=target, params=params)
+
+dev = tvm.cpu()
+vm = VirtualMachine(vm_exec, dev)
+vm.set_input("main", **{input_name: img})
+tvm_res = vm.run()
+
+score_threshold = 0.9
+boxes = tvm_res[0].numpy().tolist()
+valid_boxes = []
+for i, score in enumerate(tvm_res[1].numpy().tolist()):
+    if score > score_threshold:
+        valid_boxes.append(boxes[i])
+    else:
+        break
+
+print("Get {} valid boxes".format(len(valid_boxes)))
