@@ -673,9 +673,9 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
         call_interpreter = relay.build_module.create_executor("graph", call_ir_module, device, target)
     call_intput_args = generate_intermediate_actual_args(ready_op_node, dtype, x, input_name)
 
-    print("actual input args:")
-    for temp in call_intput_args:
-        print(type(temp))
+    # print("actual input args:")
+    # for temp in call_intput_args:
+    #     print(type(temp))
     # print(call_ir_module)
 
     # for key in ready_op_node.prior.keys():
@@ -699,6 +699,26 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     # for p in ir_params:
     #     print(p)
 
+    # tmp_param = call_interpreter.mod["main"].params
+    # if tmp_param[0].name_hint in ir_params.keys() and tmp_param[-1].name_hint not in ir_params.keys():
+    #     new_call_intput_args1 = []
+    #     new_call_intput_args2 = []
+    #     for beg in range(len(tmp_param)):
+    #         if tmp_param[beg].name_hint in ir_params.keys():
+    #             new_call_intput_args1.append(ir_params[tmp_param[beg].name_hint])
+    #         else:
+    #             for end in range(len(call_intput_args)):
+    #                 new_call_intput_args2.append(call_intput_args[end])
+    #             break
+    #     new_call_intput_args = []
+    #     for s in range(len(new_call_intput_args1)):
+    #         new_call_intput_args.append(new_call_intput_args1[s])
+    #     for s in range(len(new_call_intput_args2)):
+    #         new_call_intput_args.append(new_call_intput_args2[s])
+    #     ir_params = {}
+    #     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*new_call_intput_args, **ir_params)
+    # else:
+    #     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*call_intput_args, **ir_params)
     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*call_intput_args, **ir_params)
     # print("return value:")
     # print(type(ready_op_node.performance_data["fw_value"]))
