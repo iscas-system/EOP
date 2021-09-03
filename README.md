@@ -1,7 +1,22 @@
 # TVMProfiler
 
-## now
+# now
 For high level RelayIR, TVMProfiler can consturct computation graph and calculate each op's execution time and memory consumption.
+
+# prerequest
+
+```
+    llvm 10.0
+    cuda 11.0 (or 10.2)
+    nvidia drive 450.51.05
+    pytorch 1.7.1
+    torchvision 0.8.2+cu110
+    torchaudio 0.7.2
+    huggingFace (Transformer) needRecheck
+    darkNet needRecheck
+    OnnX needRecheck
+    MxNet needRecheck
+```
 
 # how to use
 
