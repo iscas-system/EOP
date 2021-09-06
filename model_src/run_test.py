@@ -18,6 +18,13 @@ import torchvision
 from tvm.contrib.download import download_testdata
 from tvm.relay.testing.darknet import __darknetffi__
 from optparse import OptionParser
+
+"""
+Example
+----------
+python run_test.py -o -m resnet18.onnx -g
+"""
+
 parser = OptionParser(usage="define the data and input_name in source code before running this code")
 parser.add_option("-o", "--onnx", action="store_true",
                   dest="onnx",
@@ -103,6 +110,9 @@ if options.darknet == True:
     print("Compiling the model...")
     with tvm.transform.PassContext(opt_level=3):
         graph, lib, mod_params = relay.build(mod, target=target, target_host=target_host, params=params)
+
+if options.onnx == False and options.tvm == False and options.pytorch == False and options.darknet == False:
+    raise Exception("Please choose the framework from which the model come")
 
 relay_graph.construct_op_graph(mod)
 parent = os.path.dirname(os.path.realpath(__file__))
