@@ -42,6 +42,10 @@ parser.add_option("-d", "--darknet", action="store_true",
                   dest="darknet",
                   default=False,
                   help="load model from darknet")
+parser.add_option("-n", "--nntype", action="store_true",
+                  dest="nntype",
+                  default=False,
+                  help="specify")
 parser.add_option("-m", "--model",
                   dest="model",
                   default="resnet18.onnx",
@@ -70,6 +74,9 @@ attributes
 :attr data: input of the model
 :attr input_name: keys of the input
 """
+
+data = None
+input_name = None
 
 data = np.random.uniform(-10, 10, (1, 3, 224, 224)).astype("float32")
 data = [data]
