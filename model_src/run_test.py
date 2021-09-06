@@ -18,6 +18,8 @@ import torchvision
 from tvm.contrib.download import download_testdata
 from tvm.relay.testing.darknet import __darknetffi__
 from optparse import OptionParser
+from relayIR import get_network
+import tvm.relay as relay
 
 """
 Example
@@ -42,10 +44,11 @@ parser.add_option("-d", "--darknet", action="store_true",
                   dest="darknet",
                   default=False,
                   help="load model from darknet")
-parser.add_option("-n", "--nntype", action="store_true",
-                  dest="nntype",
-                  default=False,
-                  help="specify")
+parser.add_option("-b", "--batchsize", action="store_true",
+                  dest="batchsize",
+                  default=1,
+                  type="int",
+                  help="set model batchsize")
 parser.add_option("-m", "--model",
                   dest="model",
                   default="resnet18.onnx",
@@ -75,10 +78,7 @@ attributes
 :attr input_name: keys of the input
 """
 
-data = None
-input_name = None
-
-data = np.random.uniform(-10, 10, (1, 3, 224, 224)).astype("float32")
+data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
 data = [data]
 input_name = ["input.1"]
 
@@ -87,10 +87,14 @@ if options.onnx == True:
     mod, params, intrp = onnx_profiler.compile_onnx_model(onnx_model, data, target=target, input_names=input_name)
 
 if options.tvm == True:
+    mod = None
+    params = None
     if options.model == "densenet":
-        mod, mod_params = densenet.get_workload(classes=2, batch_size=1, image_shape=(1, 224, 224))
-    if options.model == "dcgan":
+        mod, params = densenet.get_workload(classes=2, batch_size=options.batchsize, image_shape=(1, 224, 224))
+    elif options.model == "dcgan":
         mod, params = dcgan.get_workload(1, oshape=(3, 64, 64), ngf=128, random_len=100, layout='NCHW', dtype='float32')
+    else :
+        mod, params, input_shape, output_shape = get_network(options.model, options.batchsize, )
     with tvm.transform.PassContext(opt_level=1):
         intrp = tvm.relay.build_module.create_executor("graph", mod, device, target)
     onnx_profiler.run_relay_mod(data, intrp, params)
