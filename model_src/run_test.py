@@ -1,3 +1,9 @@
+#This code aims at profiling the performance of operators in several deep learning workloads
+#resnet, vgg, lstm, and gru are from onnx
+#yolov3 are from darknet
+#densenet, dcgan are from tvm.relay.testing
+#
+
 import onnx_profiler
 import relay_graph
 from tvm.relay.testing import densenet,dcgan

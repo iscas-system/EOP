@@ -1,3 +1,6 @@
+#This code is baesd on the tutorial from tvm about how to build a Graph Convolutional Network (GCN) with Relay.
+#We use this code to profile the performance of operators in Graph Convolutional Network.
+
 # Licensed to the Apache Software Foundation (ASF) under one
 # or more contributor license agreements.  See the NOTICE file
 # distributed with this work for additional information
