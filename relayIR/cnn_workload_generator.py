@@ -91,4 +91,4 @@ def evaluate_time_with_tvm_evaluator(module, dev):
     ftimer = module.module.time_evaluator("run", dev, repeat=1, min_repeat_ms=500, number=1)
     prof_res = np.array(ftimer().results) * 1e3* 1e6  # convert to millisecond
     print("Mean inference time (std dev): %f ns (%f ns)" % (np.mean(prof_res), np.std(prof_res)))
-    return np.mean(prof_res)
+    return np.mean(prof_res), np.std(prof_res)
