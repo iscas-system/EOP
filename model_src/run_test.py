@@ -18,7 +18,7 @@ import torchvision
 from tvm.contrib.download import download_testdata
 from tvm.relay.testing.darknet import __darknetffi__
 from optparse import OptionParser
-from relayIR import get_network
+from cnn_workload_generator import get_network
 import tvm.relay as relay
 
 """
@@ -44,7 +44,7 @@ parser.add_option("-d", "--darknet", action="store_true",
                   dest="darknet",
                   default=False,
                   help="load model from darknet")
-parser.add_option("-b", "--batchsize", action="store_true",
+parser.add_option("-b", "--batchsize", action="store",
                   dest="batchsize",
                   default=1,
                   type="int",
@@ -78,9 +78,13 @@ attributes
 :attr input_name: keys of the input
 """
 
-data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
+data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
+input = np.random.uniform(-10, 10, (5,3,10)).astype("float32")
+h0 = np.random.uniform(-10, 10, (2,3,20)).astype("float32")
+c0 = np.random.uniform(-10, 10, (2,3,20)).astype("float32")
+#data = [input,h0,c0]
 data = [data]
-input_name = ["input.1"]
+input_name = ["data"]
 
 if options.onnx == True:
     onnx_model = onnx_profiler.create_onnx_model_from_local_path("./onnx/"+options.model)
@@ -100,6 +104,8 @@ if options.tvm == True:
     with tvm.transform.PassContext(opt_level=1):
         intrp = tvm.relay.build_module.create_executor("graph", mod, device, target)
     onnx_profiler.run_relay_mod(data, intrp, params)
+
+    print(mod)
 
 if options.pytorch == True:
     pass

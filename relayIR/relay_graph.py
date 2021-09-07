@@ -100,6 +100,7 @@ class op_graph:
         """
         global profile_count
         available_op_queue = self.find_starting_ops()
+        print(len(available_op_queue))
         # for p in available_op_queue:
         #     print(p.id)
         #     for key in p.prior.keys():
@@ -108,13 +109,17 @@ class op_graph:
         output_list = []
         while len(available_op_queue) > 0:
             temp_op = available_op_queue.pop(0)
-            # print("temp_op: %s" %(temp_op.id))
+            if "fw_value"  in temp_op.performance_data.keys():
+                continue
+            print("temp_op: %s" %(temp_op.id))
             op_list = [temp_op]
             output = {}
-            while temp_op.concentrate != False:
+            temp_op_list = []
+            if temp_op.concentrate != False:
                 for key1 in temp_op.next.keys():
                     op_list.append(temp_op.next[key1][1])
                     tmp = key1
+                    temp_op_list.append(temp_op.next[key1][1])
                 temp_op = temp_op.next[tmp][1]
 
             if fw:
@@ -127,9 +132,18 @@ class op_graph:
                 output['a_name'] = bw_id
                 for key2 in bw_data.keys():
                     output['backward_' + key2] = bw_data[key2]
-            for key in temp_op.next.keys():
-                if self.check_op_ready(temp_op.next[key][1]):
-                    available_op_queue.append(temp_op.next[key][1])
+            print("nextlen %r" %(len(temp_op.next)))
+            if len(temp_op_list) > 0:
+                for p in temp_op_list:
+                    for key in p.next.keys():
+                        #print("%r:%r" % (temp_op.next[key][1].id, self.check_op_ready(temp_op.next[key][1])))
+                        if self.check_op_ready(p.next[key][1]) and  "fw_value" not in p.next[key][1].performance_data.keys():
+                            available_op_queue.append(p.next[key][1])
+            else:
+                for key in temp_op.next.keys():
+                    #print("%r:%r" % (temp_op.next[key][1].id, self.check_op_ready(temp_op.next[key][1])))
+                    if self.check_op_ready(temp_op.next[key][1]) and "fw_value" not in temp_op.next[key][1].performance_data.keys():
+                        available_op_queue.append(temp_op.next[key][1])
             profile_count +=1
             output_list.append(output)
         if len(output_list) > 0:
@@ -260,6 +274,18 @@ def construct_op_graph(ir_module):
         computation_graph.insert_op(temp_op_node)
         op_index+=1
     start_iteration(main_function)
+    # for key in computation_graph.dictionary.keys():
+    #     print(computation_graph.dictionary[key].id)
+        # if key == "tuplegetitem-40":
+        #     current_op_node = computation_graph.dictionary[key]
+        #     break
+    #if current_op_node.id == "tuple-38":
+    # print('son')
+    # for key in current_op_node.next.keys():
+    #     print(current_op_node.next[key][1].id)
+    # print('father')
+    # for key in current_op_node.prior.keys():
+    #     print(current_op_node.prior[key][1].id)
 
 def profile_resource_usage(ir_params, x, input_name, device=tvm.cuda(0), target="cuda", output_file = "out.csv"):
     computation_graph.traverse_and_calculate_per_op(ir_params, x, input_name, device, target, bw = False, output_file = output_file)
@@ -291,6 +317,7 @@ def recursive_traverse_op(type, input, temp_op=None):
     if computation_graph.find_if_exist(next_op_node) != None :
         return computation_graph.find_if_exist(next_op_node)
     op_index+=1
+
     for each_arg in args:
         if isinstance(each_arg, tvm.relay.expr.Call):
             current_input = {}
@@ -325,7 +352,12 @@ def recursive_traverse_op(type, input, temp_op=None):
             args_index+=1
 
     computation_graph.insert_op(next_op_node)
+
     return next_op_node
+
+def view_computationgraph():
+    global computation_graph
+
 
 def generate_intermediate_actual_args(ready_op_node, dtype, x, input_name):
     """
