@@ -718,6 +718,34 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     #     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*new_call_intput_args, **ir_params)
     # else:
     #     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*call_intput_args, **ir_params)
+
+    metadata = {}
+
+    if len(call_intput_args) > 0:
+        metadata['fw_inputsize'] = 0
+        for p in call_intput_args:
+            metadata['fw_inputsize'] += sys.getsizeof(p)
+        tmp_param = call_interpreter.mod["main"].params
+        for p in tmp_param:
+            if p in ir_params.keys():
+                metadata['fw_inputsize'] += sys.getsizeof(ir_params[p])
+    else:
+        metadata['fw_inputsize'] = 0
+
+    if target == "llvm":
+        @operation_memory_profile(stream=sys.stdout, operation_meta=metadata)
+        def op_memory_forward_profile(call_interpreter, call_intput_args, ir_params):
+            return call_interpreter.evaluate()(*call_intput_args, **ir_params)
+
+        op_memory_forward_profile(call_interpreter, call_intput_args, ir_params)
+
+    if target == "cuda":
+        @operation_cuda_memory_profile(stream=sys.stdout, operation_meta=metadata)
+        def op_memory_forward_profile(call_interpreter, call_intput_args, ir_params):
+            return call_interpreter.evaluate()(*call_intput_args, **ir_params)
+
+        op_memory_forward_profile(call_interpreter, call_intput_args, ir_params)
+
     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*call_intput_args, **ir_params)
     # print("return value:")
     # print(type(ready_op_node.performance_data["fw_value"]))
@@ -732,10 +760,12 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
             ready_op_node_list[i].performance_data["fw_value"] = ready_op_node.performance_data["fw_value"]
     lib = compile_without_log(call_ir_module, target, ir_params)
     actual_module = create_operator_executor_on_single_device(lib, call_intput_args, target)
-    put_op_time(ready_op_node.name, evaluate_time_with_tvm_evaluator(actual_module, device))
+    result = put_op_time(ready_op_node.name, evaluate_time_with_tvm_evaluator(actual_module, device))
 
+    metadata['fw_mean_time'] = result[0]
+    metadata['fw_stdvar_time'] = result[1]
     # print(ready_op_node.id)
-    return ready_op_node.id, {}
+    return ready_op_node.id, metadata
 
 def profile_backward_relay_operator(ready_op_node_list, ir_params, x, input_name, device, target, dtype="float32"):
     """
