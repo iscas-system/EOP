@@ -84,7 +84,7 @@ input_name = ["input.1"]
 
 if options.onnx == True:
     onnx_model = onnx_profiler.create_onnx_model_from_local_path("./onnx/"+options.model)
-    mod, params, intrp = onnx_profiler.compile_onnx_model(onnx_model, data, target=target, input_names=input_name)
+    mod, params, intrp = onnx_profiler.compile_onnx_model(onnx_model, data, target=target, device=device, input_names=input_name)
 
 if options.tvm == True:
     mod = None
