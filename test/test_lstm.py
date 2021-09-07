@@ -8,69 +8,35 @@ from relay_graph import construct_op_graph, profile_resource_usage
 from std_memory_profiler import operation_memory_profile, operation_time_profile,operation_cuda_memory_profile, profile
 import tvm.topi.nn as nn
 import tvm.topi
+import onnx_profiler
+import relay_graph
+import op_statistics
+import torch
 
-# tgt = tvm.target.Target(target="llvm", host="llvm")
-# n = te.var("n")
-# A = te.placeholder((n,), name='A')
-# B = te.placeholder((n,), name='B')
-# C = te.compute(A.shape, lambda i: A[i] + B[i], name="C")
-# s = te.create_schedule(C.op)
-#
-# fadd = tvm.build(s, [A, B, C], tgt, name="myadd")
-# dev = tvm.device(tgt.kind.name, 0)
-# n = 1024
-# a = tvm.nd.array(np.random.uniform(size=n).astype(A.dtype), dev)
-# b = tvm.nd.array(np.random.uniform(size=n).astype(B.dtype), dev)
-# c = tvm.nd.array(np.zeros(n, dtype=C.dtype), dev)
-# fadd(a, b, c)
-# tvm.testing.assert_allclose(c.asnumpy(), a.asnumpy() + b.asnumpy())
-# print(type(a))
-# print(type(c))
+'''
+lstm CPU:
+('{"model_name": "lstm", "split": "43.920728%", "strided_slice": "11.807081%", "squeeze": "0.027233%", "tuple": "0.034142%", "concatenate": "44.210817%"}', '{"split": 125972.3802549416, "total_op_time": 286817.6070344518, "strided_slice": 33864.786158099894, "squeeze": 78.10893673426544, "tuple": 97.92396837117622, "concatenate": 126804.40771630484}')
 
-# def funcd(a,begin,end,strides):
-#     return nn.strided_slice(a,begin,end,strides)
-#
-# data_shape = (5,3,3)
-# dtype = "float32"
-# a = relay.var("a", shape=data_shape, dtype=dtype)
-# act =funcd(a,[0],[1],[1])
-# func = relay.Function(relay.analysis.free_vars(act),act)
-# mod = tvm.ir.IRModule.from_expr(func)
-# mod = relay.transform.InferType()(mod)
-# shape_dict = {
-#     v.name_hint : v.checked_type for v in mod["main"].params}
-# np.random.seed(0)
-# params = {}
-# for k, v in shape_dict.items():
-#     if k == "data":
-#         continue
-#     init_value = np.random.uniform(-1, 1, v.concrete_shape).astype(v.dtype)
-#     params[k] = tvm.nd.array(init_value, device=tvm.cpu(0))
-#
-# target = "llvm"
-# device = tvm.cpu(0)
-#
-# with relay.build_config(opt_level=3):
-#     graph, lib, params2 = relay.build(mod, target, params=params)
-#
-# print(mod)
-# module = graph_runtime.create(graph, lib, device)
-# data_tvm = np.random.uniform(1, 255, size=data_shape).astype(dtype)
-# module.set_input('a', data_tvm)
-# module.set_input(**params)
-# module.run()
-#
-# construct_op_graph(mod)
-# parent = os.path.dirname(os.path.realpath(__file__))
-# input_name = ['a']
-# data = [data_tvm]
+lstm GPU:
+('{"model_name": "lstm", "split": "66.557981%", "strided_slice": "6.530812%", "squeeze": "0.042268%", "tuple": "0.052681%", "concatenate": "26.816257%"}', '{"split": 125581.50617446535, "total_op_time": 188679.86062871604, "strided_slice": 12322.327837297229, "squeeze": 79.751342814039, "tuple": 99.39875020725627, "concatenate": 50596.87652393224}')
+'''
+
+target = "cuda"
+device = tvm.cuda(0)
+
+input_name = ['input', 'h0', 'c0']
+
+input = np.random.uniform(-10, 10, (5, 128, 10)).astype("float32")
+h0 = np.random.uniform(-10, 10, (2, 128, 20)).astype("float32")
+c0 = np.random.uniform(-10, 10, (2, 128, 20)).astype("float32")
+data = [input,h0,c0]
+
+onnx_model = onnx_profiler.create_onnx_model_from_local_path("/root/github/TVMProfiler/model_src/onnx/lstm.onnx")
+mod, params, intrp = onnx_profiler.compile_onnx_model(onnx_model, data, target=target, input_names=input_name, device=device)
+
+print(mod)
+print(params)
+# relay_graph.construct_op_graph(mod)
 # tmp = {input_name[i]:data[i] for i in range(len(data))}
-# profile_resource_usage(params,tmp,input_name=input_name,device = tvm.cpu(0), target = "llvm", output_file = os.path.join(parent,'lstm.csv'))
-tgt = tvm.target.Target(target="llvm", host="llvm")
-dev = tvm.device(tgt.kind.name, 0)
-n = 1024
-dtype = "float32"
-a = tvm.nd.array(np.random.uniform(-1,1,(5,3,10)).astype(dtype), dev)
-b = tvm.topi.split(a,5)
-c = tvm.topi.squeeze(b[0])
-print(c)
+# relay_graph.profile_resource_usage(params, tmp,input_name, device = device, target = target)
+# print(op_statistics.calculate_op_distribution("lstm"))

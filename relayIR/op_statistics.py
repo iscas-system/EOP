@@ -21,5 +21,5 @@ def calculate_op_distribution(model_name):
     op_time_distribution["model_name"] = model_name
     for k in op_time_collection:
         if k != "total_op_time":
-            op_time_distribution[k] = "%.2f%%" % (op_time_collection[k]/op_time_collection["total_op_time"] * 100)
+            op_time_distribution[k] = "%f%%" % (op_time_collection[k]/op_time_collection["total_op_time"] * 100)
     return json.dumps(op_time_distribution), json.dumps(op_time_collection)

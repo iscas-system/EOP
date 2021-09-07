@@ -626,7 +626,6 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     global profile_count, profile_point
     op_list_len = len(ready_op_node_list)
     ready_op_node = ready_op_node_list[0]
-
     print("current_op:"+ready_op_node.id)
     # print(type(ready_op_node.op_instance))
     print("father:")

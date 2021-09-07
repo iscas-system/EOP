@@ -1,0 +1,1222 @@
+relay IR:
+def @main(%input: Tensor[(5, 128, 10), float32], %h0: Tensor[(2, 128, 20), float32], %c0: Tensor[(2, 128, 20), float32], %v103: Tensor[(1, 80, 20), float32], %v104: Tensor[(1, 80, 20), float32], %v105: Tensor[(1, 160), float32], %v83: Tensor[(1, 80, 10), float32], %v84: Tensor[(1, 80, 20), float32], %v85: Tensor[(1, 160), float32]) {
+  %0 = split(%input, indices_or_sections=5);
+  %1 = %0.0;
+  %2 = strided_slice(%h0, begin=[0], end=[1], strides=[1], axes=None);
+  %3 = split(%2, indices_or_sections=1);
+  %4 = %3.0;
+  %5 = squeeze(%1, axis=[0]);
+  %6 = squeeze(%4, axis=[0]);
+  %7 = (%5, %6);
+  %8 = split(%v83, indices_or_sections=1);
+  %9 = %8.0;
+  %10 = squeeze(%9, axis=[0]);
+  %11 = split(%10, indices_or_sections=4);
+  %12 = %11.0;
+  %13 = %11.2;
+  %14 = %11.3;
+  %15 = %11.1;
+  %16 = (%12, %13, %14, %15);
+  %17 = split(%v84, indices_or_sections=1);
+  %18 = %17.0;
+  %19 = squeeze(%18, axis=[0]);
+  %20 = split(%19, indices_or_sections=4);
+  %21 = %20.0;
+  %22 = %20.2;
+  %23 = %20.3;
+  %24 = %20.1;
+  %25 = (%21, %22, %23, %24);
+  %26 = concatenate(%16);
+  %27 = concatenate(%25);
+  %28 = (%26, %27);
+  %29 = concatenate(%7, axis=1);
+  %30 = concatenate(%28, axis=1);
+  %31 = split(%v85, indices_or_sections=1);
+  %32 = %31.0;
+  %33 = split(%32, indices_or_sections=2, axis=-1);
+  %34 = %33.0;
+  %35 = squeeze(%34, axis=[0]);
+  %36 = split(%35, indices_or_sections=4);
+  %37 = %36.0;
+  %38 = %36.2;
+  %39 = %36.3;
+  %40 = %36.1;
+  %41 = (%37, %38, %39, %40);
+  %42 = nn.dense(%29, %30, units=None);
+  %43 = concatenate(%41);
+  %44 = %33.1;
+  %45 = squeeze(%44, axis=[0]);
+  %46 = split(%45, indices_or_sections=4);
+  %47 = %46.0;
+  %48 = %46.2;
+  %49 = %46.3;
+  %50 = %46.1;
+  %51 = (%47, %48, %49, %50);
+  %52 = add(%42, %43);
+  %53 = concatenate(%51);
+  %54 = add(%52, %53);
+  %55 = split(%54, indices_or_sections=4, axis=-1);
+  %56 = %55.3;
+  %57 = %55.1;
+  %58 = strided_slice(%c0, begin=[0], end=[1], strides=[1], axes=None);
+  %59 = split(%58, indices_or_sections=1);
+  %60 = %59.0;
+  %61 = sigmoid(%57);
+  %62 = squeeze(%60, axis=[0]);
+  %63 = %55.0;
+  %64 = %55.2;
+  %65 = sigmoid(%63);
+  %66 = tanh(%64);
+  %67 = multiply(%61, %62);
+  %68 = multiply(%65, %66);
+  %69 = add(%67, %68);
+  %70 = sigmoid(%56);
+  %71 = tanh(%69);
+  %72 = %0.1;
+  %73 = squeeze(%72, axis=[0]);
+  %74 = multiply(%70, %71);
+  %75 = (%73, %74);
+  %76 = (%26, %27);
+  %77 = concatenate(%75, axis=1);
+  %78 = concatenate(%76, axis=1);
+  %79 = nn.dense(%77, %78, units=None);
+  %80 = add(%79, %43);
+  %81 = add(%80, %53);
+  %82 = split(%81, indices_or_sections=4, axis=-1);
+  %83 = %82.3;
+  %84 = %82.1;
+  %85 = sigmoid(%84);
+  %86 = %82.0;
+  %87 = %82.2;
+  %88 = sigmoid(%86);
+  %89 = tanh(%87);
+  %90 = multiply(%85, %69);
+  %91 = multiply(%88, %89);
+  %92 = add(%90, %91);
+  %93 = sigmoid(%83);
+  %94 = tanh(%92);
+  %95 = %0.2;
+  %96 = squeeze(%95, axis=[0]);
+  %97 = multiply(%93, %94);
+  %98 = (%96, %97);
+  %99 = (%26, %27);
+  %100 = concatenate(%98, axis=1);
+  %101 = concatenate(%99, axis=1);
+  %102 = nn.dense(%100, %101, units=None);
+  %103 = add(%102, %43);
+  %104 = add(%103, %53);
+  %105 = split(%104, indices_or_sections=4, axis=-1);
+  %106 = %105.3;
+  %107 = %105.1;
+  %108 = sigmoid(%107);
+  %109 = %105.0;
+  %110 = %105.2;
+  %111 = sigmoid(%109);
+  %112 = tanh(%110);
+  %113 = multiply(%108, %92);
+  %114 = multiply(%111, %112);
+  %115 = add(%113, %114);
+  %116 = sigmoid(%106);
+  %117 = tanh(%115);
+  %118 = %0.3;
+  %119 = squeeze(%118, axis=[0]);
+  %120 = multiply(%116, %117);
+  %121 = (%119, %120);
+  %122 = (%26, %27);
+  %123 = concatenate(%121, axis=1);
+  %124 = concatenate(%122, axis=1);
+  %125 = nn.dense(%123, %124, units=None);
+  %126 = add(%125, %43);
+  %127 = add(%126, %53);
+  %128 = split(%127, indices_or_sections=4, axis=-1);
+  %129 = %128.3;
+  %130 = %128.1;
+  %131 = sigmoid(%130);
+  %132 = %128.0;
+  %133 = %128.2;
+  %134 = sigmoid(%132);
+  %135 = tanh(%133);
+  %136 = multiply(%131, %115);
+  %137 = multiply(%134, %135);
+  %138 = add(%136, %137);
+  %139 = sigmoid(%129);
+  %140 = tanh(%138);
+  %141 = %0.4;
+  %142 = squeeze(%141, axis=[0]);
+  %143 = multiply(%139, %140);
+  %144 = (%142, %143);
+  %145 = (%26, %27);
+  %146 = concatenate(%144, axis=1);
+  %147 = concatenate(%145, axis=1);
+  %148 = nn.dense(%146, %147, units=None);
+  %149 = add(%148, %43);
+  %150 = add(%149, %53);
+  %151 = split(%150, indices_or_sections=4, axis=-1);
+  %152 = %151.3;
+  %153 = %151.1;
+  %154 = sigmoid(%153);
+  %155 = %151.0;
+  %156 = %151.2;
+  %157 = sigmoid(%155);
+  %158 = tanh(%156);
+  %159 = multiply(%154, %138);
+  %160 = multiply(%157, %158);
+  %161 = add(%159, %160);
+  %162 = sigmoid(%152);
+  %163 = tanh(%161);
+  %164 = multiply(%162, %163);
+  %165 = (%74, %97, %120, %143, %164);
+  %166 = stack(%165);
+  %167 = expand_dims(%166, axis=1);
+  %168 = squeeze(%167, axis=[1]);
+  %169 = split(%168, indices_or_sections=5);
+  %170 = %169.0;
+  %171 = strided_slice(%h0, begin=[1], end=[2], strides=[1], axes=None);
+  %172 = split(%171, indices_or_sections=1);
+  %173 = %172.0;
+  %174 = squeeze(%170, axis=[0]);
+  %175 = squeeze(%173, axis=[0]);
+  %176 = (%174, %175);
+  %177 = split(%v103, indices_or_sections=1);
+  %178 = %177.0;
+  %179 = squeeze(%178, axis=[0]);
+  %180 = split(%179, indices_or_sections=4);
+  %181 = %180.0;
+  %182 = %180.2;
+  %183 = %180.3;
+  %184 = %180.1;
+  %185 = (%181, %182, %183, %184);
+  %186 = split(%v104, indices_or_sections=1);
+  %187 = %186.0;
+  %188 = squeeze(%187, axis=[0]);
+  %189 = split(%188, indices_or_sections=4);
+  %190 = %189.0;
+  %191 = %189.2;
+  %192 = %189.3;
+  %193 = %189.1;
+  %194 = (%190, %191, %192, %193);
+  %195 = concatenate(%185);
+  %196 = concatenate(%194);
+  %197 = (%195, %196);
+  %198 = concatenate(%176, axis=1);
+  %199 = concatenate(%197, axis=1);
+  %200 = split(%v105, indices_or_sections=1);
+  %201 = %200.0;
+  %202 = split(%201, indices_or_sections=2, axis=-1);
+  %203 = %202.0;
+  %204 = squeeze(%203, axis=[0]);
+  %205 = split(%204, indices_or_sections=4);
+  %206 = %205.0;
+  %207 = %205.2;
+  %208 = %205.3;
+  %209 = %205.1;
+  %210 = (%206, %207, %208, %209);
+  %211 = nn.dense(%198, %199, units=None);
+  %212 = concatenate(%210);
+  %213 = %202.1;
+  %214 = squeeze(%213, axis=[0]);
+  %215 = split(%214, indices_or_sections=4);
+  %216 = %215.0;
+  %217 = %215.2;
+  %218 = %215.3;
+  %219 = %215.1;
+  %220 = (%216, %217, %218, %219);
+  %221 = add(%211, %212);
+  %222 = concatenate(%220);
+  %223 = add(%221, %222);
+  %224 = split(%223, indices_or_sections=4, axis=-1);
+  %225 = %224.3;
+  %226 = %224.1;
+  %227 = strided_slice(%c0, begin=[1], end=[2], strides=[1], axes=None);
+  %228 = split(%227, indices_or_sections=1);
+  %229 = %228.0;
+  %230 = sigmoid(%226);
+  %231 = squeeze(%229, axis=[0]);
+  %232 = %224.0;
+  %233 = %224.2;
+  %234 = sigmoid(%232);
+  %235 = tanh(%233);
+  %236 = multiply(%230, %231);
+  %237 = multiply(%234, %235);
+  %238 = add(%236, %237);
+  %239 = sigmoid(%225);
+  %240 = tanh(%238);
+  %241 = %169.1;
+  %242 = squeeze(%241, axis=[0]);
+  %243 = multiply(%239, %240);
+  %244 = (%242, %243);
+  %245 = (%195, %196);
+  %246 = concatenate(%244, axis=1);
+  %247 = concatenate(%245, axis=1);
+  %248 = nn.dense(%246, %247, units=None);
+  %249 = add(%248, %212);
+  %250 = add(%249, %222);
+  %251 = split(%250, indices_or_sections=4, axis=-1);
+  %252 = %251.3;
+  %253 = %251.1;
+  %254 = sigmoid(%253);
+  %255 = %251.0;
+  %256 = %251.2;
+  %257 = sigmoid(%255);
+  %258 = tanh(%256);
+  %259 = multiply(%254, %238);
+  %260 = multiply(%257, %258);
+  %261 = add(%259, %260);
+  %262 = sigmoid(%252);
+  %263 = tanh(%261);
+  %264 = %169.2;
+  %265 = squeeze(%264, axis=[0]);
+  %266 = multiply(%262, %263);
+  %267 = (%265, %266);
+  %268 = (%195, %196);
+  %269 = concatenate(%267, axis=1);
+  %270 = concatenate(%268, axis=1);
+  %271 = nn.dense(%269, %270, units=None);
+  %272 = add(%271, %212);
+  %273 = add(%272, %222);
+  %274 = split(%273, indices_or_sections=4, axis=-1);
+  %275 = %274.3;
+  %276 = %274.1;
+  %277 = sigmoid(%276);
+  %278 = %274.0;
+  %279 = %274.2;
+  %280 = sigmoid(%278);
+  %281 = tanh(%279);
+  %282 = multiply(%277, %261);
+  %283 = multiply(%280, %281);
+  %284 = add(%282, %283);
+  %285 = sigmoid(%275);
+  %286 = tanh(%284);
+  %287 = %169.3;
+  %288 = squeeze(%287, axis=[0]);
+  %289 = multiply(%285, %286);
+  %290 = (%288, %289);
+  %291 = (%195, %196);
+  %292 = concatenate(%290, axis=1);
+  %293 = concatenate(%291, axis=1);
+  %294 = nn.dense(%292, %293, units=None);
+  %295 = add(%294, %212);
+  %296 = add(%295, %222);
+  %297 = split(%296, indices_or_sections=4, axis=-1);
+  %298 = %297.3;
+  %299 = %297.1;
+  %300 = sigmoid(%299);
+  %301 = %297.0;
+  %302 = %297.2;
+  %303 = sigmoid(%301);
+  %304 = tanh(%302);
+  %305 = multiply(%300, %284);
+  %306 = multiply(%303, %304);
+  %307 = add(%305, %306);
+  %308 = sigmoid(%298);
+  %309 = tanh(%307);
+  %310 = %169.4;
+  %311 = squeeze(%310, axis=[0]);
+  %312 = multiply(%308, %309);
+  %313 = (%311, %312);
+  %314 = (%195, %196);
+  %315 = concatenate(%313, axis=1);
+  %316 = concatenate(%314, axis=1);
+  %317 = nn.dense(%315, %316, units=None);
+  %318 = add(%317, %212);
+  %319 = add(%318, %222);
+  %320 = split(%319, indices_or_sections=4, axis=-1);
+  %321 = %320.3;
+  %322 = %320.1;
+  %323 = sigmoid(%322);
+  %324 = %320.0;
+  %325 = %320.2;
+  %326 = sigmoid(%324);
+  %327 = tanh(%325);
+  %328 = multiply(%323, %307);
+  %329 = multiply(%326, %327);
+  %330 = add(%328, %329);
+  %331 = sigmoid(%321);
+  %332 = tanh(%330);
+  %333 = multiply(%331, %332);
+  %334 = (%243, %266, %289, %312, %333);
+  %335 = stack(%334);
+  %336 = expand_dims(%335, axis=1);
+  %337 = expand_dims(%164, axis=0);
+  %338 = expand_dims(%333, axis=0);
+  %339 = (%337, %338);
+  %340 = expand_dims(%161, axis=0);
+  %341 = expand_dims(%330, axis=0);
+  %342 = (%340, %341);
+  %343 = squeeze(%336, axis=[1]);
+  %344 = concatenate(%339);
+  %345 = concatenate(%342);
+  (%343, %344, %345)
+}
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+
+current_op:split-41
+father:
+input-0
+son:
+tuplegetitem-40
+tuplegetitem-113
+tuplegetitem-136
+tuplegetitem-159
+tuplegetitem-182
+def @main(%input: Tensor[(5, 128, 10), float32]) {
+  %0 = split(%input, indices_or_sections=5);
+  %1 = %0.0;
+  %2 = %0.1;
+  %3 = %0.2;
+  %4 = %0.3;
+  %5 = %0.4;
+  (%1, %2, %3, %4, %5)
+}
+
+Mean inference time (std dev): 14695.322170 ns (0.000000 ns)
+current_op:strided_slice-45
+father:
+h0-1
+son:
+split-44
+def @main(%h0: Tensor[(2, 128, 20), float32]) {
+  strided_slice(%h0, begin=[0], end=[1], strides=[1], axes=None)
+}
+
+Mean inference time (std dev): 3382.889666 ns (0.000000 ns)
+current_op:split-54
+father:
+83-6
+son:
+tuplegetitem-53
+def @main(%v83: Tensor[(1, 80, 10), float32]) {
+  %0 = split(%v83, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3407.178803 ns (0.000000 ns)
+current_op:split-64
+father:
+84-7
+son:
+tuplegetitem-63
+def @main(%v84: Tensor[(1, 80, 20), float32]) {
+  %0 = split(%v84, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3085.688763 ns (0.000000 ns)
+current_op:split-76
+father:
+85-8
+son:
+tuplegetitem-75
+def @main(%v85: Tensor[(1, 160), float32]) {
+  %0 = split(%v85, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3093.138649 ns (0.000000 ns)
+current_op:strided_slice-97
+father:
+c0-2
+son:
+split-96
+def @main(%c0: Tensor[(2, 128, 20), float32]) {
+  strided_slice(%c0, begin=[0], end=[1], strides=[1], axes=None)
+}
+
+Mean inference time (std dev): 3078.404516 ns (0.000000 ns)
+current_op:strided_slice-198
+father:
+h0-1
+son:
+split-197
+def @main(%h0: Tensor[(2, 128, 20), float32]) {
+  strided_slice(%h0, begin=[1], end=[2], strides=[1], axes=None)
+}
+
+Mean inference time (std dev): 3426.593037 ns (0.000000 ns)
+current_op:split-207
+father:
+103-3
+son:
+tuplegetitem-206
+def @main(%v103: Tensor[(1, 80, 20), float32]) {
+  %0 = split(%v103, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3456.688598 ns (0.000000 ns)
+current_op:split-217
+father:
+104-4
+son:
+tuplegetitem-216
+def @main(%v104: Tensor[(1, 80, 20), float32]) {
+  %0 = split(%v104, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3487.835312 ns (0.000000 ns)
+current_op:split-229
+father:
+105-5
+son:
+tuplegetitem-228
+def @main(%v105: Tensor[(1, 160), float32]) {
+  %0 = split(%v105, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3139.796996 ns (0.000000 ns)
+current_op:strided_slice-250
+father:
+c0-2
+son:
+split-249
+def @main(%c0: Tensor[(2, 128, 20), float32]) {
+  strided_slice(%c0, begin=[1], end=[2], strides=[1], axes=None)
+}
+
+Mean inference time (std dev): 3410.693024 ns (0.000000 ns)
+current_op:squeeze-181
+father:
+tuplegetitem-182
+son:
+tuple-180
+def @main(%v0: Tensor[(1, 128, 10), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.444797 ns (0.000000 ns)
+current_op:split-44
+father:
+strided_slice-45
+son:
+tuplegetitem-43
+def @main(%v0: Tensor[(1, 128, 20), float32]) {
+  %0 = split(%v0, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3097.727365 ns (0.000000 ns)
+current_op:squeeze-52
+father:
+tuplegetitem-53
+son:
+split-51
+def @main(%v0: Tensor[(1, 80, 10), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.264187 ns (0.000000 ns)
+current_op:squeeze-62
+father:
+tuplegetitem-63
+son:
+split-61
+def @main(%v0: Tensor[(1, 80, 20), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.199779 ns (0.000000 ns)
+current_op:split-74
+father:
+tuplegetitem-75
+son:
+tuplegetitem-73
+tuplegetitem-85
+def @main(%v0: Tensor[(1, 160), float32]) {
+  %0 = split(%v0, indices_or_sections=2, axis=-1);
+  %1 = %0.0;
+  %2 = %0.1;
+  (%1, %2)
+}
+
+Mean inference time (std dev): 6281.858264 ns (0.000000 ns)
+current_op:split-96
+father:
+strided_slice-97
+son:
+tuplegetitem-95
+def @main(%v0: Tensor[(1, 128, 20), float32]) {
+  %0 = split(%v0, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3431.593008 ns (0.000000 ns)
+current_op:split-197
+father:
+strided_slice-198
+son:
+tuplegetitem-196
+def @main(%v0: Tensor[(1, 128, 20), float32]) {
+  %0 = split(%v0, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3404.822118 ns (0.000000 ns)
+current_op:squeeze-205
+father:
+tuplegetitem-206
+son:
+split-204
+def @main(%v0: Tensor[(1, 80, 20), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.019651 ns (0.000000 ns)
+current_op:squeeze-215
+father:
+tuplegetitem-216
+son:
+split-214
+def @main(%v0: Tensor[(1, 80, 20), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.140884 ns (0.000000 ns)
+current_op:split-227
+father:
+tuplegetitem-228
+son:
+tuplegetitem-226
+tuplegetitem-238
+def @main(%v0: Tensor[(1, 160), float32]) {
+  %0 = split(%v0, indices_or_sections=2, axis=-1);
+  %1 = %0.0;
+  %2 = %0.1;
+  (%1, %2)
+}
+
+Mean inference time (std dev): 6074.130426 ns (0.000000 ns)
+current_op:split-249
+father:
+strided_slice-250
+son:
+tuplegetitem-248
+def @main(%v0: Tensor[(1, 128, 20), float32]) {
+  %0 = split(%v0, indices_or_sections=1);
+  %0.0
+}
+
+Mean inference time (std dev): 3117.570321 ns (0.000000 ns)
+current_op:squeeze-42
+father:
+tuplegetitem-43
+son:
+tuple-38
+def @main(%v0: Tensor[(1, 128, 20), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.306488 ns (0.000000 ns)
+current_op:split-51
+father:
+squeeze-52
+son:
+tuplegetitem-50
+tuplegetitem-55
+tuplegetitem-56
+tuplegetitem-57
+def @main(%v0: Tensor[(80, 10), float32]) {
+  %0 = split(%v0, indices_or_sections=4);
+  %1 = %0.0;
+  %2 = %0.2;
+  %3 = %0.3;
+  %4 = %0.1;
+  (%1, %2, %3, %4)
+}
+
+Mean inference time (std dev): 11761.290448 ns (0.000000 ns)
+current_op:split-61
+father:
+squeeze-62
+son:
+tuplegetitem-60
+tuplegetitem-65
+tuplegetitem-66
+tuplegetitem-67
+def @main(%v0: Tensor[(80, 20), float32]) {
+  %0 = split(%v0, indices_or_sections=4);
+  %1 = %0.0;
+  %2 = %0.2;
+  %3 = %0.3;
+  %4 = %0.1;
+  (%1, %2, %3, %4)
+}
+
+Mean inference time (std dev): 11964.920907 ns (0.000000 ns)
+current_op:squeeze-84
+father:
+tuplegetitem-85
+son:
+split-83
+def @main(%v0: Tensor[(1, 80), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.373876 ns (0.000000 ns)
+current_op:squeeze-94
+father:
+tuplegetitem-95
+son:
+multiply-91
+def @main(%v0: Tensor[(1, 128, 20), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.286104 ns (0.000000 ns)
+current_op:squeeze-195
+father:
+tuplegetitem-196
+son:
+tuple-22
+def @main(%v0: Tensor[(1, 128, 20), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.359888 ns (0.000000 ns)
+current_op:split-204
+father:
+squeeze-205
+son:
+tuplegetitem-203
+tuplegetitem-208
+tuplegetitem-209
+tuplegetitem-210
+def @main(%v0: Tensor[(80, 20), float32]) {
+  %0 = split(%v0, indices_or_sections=4);
+  %1 = %0.0;
+  %2 = %0.2;
+  %3 = %0.3;
+  %4 = %0.1;
+  (%1, %2, %3, %4)
+}
+
+Mean inference time (std dev): 12008.577132 ns (0.000000 ns)
+current_op:split-214
+father:
+squeeze-215
+son:
+tuplegetitem-213
+tuplegetitem-218
+tuplegetitem-219
+tuplegetitem-220
+def @main(%v0: Tensor[(80, 20), float32]) {
+  %0 = split(%v0, indices_or_sections=4);
+  %1 = %0.0;
+  %2 = %0.2;
+  %3 = %0.3;
+  %4 = %0.1;
+  (%1, %2, %3, %4)
+}
+
+Mean inference time (std dev): 11891.584662 ns (0.000000 ns)
+current_op:squeeze-237
+father:
+tuplegetitem-238
+son:
+split-236
+def @main(%v0: Tensor[(1, 80), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.046654 ns (0.000000 ns)
+current_op:squeeze-247
+father:
+tuplegetitem-248
+son:
+multiply-244
+def @main(%v0: Tensor[(1, 128, 20), float32]) {
+  squeeze(%v0, axis=[0])
+}
+
+Mean inference time (std dev): 7.326057 ns (0.000000 ns)
+current_op:tuple-49
+father:
+tuplegetitem-50
+tuplegetitem-55
+tuplegetitem-56
+tuplegetitem-57
+son:
+concatenate-48
+def @main(%v0: Tensor[(20, 10), float32], %v1: Tensor[(20, 10), float32], %v2: Tensor[(20, 10), float32], %v3: Tensor[(20, 10), float32]) {
+  (%v0, %v1, %v2, %v3)
+}
+
+Mean inference time (std dev): 7.318078 ns (0.000000 ns)
+current_op:tuple-59
+father:
+tuplegetitem-60
+tuplegetitem-65
+tuplegetitem-66
+tuplegetitem-67
+son:
+concatenate-58
+def @main(%v0: Tensor[(20, 20), float32], %v1: Tensor[(20, 20), float32], %v2: Tensor[(20, 20), float32], %v3: Tensor[(20, 20), float32]) {
+  (%v0, %v1, %v2, %v3)
+}
+
+Mean inference time (std dev): 7.434056 ns (0.000000 ns)AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+AS ready to profile
+
+current_op:split-83
+father:
+squeeze-84
+son:
+tuplegetitem-82
+tuplegetitem-86
+tuplegetitem-87
+tuplegetitem-88
+def @main(%v0: Tensor[(80), float32]) {
+  %0 = split(%v0, indices_or_sections=4);
+  %1 = %0.0;
+  %2 = %0.2;
+  %3 = %0.3;
+  %4 = %0.1;
+  (%1, %2, %3, %4)
+}
+
+Mean inference time (std dev): 11711.258333 ns (0.000000 ns)
+current_op:tuple-202
+father:
+tuplegetitem-203
+tuplegetitem-208
+tuplegetitem-209
+tuplegetitem-210
+son:
+concatenate-201
+def @main(%v0: Tensor[(20, 20), float32], %v1: Tensor[(20, 20), float32], %v2: Tensor[(20, 20), float32], %v3: Tensor[(20, 20), float32]) {
+  (%v0, %v1, %v2, %v3)
+}
+
+Mean inference time (std dev): 7.065586 ns (0.000000 ns)
+current_op:tuple-212
+father:
+tuplegetitem-213
+tuplegetitem-218
+tuplegetitem-219
+tuplegetitem-220
+son:
+concatenate-211
+def @main(%v0: Tensor[(20, 20), float32], %v1: Tensor[(20, 20), float32], %v2: Tensor[(20, 20), float32], %v3: Tensor[(20, 20), float32]) {
+  (%v0, %v1, %v2, %v3)
+}
+
+Mean inference time (std dev): 7.340227 ns (0.000000 ns)
+current_op:split-236
+father:
+squeeze-237
+son:
+tuplegetitem-235
+tuplegetitem-239
+tuplegetitem-240
+tuplegetitem-241
+def @main(%v0: Tensor[(80), float32]) {
+  %0 = split(%v0, indices_or_sections=4);
+  %1 = %0.0;
+  %2 = %0.2;
+  %3 = %0.3;
+  %4 = %0.1;
+  (%1, %2, %3, %4)
+}
+
+Mean inference time (std dev): 11696.613074 ns (0.000000 ns)
+current_op:concatenate-48
+father:
+tuple-49
+son:
+tuple-47
+tuple-115
+tuple-138
+tuple-161
+tuple-184
+def @main(%v0: Tensor[(20, 10), float32], %v1: Tensor[(20, 10), float32], %v2: Tensor[(20, 10), float32], %v3: Tensor[(20, 10), float32]) {
+  %0 = (%v0, %v1, %v2, %v3);
+  concatenate(%0)
+}
+
+Mean inference time (std dev): 3537.848378 ns (0.000000 ns)
+current_op:concatenate-58
+father:
+tuple-59
+son:
+tuple-47
+tuple-115
+tuple-138
+tuple-161
+tuple-184
+def @main(%v0: Tensor[(20, 20), float32], %v1: Tensor[(20, 20), float32], %v2: Tensor[(20, 20), float32], %v3: Tensor[(20, 20), float32]) {
+  %0 = (%v0, %v1, %v2, %v3);
+  concatenate(%0)
+}
+
+Mean inference time (std dev): 3438.440639 ns (0.000000 ns)
+current_op:tuple-81
+father:
+tuplegetitem-82
+tuplegetitem-86
+tuplegetitem-87
+tuplegetitem-88
+son:
+concatenate-80
+def @main(%v0: Tensor[(20), float32], %v1: Tensor[(20), float32], %v2: Tensor[(20), float32], %v3: Tensor[(20), float32]) {
+  (%v0, %v1, %v2, %v3)
+}
+
+Mean inference time (std dev): 7.397533 ns (0.000000 ns)
+current_op:concatenate-201
+father:
+tuple-202
+son:
+tuple-200
+tuple-268
+tuple-291
+tuple-314
+tuple-337
+def @main(%v0: Tensor[(20, 20), float32], %v1: Tensor[(20, 20), float32], %v2: Tensor[(20, 20), float32], %v3: Tensor[(20, 20), float32]) {
+  %0 = (%v0, %v1, %v2, %v3);
+  concatenate(%0)
+}
+
+Mean inference time (std dev): 3464.421925 ns (0.000000 ns)
+current_op:concatenate-211
+father:
+tuple-212
+son:
+tuple-200
+tuple-268
+tuple-291
+tuple-314
+tuple-337
+def @main(%v0: Tensor[(20, 20), float32], %v1: Tensor[(20, 20), float32], %v2: Tensor[(20, 20), float32], %v3: Tensor[(20, 20), float32]) {
+  %0 = (%v0, %v1, %v2, %v3);
+  concatenate(%0)
+}
+
+Mean inference time (std dev): 3194.347894 ns (0.000000 ns)
+current_op:tuple-234
+father:
+tuplegetitem-235
+tuplegetitem-239
+tuplegetitem-240
+tuplegetitem-241
+son:
+concatenate-233
+def @main(%v0: Tensor[(20), float32], %v1: Tensor[(20), float32], %v2: Tensor[(20), float32], %v3: Tensor[(20), float32]) {
+  (%v0, %v1, %v2, %v3)
+}
+
+Mean inference time (std dev): 7.383114 ns (0.000000 ns)
+current_op:tuple-47
+father:
+concatenate-48
+concatenate-58
+son:
+concatenate-46
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.358026 ns (0.000000 ns)
+current_op:tuple-115
+father:
+concatenate-48
+concatenate-58
+son:
+concatenate-114
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.444146 ns (0.000000 ns)
+current_op:tuple-138
+father:
+concatenate-48
+concatenate-58
+son:
+concatenate-137
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.341591 ns (0.000000 ns)
+current_op:tuple-161
+father:
+concatenate-48
+concatenate-58
+son:
+concatenate-160
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.492682 ns (0.000000 ns)
+current_op:tuple-184
+father:
+concatenate-48
+concatenate-58
+son:
+concatenate-183
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.498256 ns (0.000000 ns)
+current_op:concatenate-80
+father:
+tuple-81
+son:
+add-34
+add-107
+add-130
+add-153
+add-176
+def @main(%v0: Tensor[(20), float32], %v1: Tensor[(20), float32], %v2: Tensor[(20), float32], %v3: Tensor[(20), float32]) {
+  %0 = (%v0, %v1, %v2, %v3);
+  concatenate(%0)
+}
+
+Mean inference time (std dev): 3207.874338 ns (0.000000 ns)
+current_op:tuple-200
+father:
+concatenate-201
+concatenate-211
+son:
+concatenate-199
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.420033 ns (0.000000 ns)
+current_op:tuple-268
+father:
+concatenate-201
+concatenate-211
+son:
+concatenate-267
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.473022 ns (0.000000 ns)
+current_op:tuple-291
+father:
+concatenate-201
+concatenate-211
+son:
+concatenate-290
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.473809 ns (0.000000 ns)
+current_op:tuple-314
+father:
+concatenate-201
+concatenate-211
+son:
+concatenate-313
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.565148 ns (0.000000 ns)
+current_op:tuple-337
+father:
+concatenate-201
+concatenate-211
+son:
+concatenate-336
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  (%v0, %v1)
+}
+
+Mean inference time (std dev): 5.511826 ns (0.000000 ns)
+current_op:concatenate-233
+father:
+tuple-234
+son:
+add-18
+add-260
+add-283
+add-306
+add-329
+def @main(%v0: Tensor[(20), float32], %v1: Tensor[(20), float32], %v2: Tensor[(20), float32], %v3: Tensor[(20), float32]) {
+  %0 = (%v0, %v1, %v2, %v3);
+  concatenate(%0)
+}
+
+Mean inference time (std dev): 3479.391428 ns (0.000000 ns)
+current_op:concatenate-46
+father:
+tuple-47
+son:
+nn.dense-36
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+
+Mean inference time (std dev): 3421.532984 ns (0.000000 ns)
+current_op:concatenate-114
+father:
+tuple-115
+son:
+nn.dense-109
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+
+Mean inference time (std dev): 3187.702572 ns (0.000000 ns)
+current_op:concatenate-137
+father:
+tuple-138
+son:
+nn.dense-132
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+
+Mean inference time (std dev): 3363.573380 ns (0.000000 ns)
+current_op:concatenate-160
+father:
+tuple-161
+son:
+nn.dense-155
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+
+Mean inference time (std dev): 3455.613449 ns (0.000000 ns)
+current_op:concatenate-183
+father:
+tuple-184
+son:
+nn.dense-178
+def @main(%v0: Tensor[(80, 10), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+
+Mean inference time (std dev): 3098.583380 ns (0.000000 ns)
+current_op:concatenate-199
+father:
+tuple-200
+son:
+nn.dense-20
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+
+Mean inference time (std dev): 3217.595273 ns (0.000000 ns)
+current_op:concatenate-267
+father:
+tuple-268
+son:
+nn.dense-262
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+
+Mean inference time (std dev): 3381.293605 ns (0.000000 ns)
+current_op:concatenate-290
+father:
+tuple-291
+son:
+nn.dense-285
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+AS ready to profile
+AS ready to profile
+AS ready to profile
+
+Mean inference time (std dev): 3449.098235 ns (0.000000 ns)
+current_op:concatenate-313
+father:
+tuple-314
+son:
+nn.dense-308
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+
+Mean inference time (std dev): 3369.043131 ns (0.000000 ns)
+current_op:concatenate-336
+father:
+tuple-337
+son:
+nn.dense-331
+def @main(%v0: Tensor[(80, 20), float32], %v1: Tensor[(80, 20), float32]) {
+  %0 = (%v0, %v1);
+  concatenate(%0, axis=1)
+}
+
+Mean inference time (std dev): 3385.403175 ns (0.000000 ns)
+('{"model_name": "lstm", "split": "66.085728%", "strided_slice": "6.718619%", "squeeze": "0.040300%", "tuple": "0.049772%", "concatenate": "27.105581%"}', '{"split": 130807.59534924754, "total_op_time": 197936.22487672683, "strided_slice": 13298.58024323555, "squeeze": 79.76836596692723, "tuple": 98.51713296845507, "concatenate": 53651.763785308365}')

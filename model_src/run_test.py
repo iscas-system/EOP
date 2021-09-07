@@ -95,6 +95,8 @@ if options.tvm == True:
         mod, params = dcgan.get_workload(1, oshape=(3, 64, 64), ngf=128, random_len=100, layout='NCHW', dtype='float32')
     else :
         mod, params, input_shape, output_shape = get_network(options.model, options.batchsize, )
+        data = [np.random.uniform(-10, 10, input_shape).astype("float32")]
+        input_name = ["data"]
     with tvm.transform.PassContext(opt_level=1):
         intrp = tvm.relay.build_module.create_executor("graph", mod, device, target)
     onnx_profiler.run_relay_mod(data, intrp, params)
