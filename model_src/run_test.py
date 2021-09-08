@@ -138,13 +138,15 @@ if options.darknet == True:
     print("Converting darknet to relay functions...")
     mod, params = relay.frontend.from_darknet(net, dtype=dtype, shape=data.shape)
     print(mod)
-    target = 'llvm'
-    target_host = 'llvm'
+    # target = 'llvm'
+    # target_host = 'llvm'
+    # target = 'cuda'
+    # target_host = 'cuda'
 
     print("Compiling the model...")
     with tvm.transform.PassContext(opt_level=3):
         graph, lib, mod_params = relay.build(mod, target=target, target_host=target_host, params=params)
-    
+
     data = [data]
 
 if options.onnx == False and options.tvm == False and options.pytorch == False and options.darknet == False:

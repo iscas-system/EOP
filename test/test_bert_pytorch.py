@@ -3,6 +3,15 @@ import torch
 import tvm
 import tvm.relay
 from tvm.contrib import graph_runtime
+import onnx_profiler
+import relay_graph
+import os
+import op_statistics
+
+'''
+bert: CPU
+('{"model_name": "bert", "cast": "0.000076%", "strided_slice": "0.000035%", "transpose": "19.338548%", "expand_dims": "0.000010%", "take": "0.015821%", "repeat": "0.000018%", "multiply": "0.201182%", "add": "0.664358%", "subtract": "0.000018%", "nn.layer_norm": "0.694734%", "nn.dropout": "0.000110%", "reshape": "0.001279%", "nn.dense": "77.784594%", "nn.batch_matmul": "0.274035%", "divide": "0.064497%", "nn.softmax": "0.088449%", "erf": "0.867593%", "tanh": "0.004638%", "tuple": "0.000005%"}', '{"cast": 101.01691008994716, "total_op_time": 132487045.55422042, "strided_slice": 46.93220387275787, "transpose": 25621070.37045182, "expand_dims": 12.739240389150503, "take": 20961.236664950036, "repeat": 23.847749260967312, "multiply": 266539.78406513506, "add": 880188.4485154, "subtract": 24.40867608479712, "nn.layer_norm": 920432.8395848701, "nn.dropout": 145.94995260013997, "reshape": 1695.0509930852302, "nn.dense": 103054509.9525598, "nn.batch_matmul": 363060.3535744703, "divide": 85449.51553656165, "nn.softmax": 117183.47923938687, "erf": 1149448.892468539, "tanh": 6144.593092327872, "tuple": 6.142741622195516}')
+'''
 
 enc = BertTokenizer.from_pretrained("bert-base-uncased")
 
@@ -48,6 +57,9 @@ print(mod_bert)
 target = "llvm"
 ctx = tvm.cpu(0)
 target_host = 'llvm'
+# target = "cuda"
+# ctx = tvm.cuda(0)
+# target_host = 'cuda'
 
 tt_a = tvm.nd.array(tokens_tensor.numpy(), ctx)
 st_a = tvm.nd.array(segments_tensors.numpy(), ctx)
@@ -57,12 +69,22 @@ with tvm.transform.PassContext(opt_level=3):
                                      target=target,
                                      target_host=target_host,
                                      params=params_bert)
-module = graph_runtime.create(graph, lib, ctx)
+# module = graph_runtime.create(graph, lib, ctx)
+#
+# module.set_input("input_ids", tt_a)
+# module.set_input("attention_mask", st_a)
+# module.set_input(**params)
+#
+# module.run()
+#
+# print(module.get_output(0))
+relay_graph.construct_op_graph(mod_bert)
+parent = os.path.dirname(os.path.realpath(__file__))
+a = tokens_tensor.numpy()
+b = segments_tensors.numpy()
+data = [a,b]
+input_name = ["input_ids","attention_mask"]
+tmp = {input_name[i]:data[i] for i in range(len(data))}
+relay_graph.profile_resource_usage(params_bert, tmp,input_name, device = tvm.cpu(), target = "llvm", output_file = os.path.join(parent,'bert.csv'))
+print(op_statistics.calculate_op_distribution("bert"))
 
-module.set_input("input_ids", tt_a)
-module.set_input("attention_mask", st_a)
-module.set_input(**params)
-
-module.run()
-
-print(module.get_output(0))
