@@ -76,15 +76,25 @@ attributes
 ----------
 :attr data: input of the model
 :attr input_name: keys of the input
+
+description
+----------
+resnet18: {"input.1":(1,3,224,224)} 
+vgg11: {"input.1":(1,3,224,224)}
+lstm: {"input":(5,3,10),"h0":(2,3,20),"c0":(2,3,20)}
+gru: {"input":(5,1,10),"h0":(2,1,20)}
 """
 
-data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
-input = np.random.uniform(-10, 10, (5,3,10)).astype("float32")
-h0 = np.random.uniform(-10, 10, (2,3,20)).astype("float32")
+#data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
+input = np.random.uniform(-10, 10, (5,1,10)).astype("float32")
+h0 = np.random.uniform(-10, 10, (2,1,20)).astype("float32")
 c0 = np.random.uniform(-10, 10, (2,3,20)).astype("float32")
 #data = [input,h0,c0]
-data = [data]
-input_name = ["data"]
+data = [input,h0]
+#data = [data]
+#input_name = ["input.1"]
+#input_name = ["input","h0","c0"]
+input_name = ["input","h0"]
 
 if options.onnx == True:
     onnx_model = onnx_profiler.create_onnx_model_from_local_path("./onnx/"+options.model)
@@ -137,6 +147,10 @@ relay_graph.construct_op_graph(mod)
 parent = os.path.dirname(os.path.realpath(__file__))
 tmp = {input_name[i]:data[i] for i in range(len(data))}
 file_name = options.model.split(".")[0]
-print(file_name)
+if options.gpu == True:
+    device_name = "k80"
+else:
+    device_name = "cpu"
+file_name = file_name + '_' + device_name + '_' + str(options.batchsize)
 relay_graph.profile_resource_usage(params, tmp,input_name, device = device, target = target, output_file = os.path.join(parent,"output/"+file_name+".csv"))
-op_statistics.calculate_op_distribution(options.model)
+print(op_statistics.calculate_op_distribution(options.model))
