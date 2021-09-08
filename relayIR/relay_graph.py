@@ -132,7 +132,7 @@ class op_graph:
                 output['a_name'] = bw_id
                 for key2 in bw_data.keys():
                     output['backward_' + key2] = bw_data[key2]
-            print("nextlen %r" %(len(temp_op.next)))
+            #print("nextlen %r" %(len(temp_op.next)))
             if len(temp_op_list) > 0:
                 for p in temp_op_list:
                     for key in p.next.keys():
@@ -730,26 +730,30 @@ def profile_forward_relay_operator_time(ready_op_node_list, ir_params, x, input_
     # for p in ir_params:
     #     print(p)
 
-    # tmp_param = call_interpreter.mod["main"].params
-    # if tmp_param[0].name_hint in ir_params.keys() and tmp_param[-1].name_hint not in ir_params.keys():
-    #     new_call_intput_args1 = []
-    #     new_call_intput_args2 = []
-    #     for beg in range(len(tmp_param)):
-    #         if tmp_param[beg].name_hint in ir_params.keys():
-    #             new_call_intput_args1.append(ir_params[tmp_param[beg].name_hint])
-    #         else:
-    #             for end in range(len(call_intput_args)):
-    #                 new_call_intput_args2.append(call_intput_args[end])
-    #             break
-    #     new_call_intput_args = []
-    #     for s in range(len(new_call_intput_args1)):
-    #         new_call_intput_args.append(new_call_intput_args1[s])
-    #     for s in range(len(new_call_intput_args2)):
-    #         new_call_intput_args.append(new_call_intput_args2[s])
-    #     ir_params = {}
-    #     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*new_call_intput_args, **ir_params)
-    # else:
-    #     ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*call_intput_args, **ir_params)
+    tmp_param = call_interpreter.mod["main"].params
+    if len(tmp_param)>1:
+        for i in range(len(tmp_param)-1):
+            if tmp_param[i].name_hint in ir_params.keys() and tmp_param[i+1].name_hint not in ir_params.keys():
+                new_call_intput_args = []
+                cnt = 0
+                for beg in range(len(tmp_param)):
+                    if tmp_param[beg].name_hint in ir_params.keys():
+                        new_call_intput_args.append(ir_params[tmp_param[beg].name_hint])
+                    else:
+                        if cnt < len(call_intput_args):
+                            new_call_intput_args.append(call_intput_args[cnt])
+                            cnt += 1
+                        else:
+                            raise Exception("too many arguments!")
+                # new_call_intput_args = []
+                # for s in range(len(new_call_intput_args1)):
+                #     new_call_intput_args.append(new_call_intput_args1[s])
+                # for s in range(len(new_call_intput_args2)):
+                #     new_call_intput_args.append(new_call_intput_args2[s])
+                ir_params = {}
+                call_intput_args = new_call_intput_args
+                break
+    ready_op_node.performance_data["fw_value"] = call_interpreter.evaluate()(*call_intput_args, **ir_params)
 
     metadata = {}
 

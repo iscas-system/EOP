@@ -7,6 +7,11 @@ import relay_graph
 import os
 import op_statistics
 
+'''
+yolov3: CPU
+('{"model_name": "yolov3", "nn.conv2d": "96.600505%", "nn.batch_norm": "1.845165%", "nn.leaky_relu": "0.962330%", "add": "0.245037%", "nn.upsampling": "0.047668%", "tuple": "0.000018%", "nn.bias_add": "0.022487%", "concatenate": "0.028873%", "reshape": "0.000015%", "split": "0.134874%", "sigmoid": "0.113028%"}', '{"nn.conv2d": 240907883.32274368, "total_op_time": 249385738.16623637, "nn.batch_norm": 4601579.534899346, "nn.leaky_relu": 2399913.0289591225, "add": 611086.3021419203, "nn.upsampling": 118876.79676302955, "tuple": 45.94247025457003, "nn.bias_add": 56078.870224520506, "concatenate": 72006.16877805878, "reshape": 37.625818861510545, "split": 336356.019237177, "sigmoid": 281874.5542003876}')
+'''
+
 cfg_path = './darknet/cfg/yolov3.cfg'
 weights_path = './darknet/yolov3.weights'
 lib_path = './darknet/libdarknet.so'

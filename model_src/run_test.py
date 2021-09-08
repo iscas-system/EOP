@@ -66,7 +66,7 @@ if options.gpu == True:
     device = tvm.cuda(0)
 else:
     target = "llvm"
-    device = tvm.cpu(0)
+    device = tvm.cpu()
 
 
 """
@@ -83,18 +83,23 @@ resnet18: {"input.1":(1,3,224,224)}
 vgg11: {"input.1":(1,3,224,224)}
 lstm: {"input":(5,3,10),"h0":(2,3,20),"c0":(2,3,20)}
 gru: {"input":(5,1,10),"h0":(2,1,20)}
+densenet: {"data":(1,1,224,224)}
+dcgan: {"data":(1,100)}
 """
 
 #data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
-input = np.random.uniform(-10, 10, (5,1,10)).astype("float32")
-h0 = np.random.uniform(-10, 10, (2,1,20)).astype("float32")
-c0 = np.random.uniform(-10, 10, (2,3,20)).astype("float32")
+#data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
+data = np.random.uniform(-10, 10, (1, 100)).astype("float32")
+# input = np.random.uniform(-10, 10, (5,1,10)).astype("float32")
+# h0 = np.random.uniform(-10, 10, (2,1,20)).astype("float32")
+# c0 = np.random.uniform(-10, 10, (2,3,20)).astype("float32")
 #data = [input,h0,c0]
-data = [input,h0]
-#data = [data]
+#data = [input,h0]
+data = [data]
 #input_name = ["input.1"]
 #input_name = ["input","h0","c0"]
-input_name = ["input","h0"]
+#input_name = ["input","h0"]
+input_name = ["data"]
 
 if options.onnx == True:
     onnx_model = onnx_profiler.create_onnx_model_from_local_path("./onnx/"+options.model)
@@ -121,9 +126,9 @@ if options.pytorch == True:
     pass
 
 if options.darknet == True:
-    cfg_path = './darknet/cfg/yolov3.cfg'
-    weights_path = './darknet/yolov3.weights'
-    lib_path = './darknet/libdarknet.so'
+    cfg_path = '/root/huyi/talos/tvm-analyzer/relay_profiler/darknet/cfg/yolov3.cfg'
+    weights_path = '/root/huyi/talos/tvm-analyzer/relay_profiler/darknet/yolov3.weights'
+    lib_path = '/root/huyi/talos/tvm-analyzer/relay_profiler/darknet/libdarknet.so'
 
     DARKNET_LIB = __darknetffi__.dlopen(lib_path)
     net = DARKNET_LIB.load_network(cfg_path.encode('utf-8'), weights_path.encode('utf-8'), 0)
@@ -139,6 +144,8 @@ if options.darknet == True:
     print("Compiling the model...")
     with tvm.transform.PassContext(opt_level=3):
         graph, lib, mod_params = relay.build(mod, target=target, target_host=target_host, params=params)
+    
+    data = [data]
 
 if options.onnx == False and options.tvm == False and options.pytorch == False and options.darknet == False:
     raise Exception("Please choose the framework from which the model come")
