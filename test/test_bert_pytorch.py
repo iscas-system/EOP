@@ -11,6 +11,9 @@ import op_statistics
 '''
 bert: CPU
 ('{"model_name": "bert", "cast": "0.000076%", "strided_slice": "0.000035%", "transpose": "19.338548%", "expand_dims": "0.000010%", "take": "0.015821%", "repeat": "0.000018%", "multiply": "0.201182%", "add": "0.664358%", "subtract": "0.000018%", "nn.layer_norm": "0.694734%", "nn.dropout": "0.000110%", "reshape": "0.001279%", "nn.dense": "77.784594%", "nn.batch_matmul": "0.274035%", "divide": "0.064497%", "nn.softmax": "0.088449%", "erf": "0.867593%", "tanh": "0.004638%", "tuple": "0.000005%"}', '{"cast": 101.01691008994716, "total_op_time": 132487045.55422042, "strided_slice": 46.93220387275787, "transpose": 25621070.37045182, "expand_dims": 12.739240389150503, "take": 20961.236664950036, "repeat": 23.847749260967312, "multiply": 266539.78406513506, "add": 880188.4485154, "subtract": 24.40867608479712, "nn.layer_norm": 920432.8395848701, "nn.dropout": 145.94995260013997, "reshape": 1695.0509930852302, "nn.dense": 103054509.9525598, "nn.batch_matmul": 363060.3535744703, "divide": 85449.51553656165, "nn.softmax": 117183.47923938687, "erf": 1149448.892468539, "tanh": 6144.593092327872, "tuple": 6.142741622195516}')
+
+bert: GPU(K40)
+('{"model_name": "bert", "cast": "0.026128%", "strided_slice": "0.013049%", "transpose": "58.419500%", "expand_dims": "0.000019%", "take": "0.029508%", "repeat": "0.006518%", "multiply": "0.290617%", "add": "0.819530%", "subtract": "0.006586%", "nn.layer_norm": "1.716359%", "nn.dropout": "0.000213%", "reshape": "0.002473%", "nn.dense": "37.447621%", "nn.batch_matmul": "0.690844%", "divide": "0.084864%", "nn.softmax": "0.326392%", "erf": "0.113396%", "tanh": "0.006375%", "tuple": "0.000009%"}', '{"cast": 18151.089771884916, "total_op_time": 69469257.59604834, "strided_slice": 9064.977251713633, "transpose": 40583592.85619145, "expand_dims": 12.993658453214131, "take": 20499.224731075043, "repeat": 4527.87672771782, "multiply": 201889.2000140288, "add": 569321.4847191551, "subtract": 4575.346931870142, "nn.layer_norm": 1192342.1756438226, "nn.dropout": 147.79842128658473, "reshape": 1717.665126660619, "nn.dense": 26014583.955047887, "nn.batch_matmul": 479924.10589409026, "divide": 58954.29077181897, "nn.softmax": 226742.1783381147, "erf": 78775.27596735921, "tanh": 4428.9472131579805, "tuple": 6.153626884201612}')
 '''
 
 enc = BertTokenizer.from_pretrained("bert-base-uncased")
@@ -54,12 +57,12 @@ shape_list = [(i.debugName().split('.')[0], i.type().sizes()) for i in  list(tra
 mod_bert, params_bert = tvm.relay.frontend.from_pytorch(traced_model,shape_list, default_dtype="float32")
 print(mod_bert)
 
-target = "llvm"
-ctx = tvm.cpu(0)
+# target = "llvm"
+# ctx = tvm.cpu(0)
+# target_host = 'llvm'
+target = "cuda"
+ctx = tvm.cuda(0)
 target_host = 'llvm'
-# target = "cuda"
-# ctx = tvm.cuda(0)
-# target_host = 'cuda'
 
 tt_a = tvm.nd.array(tokens_tensor.numpy(), ctx)
 st_a = tvm.nd.array(segments_tensors.numpy(), ctx)
@@ -85,6 +88,6 @@ b = segments_tensors.numpy()
 data = [a,b]
 input_name = ["input_ids","attention_mask"]
 tmp = {input_name[i]:data[i] for i in range(len(data))}
-relay_graph.profile_resource_usage(params_bert, tmp,input_name, device = tvm.cpu(), target = "llvm", output_file = os.path.join(parent,'bert.csv'))
+relay_graph.profile_resource_usage(params_bert, tmp,input_name, device = tvm.cuda(0), target = "cuda", output_file = os.path.join(parent,'bert.csv'))
 print(op_statistics.calculate_op_distribution("bert"))
 
