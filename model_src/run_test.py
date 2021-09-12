@@ -20,6 +20,9 @@ from tvm.relay.testing.darknet import __darknetffi__
 from optparse import OptionParser
 from cnn_workload_generator import get_network
 import tvm.relay as relay
+import sys
+import csv
+import json
 
 """
 Example
@@ -91,10 +94,10 @@ yolov3: {}
 #data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
 #data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
 data = np.random.uniform(-10, 10, (1, 100)).astype("float32")
-input = np.random.uniform(-10, 10, (5,1,10)).astype("float32")
-h0 = np.random.uniform(-10, 10, (2,1,20)).astype("float32")
-# c0 = np.random.uniform(-10, 10, (2,3,20)).astype("float32")
-#data = [input,h0,c0]
+input = np.random.uniform(-10, 10, (5,options.batchsize,10)).astype("float32")
+h0 = np.random.uniform(-10, 10, (2,options.batchsize,20)).astype("float32")
+# c0 = np.random.uniform(-10, 10, (2,options.batchsize,20)).astype("float32")
+# data = [input,h0,c0]
 data = [input,h0]
 #data = [data]
 #input_name = ["input.1"]
@@ -164,3 +167,21 @@ else:
 file_name = file_name + '_' + device_name + '_' + str(options.batchsize)
 relay_graph.profile_resource_usage(params, tmp,input_name, device = device, target = target, output_file = os.path.join(parent,"output/"+file_name+".csv"))
 print(op_statistics.calculate_op_distribution(options.model))
+a , b = op_statistics.calculate_op_distribution(options.model.split(".")[0])
+out_file = "./data/" + file_name + ".csv"
+a = json.loads(a)
+b = json.loads(b)
+output_list = []
+cnt = 0
+for key in a.keys():
+    if key in b.keys():
+        output_list.append({})
+        output_list[cnt]["op_name"] = key
+        output_list[cnt]["op_proportion"] = a[key]
+        output_list[cnt]["op_time"] = b[key]
+        cnt += 1
+with open(out_file, 'w', newline='', encoding='utf-8') as f:
+    header = ["op_name","op_time","op_proportion"]
+    writer = csv.DictWriter(f, fieldnames=header)
+    writer.writeheader()
+    writer.writerows(output_list)
