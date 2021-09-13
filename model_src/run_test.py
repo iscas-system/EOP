@@ -28,6 +28,7 @@ import json
 Example
 ----------
 python run_test.py -o -m resnet18.onnx -g
+python run_test.py -o -m gru_4.onnx -b 4 -g
 """
 
 parser = OptionParser(usage="define the data and input_name in source code before running this code")
