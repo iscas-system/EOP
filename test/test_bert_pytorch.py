@@ -7,6 +7,9 @@ import onnx_profiler
 import relay_graph
 import os
 import op_statistics
+import sys
+import csv
+import json
 
 '''
 bert: CPU
@@ -20,6 +23,9 @@ enc = BertTokenizer.from_pretrained("bert-base-uncased")
 
 # Tokenizing input text
 text = "[CLS] Who was Jim Henson ? [SEP] Jim Henson was a puppeteer [SEP]"
+# batch_seq = []
+# for i in range(64):
+#     batch_seq.append(text)
 tokenized_text = enc.tokenize(text)
 
 # Masking one of the input tokens
@@ -35,8 +41,15 @@ dummy_input = [tokens_tensor, segments_tensors]
 
 # Initializing the model with the torchscript flag
 # Flag set to True even though it is not necessary as this model does not have an LM Head.
+'''
 config = BertConfig(vocab_size_or_config_json_file=32000, hidden_size=768,
     num_hidden_layers=12, num_attention_heads=12, intermediate_size=3072, torchscript=True)
+'''
+
+num_hidden_layer = 60
+
+config = BertConfig(vocab_size_or_config_json_file=32000, hidden_size=768,
+    num_hidden_layers=num_hidden_layer, num_attention_heads=12, intermediate_size=3072, torchscript=True)
 
 # Instantiating the model
 model = BertModel(config)
@@ -57,11 +70,11 @@ shape_list = [(i.debugName().split('.')[0], i.type().sizes()) for i in  list(tra
 mod_bert, params_bert = tvm.relay.frontend.from_pytorch(traced_model,shape_list, default_dtype="float32")
 print(mod_bert)
 
-# target = "llvm"
-# ctx = tvm.cpu(0)
+target = "llvm"
+ctx = tvm.cpu(0)
 # target_host = 'llvm'
-target = "cuda"
-ctx = tvm.cuda(0)
+# target = "cuda"
+# ctx = tvm.cuda(0)
 target_host = 'llvm'
 
 tt_a = tvm.nd.array(tokens_tensor.numpy(), ctx)
@@ -90,4 +103,24 @@ input_name = ["input_ids","attention_mask"]
 tmp = {input_name[i]:data[i] for i in range(len(data))}
 relay_graph.profile_resource_usage(params_bert, tmp,input_name, device = tvm.cuda(0), target = "cuda", output_file = os.path.join(parent,'bert.csv'))
 print(op_statistics.calculate_op_distribution("bert"))
-
+# device_name = 'gpu'
+device_name = 'cpu'
+file_name = 'bert' + '_' + device_name + '_' + 'num_layers-' + str(num_hidden_layer)
+a , b = op_statistics.calculate_op_distribution("bert")
+out_file = "./data/" + file_name + ".csv"
+a = json.loads(a)
+b = json.loads(b)
+output_list = []
+cnt = 0
+for key in a.keys():
+    if key in b.keys():
+        output_list.append({})
+        output_list[cnt]["op_name"] = key
+        output_list[cnt]["op_proportion"] = a[key]
+        output_list[cnt]["op_time"] = b[key]
+        cnt += 1
+with open(out_file, 'w', newline='', encoding='utf-8') as f:
+    header = ["op_name","op_time","op_proportion"]
+    writer = csv.DictWriter(f, fieldnames=header)
+    writer.writeheader()
+    writer.writerows(output_list)

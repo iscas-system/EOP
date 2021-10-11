@@ -28,6 +28,7 @@ import json
 Example
 ----------
 python run_test.py -o -m resnet18.onnx -g
+python run_test.py -o -m gru_4.onnx -b 4 -g
 """
 
 parser = OptionParser(usage="define the data and input_name in source code before running this code")
@@ -52,6 +53,16 @@ parser.add_option("-b", "--batchsize", action="store",
                   default=1,
                   type="int",
                   help="set model batchsize")
+parser.add_option("-l", "--layer_num", action="store",
+                  dest="layer_num",
+                  default=2,
+                  type="int",
+                  help="set number of layers")
+parser.add_option("-i", "--input_size", action="store",
+                  dest="input_size",
+                  default=20,
+                  type="int",
+                  help="set input size")
 parser.add_option("-m", "--model",
                   dest="model",
                   default="resnet18.onnx",
@@ -88,22 +99,22 @@ lstm: {"input":(5,3,10),"h0":(2,3,20),"c0":(2,3,20)}
 gru: {"input":(5,1,10),"h0":(2,1,20)}
 densenet: {"data":(1,1,224,224)}
 dcgan: {"data":(1,100)}
-yolov3: {}
+yolov3: {"data":}
 """
 
-data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
-#data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
+# data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
+# data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
 # data = np.random.uniform(-10, 10, (1, 100)).astype("float32")
-# input = np.random.uniform(-10, 10, (5,options.batchsize,10)).astype("float32")
-# h0 = np.random.uniform(-10, 10, (2,options.batchsize,20)).astype("float32")
-# c0 = np.random.uniform(-10, 10, (2,options.batchsize,20)).astype("float32")
-# data = [input,h0,c0]
+input = np.random.uniform(-10, 10, (5,options.batchsize,options.input_size)).astype("float32")
+h0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
+c0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
+data = [input,h0,c0]
 # data = [input,h0]
-data = [data]
-input_name = ["input.1"]
-#input_name = ["input","h0","c0"]
-#input_name = ["input","h0"]
-#input_name = ["data"]
+# data = [data]
+# input_name = ["input.1"]
+input_name = ["input","h0","c0"]
+# input_name = ["input","h0"]
+# input_name = ["data"]
 
 if options.onnx == True:
     onnx_model = onnx_profiler.create_onnx_model_from_local_path("./onnx/"+options.model)
@@ -142,10 +153,12 @@ if options.darknet == True:
     print("Converting darknet to relay functions...")
     mod, params = relay.frontend.from_darknet(net, dtype=dtype, shape=data.shape)
     print(mod)
-    # target = 'llvm'
-    # target_host = 'llvm'
-    target = 'cuda'
-    target_host = 'llvm'
+    if options.gpu == False:
+        target = 'llvm'
+        target_host = 'llvm'
+    else:
+        target = 'cuda'
+        target_host = 'llvm'
 
     print("Compiling the model...")
     with tvm.transform.PassContext(opt_level=3):
@@ -161,10 +174,10 @@ parent = os.path.dirname(os.path.realpath(__file__))
 tmp = {input_name[i]:data[i] for i in range(len(data))}
 file_name = options.model.split(".")[0]
 if options.gpu == True:
-    device_name = "k40"
+    device_name = "k"
 else:
     device_name = "cpu"
-file_name = file_name + '_' + device_name + '_' + str(options.batchsize)
+file_name = file_name + '_' + device_name + '_' + 'inputsize' + '_' + str(options.input_size)
 relay_graph.profile_resource_usage(params, tmp,input_name, device = device, target = target, output_file = os.path.join(parent,"output/"+file_name+".csv"))
 print(op_statistics.calculate_op_distribution(options.model))
 a , b = op_statistics.calculate_op_distribution(options.model.split(".")[0])

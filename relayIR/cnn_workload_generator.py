@@ -5,7 +5,7 @@ from tvm import relay
 import tvm.relay.testing
 from tvm.contrib import graph_executor
 
-def get_network(name, batch_size, layout="NHWC", dtype="float32"):
+def get_network(name, batch_size, layout="NCHW", dtype="float32"):
     """Get the symbol definition and random weight of a network"""
 
     # auto-scheduler prefers NHWC layout
