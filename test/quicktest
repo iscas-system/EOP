@@ -1,0 +1,15 @@
+import onnx
+import onnxruntime as ort
+import numpy as np
+import time
+
+input = np.random.uniform(-10, 10, (5, 3, inputsize)).astype("float32")
+h0 = np.random.uniform(-10, 10, (2, 3, 20)).astype("float32")
+c0 = np.random.uniform(-10, 10, (2, 3, 20)).astype("float32")
+data = [input,h0,c0]
+sess = ort.InferenceSession("../model_src/onnx/lstm_iz_100.onnx")
+#input_name = sess.get_inputs()[0].name
+inputs = {'input':input,'h0':h0,'c0':c0}
+s = time.time()
+result = sess.run([], inputs)
+e = time.time()

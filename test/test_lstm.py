@@ -67,14 +67,18 @@ K40/T4:
 target = "cuda"
 device = tvm.cuda(0)
 
-input_name = ['input', 'h0', 'c0']
+# input_name = ['input', 'h0', 'c0']
+input_name = ['input', 'h0']
 
-input = np.random.uniform(-10, 10, (5, 3, 10)).astype("float32")
-h0 = np.random.uniform(-10, 10, (2, 3, 20)).astype("float32")
+inputsize = 50
+
+input = np.random.uniform(-10, 10, (10, 4, inputsize)).astype("float32")
+h0 = np.random.uniform(-10, 10, (2, 4, 20)).astype("float32")
 c0 = np.random.uniform(-10, 10, (2, 3, 20)).astype("float32")
-data = [input,h0,c0]
+# data = [input,h0,c0]
+data = [input,h0]
 
-onnx_model = onnx_profiler.create_onnx_model_from_local_path("../model_src/onnx/lstm.onnx")
+onnx_model = onnx_profiler.create_onnx_model_from_local_path("../model_src/onnx/gru_inputsize_50.onnx")
 mod, params, intrp = onnx_profiler.compile_onnx_model(onnx_model, data, target=target, input_names=input_name, device=device)
 
 # print(mod)
@@ -83,3 +87,16 @@ relay_graph.construct_op_graph(mod)
 tmp = {input_name[i]:data[i] for i in range(len(data))}
 relay_graph.profile_resource_usage(params, tmp,input_name, device = device, target = target)
 print(op_statistics.calculate_op_distribution("lstm"))
+s,g = op_statistics.calculate_op_distribution("bert")
+file_name = "./data/" + "lstm-cpu-inputsize" + str(inputsize) + ".csv"
+csv_file = open(file_name, "w")
+g_list = json.loads(g)
+key_data = g_list.keys()
+value_data = [g_list[key] for key in g_list.keys()]
+
+# csv文件写入对象
+csv_writer = csv.writer(csv_file)
+# 先写入表头字段数据
+csv_writer.writerow(key_data)
+# 再写入表的值数据
+csv_writer.writerow(value_data)

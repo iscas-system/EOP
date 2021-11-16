@@ -5,7 +5,8 @@
 #
 
 import onnx_profiler
-import relay_graph
+import test_relay
+import op_detectm
 from tvm.relay.testing import densenet,dcgan
 import tvm
 import numpy as np
@@ -58,11 +59,6 @@ parser.add_option("-l", "--layer_num", action="store",
                   default=2,
                   type="int",
                   help="set number of layers")
-parser.add_option("-i", "--input_size", action="store",
-                  dest="input_size",
-                  default=20,
-                  type="int",
-                  help="set input size")
 parser.add_option("-m", "--model",
                   dest="model",
                   default="resnet18.onnx",
@@ -99,22 +95,22 @@ lstm: {"input":(5,3,10),"h0":(2,3,20),"c0":(2,3,20)}
 gru: {"input":(5,1,10),"h0":(2,1,20)}
 densenet: {"data":(1,1,224,224)}
 dcgan: {"data":(1,100)}
-yolov3: {"data":}
+yolov3: {}
 """
 
 # data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
-data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
+# data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
 # data = np.random.uniform(-10, 10, (1, 100)).astype("float32")
-# input = np.random.uniform(-10, 10, (5,options.batchsize,options.input_size)).astype("float32")
-# h0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
+input = np.random.uniform(-10, 10, (5,options.batchsize,10)).astype("float32")
+h0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
 # c0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
 # data = [input,h0,c0]
-# data = [input,h0]
-data = [data]
+data = [input,h0]
+# data = [data]
 # input_name = ["input.1"]
 # input_name = ["input","h0","c0"]
-# input_name = ["input","h0"]
-input_name = ["data"]
+input_name = ["input","h0"]
+# input_name = ["data"]
 
 if options.onnx == True:
     onnx_model = onnx_profiler.create_onnx_model_from_local_path("./onnx/"+options.model)
@@ -169,32 +165,14 @@ if options.darknet == True:
 if options.onnx == False and options.tvm == False and options.pytorch == False and options.darknet == False:
     raise Exception("Please choose the framework from which the model come")
 
-relay_graph.construct_op_graph(mod)
+op_detectm.construct_op_graph(mod)
 parent = os.path.dirname(os.path.realpath(__file__))
 tmp = {input_name[i]:data[i] for i in range(len(data))}
 file_name = options.model.split(".")[0]
 if options.gpu == True:
-    device_name = "k"
+    device_name = "T4"
 else:
     device_name = "cpu"
-file_name = file_name + '_' + device_name + '_' + 'inputsize' + '_' + str(options.input_size)
-relay_graph.profile_resource_usage(params, tmp,input_name, device = device, target = target, output_file = os.path.join(parent,"output/"+file_name+".csv"))
-print(op_statistics.calculate_op_distribution(options.model))
-a , b = op_statistics.calculate_op_distribution(options.model.split(".")[0])
-out_file = "./data/" + file_name + ".csv"
-a = json.loads(a)
-b = json.loads(b)
-output_list = []
-cnt = 0
-for key in a.keys():
-    if key in b.keys():
-        output_list.append({})
-        output_list[cnt]["op_name"] = key
-        output_list[cnt]["op_proportion"] = a[key]
-        output_list[cnt]["op_time"] = b[key]
-        cnt += 1
-with open(out_file, 'w', newline='', encoding='utf-8') as f:
-    header = ["op_name","op_time","op_proportion"]
-    writer = csv.DictWriter(f, fieldnames=header)
-    writer.writeheader()
-    writer.writerows(output_list)
+file_name = file_name + '_' + device_name + '_' + str(options.batchsize)
+op_detectm.profile_resource_usage(params, tmp,input_name, device = device, target = target, output_file = os.path.join(parent,"jsonfile/"+file_name+".json"))
+
