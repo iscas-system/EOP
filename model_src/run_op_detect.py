@@ -100,17 +100,17 @@ yolov3: {}
 
 # data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
 # data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
-# data = np.random.uniform(-10, 10, (1, 100)).astype("float32")
-input = np.random.uniform(-10, 10, (5,options.batchsize,10)).astype("float32")
-h0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
+data = np.random.uniform(-10, 10, (1, 100)).astype("float32")
+# input = np.random.uniform(-10, 10, (5,options.batchsize,10)).astype("float32")
+# h0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
 # c0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
 # data = [input,h0,c0]
-data = [input,h0]
-# data = [data]
+# data = [input,h0]
+data = [data]
 # input_name = ["input.1"]
 # input_name = ["input","h0","c0"]
-input_name = ["input","h0"]
-# input_name = ["data"]
+# input_name = ["input","h0"]
+input_name = ["data"]
 
 if options.onnx == True:
     onnx_model = onnx_profiler.create_onnx_model_from_local_path("./onnx/"+options.model)
