@@ -98,19 +98,19 @@ dcgan: {"data":(1,100)}
 yolov3: {}
 """
 
-# data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
+data = np.random.uniform(-10, 10, (options.batchsize, 3, 224, 224)).astype("float32")
 # data = np.random.uniform(-10, 10, (options.batchsize, 1, 224, 224)).astype("float32")
-data = np.random.uniform(-10, 10, (1, 100)).astype("float32")
+# data = np.random.uniform(-10, 10, (1, 100)).astype("float32")
 # input = np.random.uniform(-10, 10, (5,options.batchsize,10)).astype("float32")
 # h0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
 # c0 = np.random.uniform(-10, 10, (options.layer_num,options.batchsize,20)).astype("float32")
 # data = [input,h0,c0]
 # data = [input,h0]
 data = [data]
-# input_name = ["input.1"]
+input_name = ["input.1"]
 # input_name = ["input","h0","c0"]
 # input_name = ["input","h0"]
-input_name = ["data"]
+# input_name = ["data"]
 
 if options.onnx == True:
     onnx_model = onnx_profiler.create_onnx_model_from_local_path("./onnx/"+options.model)
@@ -165,14 +165,76 @@ if options.darknet == True:
 if options.onnx == False and options.tvm == False and options.pytorch == False and options.darknet == False:
     raise Exception("Please choose the framework from which the model come")
 
-op_detectm.construct_op_graph(mod)
-parent = os.path.dirname(os.path.realpath(__file__))
-tmp = {input_name[i]:data[i] for i in range(len(data))}
-file_name = options.model.split(".")[0]
-if options.gpu == True:
-    device_name = "T4"
-else:
-    device_name = "cpu"
-file_name = file_name + '_' + device_name + '_' + str(options.batchsize)
-op_detectm.profile_resource_usage(params, tmp,input_name, device = device, target = target, output_file = os.path.join(parent,"jsonfile/"+file_name+".json"))
+# op_detectm.construct_op_graph(mod)
+# parent = os.path.dirname(os.path.realpath(__file__))
+# tmp = {input_name[i]:data[i] for i in range(len(data))}
+# file_name = options.model.split(".")[0]
+# if options.gpu == True:
+#     device_name = "T4"
+# else:
+#     device_name = "cpu"
+# file_name = file_name + '_' + device_name + '_' + str(options.batchsize)
+# op_detectm.profile_resource_usage(params, tmp,input_name, device = device, target = target, output_file = os.path.join(parent,"jsonfile/"+file_name+".json"))
+
+'''
+get operator information of a model
+
+Parameters
+----------
+
+name : name of test model, eg, resnet-18.
+model_setting : an list of input settings including three members. The first is the number of batchsize, the second is the shape of image and the third is the shape of input.
+eg, [3,(1,224,224),(1,3,224,224)]. Because the layout may not be "NCHW", we do not calculate the shape of input automatically.
+layout : sequence of input. eg, "NCHW"
+dtype : type of variables. eg, "float32"
+
+Return
+----------
+a json
+'''
+
+def get_op_info(name,model_setting,layout = "NCHW",dtype="float32"):
+    batch_size = model_setting[0]
+    image_shape = model_setting[1]
+    if name.startswith("resnet-"):
+        n_layer = int(name.split("-")[1])
+        mod, params = relay.testing.resnet.get_workload(
+            num_layers=n_layer,
+            batch_size=batch_size,
+            layout=layout,
+            dtype=dtype,
+            image_shape=image_shape,
+        )
+    elif name.startswith("resnet3d-"):
+        n_layer = int(name.split("-")[1])
+        mod, params = relay.testing.resnet.get_workload(
+            num_layers=n_layer,
+            batch_size=batch_size,
+            layout=layout,
+            dtype=dtype,
+            image_shape=image_shape,
+        )
+    elif name == "mobilenet":
+        mod, params = relay.testing.mobilenet.get_workload(
+            batch_size=batch_size, layout=layout, dtype=dtype, image_shape=image_shape
+        )
+    elif name == "squeezenet_v1.1":
+        assert layout == "NCHW", "squeezenet_v1.1 only supports NCHW layout"
+        mod, params = relay.testing.squeezenet.get_workload(
+            version="1.1",
+            batch_size=batch_size,
+            dtype=dtype,
+            image_shape=image_shape,
+        )
+    elif name == "inception_v3":
+        #input_shape = (batch_size, 3, 299, 299) if layout == "NCHW" else (batch_size, 299, 299, 3)
+        mod, params = relay.testing.inception_v3.get_workload(batch_size=batch_size, dtype=dtype)
+    op_detectm.construct_op_graph(mod)
+    device = tvm.cuda(0)
+    target = "cuda"
+    data = [np.random.uniform(-10, 10, model_setting[2]).astype("float32")]
+    input_name = ["data"]
+    tmp = {input_name[i]: data[i] for i in range(len(data))}
+    return op_detectm.profile_resource_usage(params, tmp, input_name, device=device, target=target)
+
 

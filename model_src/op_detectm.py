@@ -158,8 +158,9 @@ class op_graph:
             profile_count +=1
             if profile_count == 1:
                 print(key_op_list)
-        with open(output_file,"w") as f:
-            json.dump(key_op_list,f)
+        # with open(output_file,"w") as f:
+        #     json.dump(key_op_list,f)
+        return json.dumps(key_op_list)
 
 
 profile_count=0
@@ -293,7 +294,7 @@ def construct_op_graph(ir_module):
     #     print(current_op_node.prior[key][1].id)
 
 def profile_resource_usage(ir_params, x, input_name, device=tvm.cuda(0), target="cuda", output_file = "out.csv"):
-    computation_graph.traverse_and_calculate_per_op(ir_params, x, input_name, device, target, bw = False, output_file = output_file)
+    return computation_graph.traverse_and_calculate_per_op(ir_params, x, input_name, device, target, bw = False, output_file = output_file)
 
 
 def recursive_traverse_op(type, input, temp_op=None):
