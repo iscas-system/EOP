@@ -49,9 +49,9 @@ def process_data(data):
 
 # roadmap
 
-1. support static DL graph analysis (using relay graph executor).
-2. support dynamic shape analysis (using relay vm).
-3. dig more resource usage statistics.
+1. support static ananlysis and get necessary input/out put informaction (provide both python and C++ debug modes).
+2. support catogerized compile optimization mechanisms.
+3. support operator optimizations on heterogeneous resources with reduced cost.
 
 # current support DL model
 
