@@ -75,12 +75,7 @@ DCGAN
 
 DGL-PyTorch,
 
-## experiment settings
+# debug tools
 
-1. LSTM,GRU,Bert,MobileNet的算子切分后提升效果，对比在CPU+T4、CPU+K40C上的结果（不同batchsize）
-对比对象：G-HOP（咱们的），按照Layer切分的，按照模型切分的；
-2. 对传统CNN模型的切分提升效果VGG，restNet等，不比这些工作差即可（不同batchsize）
-对比对象：G-HOP（咱们的），按照Layer切分的，按照模型切分的
-3. 三个对比对象下的通信时间开销（结合预加载机制）
-4. 加速比预测的准确性
-5. 内存使用效率的提升（测资源使用的绝对值）
+1. codelldb (for C++/C): https://github.com/vadimcn/vscode-lldb (may manually download the vsix file)
+2. ff-navigator (for python): https://github.com/tqchen/ffi-navigator (may encounter some issues sovlved in https://github.com/tqchen/ffi-navigator/pull/45)
