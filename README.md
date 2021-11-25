@@ -79,3 +79,13 @@ DGL-PyTorch,
 
 1. codelldb (for C++/C): https://github.com/vadimcn/vscode-lldb (may manually download the vsix file)
 2. ff-navigator (for python): https://github.com/tqchen/ffi-navigator (may encounter some issues sovlved in https://github.com/tqchen/ffi-navigator/pull/45)
+
+# target optimized tvm codes
+
+0. all are from te.compute with dynamic shape, calculation process, tag and name.
+
+1. te.reduce_axis: values on related axises are reduced to sum/avg.
+2. condition expression and true value testing: to do some calculation like any and some.
+3. index and shape expression: may denote dynamic shapes and expressions.
+4. data types: from int8 to float32.
+5. basic topi operators can be used as meta-operators.
