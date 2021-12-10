@@ -5,6 +5,7 @@ from tvm.relay import transform
 from tvm.relay.testing import run_opt_pass
 import tvm.testing
 import numpy as np
+from tvm.relay.visualize import visualize
 from tvm.contrib import graph_executor
 import time
 from cnn_workload_generator import get_network,compile_with_executor,evaluate_time_with_tvm_evaluator
@@ -41,13 +42,15 @@ target = "llvm"
 dtype = "float32"
 device = tvm.cpu()
 
-mod, params, input_shape, output_shape = get_network("resnet-50", 1)
-x = np.random.uniform(5,10,input_shape).astype("float32")
-lib,interpreter,module = compile_with_executor(mod,device,target,params,3, [x])
-evaluate_time_with_tvm_evaluator(module,device)
+mod, params, input_shape, output_shape = get_network("resnet-18", 1)
+# x = np.random.uniform(5,10,input_shape).astype("float32")
+# lib,interpreter,module = compile_with_executor(mod,device,target,params,3, [x])
+print(type(mod.functions.items()[0][1]))
+visualize(mod.functions.items()[0][1])
+# evaluate_time_with_tvm_evaluator(module,device)
 
-print(type(interpreter))
-print(type(module))
+# print(type(interpreter))
+# print(type(module))
 # t1 = time.time_ns()
 # top1_tvm = interpreter.evaluate()(tvm.nd.array(x.astype(dtype)), **params)
 # t2 = time.time_ns() - t1
@@ -56,4 +59,4 @@ print(type(module))
 # dev = tvm.device(target, 0)
 # m = graph_executor.GraphModule(lib["default"](dev))
 # m.run(x)
-# # print(lib.get_graph_json())
+# print(lib.get_graph_json())
