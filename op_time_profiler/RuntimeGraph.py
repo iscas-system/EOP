@@ -5,6 +5,7 @@ from tvm import relay
 import tvm.relay.testing
 from tvm.contrib import graph_executor
 
+
 x = relay.var("x", shape=(10, 10))
 w0 = relay.var("w0", shape=(10, 10))
 w1 = relay.var("w1", shape=(10, 10))
