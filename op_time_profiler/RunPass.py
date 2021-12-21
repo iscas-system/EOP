@@ -46,6 +46,7 @@ with tvm.transform.PassContext(opt_level=3, disabled_pass=["AlterOpLayout"]):
    interpreter = relay.build_module.create_executor("graph", lib.ir_mod, device, target)
 
 print(lib.get_graph_json())
+print(lib.function_metadata)
 
 # mod, params, input_shape, output_shape = get_network("resnet-18", 1)
 # x = np.random.uniform(5,10,input_shape).astype("float32")
