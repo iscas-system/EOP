@@ -24,7 +24,7 @@ z3 = relay.nn.conv2d(y, relay.var("w3"), kernel_size=(1, 1), padding=(0, 0), cha
 z = relay.add(z2, z3)
 func = relay.Function(relay.analysis.free_vars(z), z)
 # print("before pass: ", func)
-# func = run_opt_pass(func, transform.FuseOps(fuse_opt_level=2))
+func = run_opt_pass(func, transform.FuseOps(fuse_opt_level=2))
 # print("after pass: ", func)
 
 mod = tvm.IRModule()
@@ -41,11 +41,12 @@ model_params["w2"] = np.random.uniform(0,10,(16, 16, 1, 1)).astype("float32")
 model_params["w3"] = np.random.uniform(0,10,(16, 16, 1, 1)).astype("float32")
 x = np.random.uniform(5,10,(1, 16, 64, 64)).astype("float32")
 
-with tvm.transform.PassContext(opt_level=0, disabled_pass=["AlterOpLayout"]):
+with tvm.transform.PassContext(opt_level=3, disabled_pass=["AlterOpLayout"]):
    lib = relay.build(mod, target=target, params=model_params)
    interpreter = relay.build_module.create_executor("graph", lib.ir_mod, device, target)
-
-print(lib.get_graph_json())
+# fused op are decided by fuseOps transofrm.
+print(lib.ir_mod)
+# print(lib.get_graph_json())
 # print(lib.function_metadata)
 
 # mod, params, input_shape, output_shape = get_network("resnet-18", 1)
