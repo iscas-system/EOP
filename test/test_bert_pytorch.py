@@ -85,7 +85,7 @@ with tvm.transform.PassContext(opt_level=3):
                                      target=target,
                                      target_host=target_host,
                                      params=params_bert)
-# module = graph_runtime.create(graph, lib, ctx)
+module = graph_runtime.create(graph, lib, ctx)
 #
 # module.set_input("input_ids", tt_a)
 # module.set_input("attention_mask", st_a)
