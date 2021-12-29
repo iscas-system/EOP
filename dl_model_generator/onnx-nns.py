@@ -14,6 +14,8 @@ from tvm.contrib import graph_executor
 from tvm.runtime.vm import VirtualMachine
 from onnx.tools import update_model_dims
 
+base_path = '/root/github/onnx-models/'
+
 def get_value_info_shape(value_info):
     return tuple([max(d.dim_value, 1) for d in value_info.type.tensor_type.shape.dim])
 
@@ -35,6 +37,7 @@ for url in urls:
     print(f'==> {url} <==')
 
     archive = posixpath.basename(url)
+    archive = base_path + archive
     if not os.path.exists(archive):
         print(f'Downloading {url} ...')
         urlretrieve(url, archive)
