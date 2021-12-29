@@ -6,6 +6,8 @@ from tvm import relay, auto_scheduler
 import tvm.relay.testing
 from tvm.contrib import graph_executor
 
+os.environ['TVM_BACKTRACE']="1"
+
 class FastSoftmaxMutator(tvm.relay.ExprMutator):
     def __init__(self):
         super().__init__()
@@ -20,7 +22,7 @@ class FastSoftmaxMutator(tvm.relay.ExprMutator):
 def FastSoftmax(fn, mod, device):
     return FastSoftmaxMutator().visit(fn)
 
-def get_network(name, batch_size, layout="NCHW", dtype="float32"):
+def get_network(name, batch_size, layout="NCHW", dtype="float32", hidden_size = 768, num_hidden_layers = 12, num_attention_heads = 12, intermediate_size = 3072, max_position_embeddings = 512):
     """Get the symbol definition and random weight of a network"""
 
     # auto-scheduler prefers NHWC layout
@@ -33,7 +35,7 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32"):
 
     input_shape = (batch_size,) + image_shape
     output_shape = (batch_size, 1000)
-
+    shape2 = ()
     if name.startswith("resnet-"):
         n_layer = int(name.split("-")[1])
         mod, params = relay.testing.resnet.get_workload(
@@ -74,15 +76,15 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32"):
 
         input_shape = [batch_size, 128]
 
-        if os.path.exists("bert-mod.relay"):
-            print("Load relay model from file...")
-            with open("bert-mod.relay", "r") as fi:
-                mod = tvm.ir.load_json(fi.read())
-            with open("bert-params.relay", "rb") as fi:
-                params = relay.load_param_dict(fi.read())
-        else:
-            model_class = transformers.BertModel
-            tokenizer_class = transformers.BertTokenizer
+        # if os.path.exists("bert-mod.relay"):
+        #     print("Load relay model from file...")
+        #     with open("bert-mod.relay", "r") as fi:
+        #         mod = tvm.ir.load_json(fi.read())
+        #     with open("bert-params.relay", "rb") as fi:
+        #         params = relay.load_param_dict(fi.read())
+        # else:
+        model_class = transformers.BertModel
+        tokenizer_class = transformers.BertTokenizer
 
             # You can also download them manualy
             #   https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-pytorch_model.bin
@@ -90,35 +92,73 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32"):
             #   https://s3.amazonaws.com/models.huggingface.co/bert/bert-base-uncased-config.json
             # Then rename to pytorch_model.bin, vocab.txt & config.json
             # weight = 'path to downloaded model dir'
-            weight = 'bert-base-uncased'
-            model = model_class.from_pretrained(weight,return_dict=False)
-            model.eval()
+            # weight = 'bert-base-uncased'
+            # model = model_class.from_pretrained(weight,return_dict=False)
+        configuration = transformers.BertConfig(return_dict=False, hidden_size = hidden_size, num_hidden_layers = num_hidden_layers, num_attention_heads = num_attention_heads, intermediate_size = intermediate_size, max_position_embeddings = max_position_embeddings)
+        model = transformers.BertModel(configuration)
+        model.eval()
 
             # tokenizer = tokenizer_class.from_pretrained(weight)
             # A = torch.tensor([tokenizer.encode("Here is some text to encode", add_special_tokens=True)])
             # There is 30522 words in bert-base-uncased's vocabulary list
-            input_name = 'input_ids'
-            input_dtype = 'int64'
-            A = torch.randint(30000, input_shape)
-            scripted_model = torch.jit.trace(model, [A], strict=False)
-            shape_list = [('input_ids', input_shape)]
-            mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
+            # input_dtype = 'int64'
+        input_name = 'input_ids'
+        A = torch.randint(30000, input_shape)
+        scripted_model = torch.jit.trace(model, [A], strict=False)
+        shape_list = [(input_name, input_shape)]
+        mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
 
-            mod = tvm.relay.transform.FastMath()(mod)
-            mod = FastSoftmax(mod)
-            mod = tvm.relay.transform.EliminateCommonSubexpr()(mod)
-            BindPass = tvm.relay.transform.function_pass(lambda fn, new_mod, device:
-                                tvm.relay.build_module.bind_params_by_name(fn, params), opt_level=1)
-            mod = BindPass(mod)
-            mod = tvm.relay.transform.FoldConstant()(mod)
-            mod = tvm.relay.transform.CombineParallelBatchMatmul()(mod)
-            mod = tvm.relay.transform.FoldConstant()(mod)
-
-            with open("bert-mod.relay", "w") as fo:
-                fo.write(tvm.ir.save_json(mod))
-            with open("bert-params.relay", "wb") as fo:
-                fo.write(relay.save_param_dict(params))
-            print("Save relay model to file...")
+        # mod = tvm.relay.transform.FastMath()(mod)
+        # mod = FastSoftmax(mod)
+        # mod = tvm.relay.transform.EliminateCommonSubexpr()(mod)
+        # BindPass = tvm.relay.transform.function_pass(lambda fn, new_mod, device: tvm.relay.build_module.bind_params_by_name(fn, params), opt_level=1)
+        # mod = BindPass(mod)
+        # mod = tvm.relay.transform.FoldConstant()(mod)
+        # mod = tvm.relay.transform.CombineParallelBatchMatmul()(mod)
+        # mod = tvm.relay.transform.FoldConstant()(mod)
+    elif name == 'gpt2':
+        import torch
+        from transformers import GPT2Model, GPT2Config
+        os.environ['TOKENIZERS_PARALLELISM'] = 'false'
+        input_shape = [batch_size, 128]
+        
+        configuration = GPT2Config(return_dict=False)
+        model = GPT2Model(configuration)
+        input_name = 'input_ids'
+        A = torch.randint(50000, input_shape)
+        scripted_model = torch.jit.trace(model, [A], strict=False).eval()
+        shape_list = [(input_name, input_shape)]
+        mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
+    elif name == 't5-small':
+        return 
+        # import torch
+        # from transformers import T5Model, T5Config, T5Tokenizer,T5ForConditionalGeneration
+        # os.environ['TOKENIZERS_PARALLELISM'] = 'false'
+        # input_shape = [batch_size, 128]
+        
+        # # configuration = T5Config(return_dict=False)
+        # # model = T5Model.from_pretrained("t5-small", torchscript=True)
+        # input_name = 'input_ids'
+        # tokenizer = T5Tokenizer.from_pretrained('t5-small')
+        # model = T5ForConditionalGeneration.from_pretrained('t5-small', torchscript =True)
+        # input_ids = tokenizer('The <extra_id_0> walks in <extra_id_1> park', return_tensors='pt').input_ids
+        # attention_mask = input_ids.ne(model.config.pad_token_id).long()
+        # decoder_input_ids = tokenizer('<pad> <extra_id_0> cute dog <extra_id_1> the <extra_id_2>', return_tensors='pt').input_ids
+        # traced_model = torch.jit.trace(model, (input_ids, attention_mask, decoder_input_ids))
+        # # torch.jit.save(traced_model, "traced_t5.pt")
+        # input_shape = input_ids.shape
+        # shape2 = attention_mask.shape
+        # # # ('attention_mask',attention_mask.shape),('decoder_input_ids',decoder_input_ids.shape)
+        # shape_list = [
+        #     (input_name, input_shape),
+        #     ('attention_mask',attention_mask.shape),('decoder_input_ids',decoder_input_ids.shape)]
+        # mod, params = relay.frontend.from_pytorch(traced_model, shape_list)
+        # mod = relay.transform.DynamicToStatic()(mod)
+            # with open("bert-mod.relay", "w") as fo:
+            #     fo.write(tvm.ir.save_json(mod))
+            # with open("bert-params.relay", "wb") as fo:
+            #     fo.write(relay.save_param_dict(params))
+            # print("Save relay model to file...")
     # elif name == "mxnet":
     #     # an example for mxnet model
     #     from mxnet.gluon.model_zoo.vision import get_model
@@ -133,26 +173,29 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32"):
     #     )
     #     mod = tvm.IRModule.from_expr(net)
 
-    return mod, params, input_shape, output_shape
+    return mod, params, input_shape, output_shape,shape2
 
-network = "bert"
-batch_size = 128
+network = "gpt2"
+batch_size = 1
 layout = "NHWC"
 #target = tvm.target.Target("llvm -mcpu=core-avx2")
 # target = tvm.target.Target("llvm -mcpu=skylake-avx512")
 target = tvm.target.Target("cuda")
 dtype = "float32"
-mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype)
+mod, params, input_shape, output_shape,shape2 = get_network(network, batch_size, layout, dtype=dtype)
 
-with tvm.transform.PassContext(opt_level=3, config={"relay.backend.use_auto_scheduler": False}):
+with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
     lib = relay.build(mod, target=target, params=params)
 
 device = tvm.device(str(target), 0)
 module = graph_executor.GraphModule(lib["default"](device))
-data_tvm = tvm.nd.array((np.random.uniform(size=input_shape)).astype("int64"))
-module.set_input("input_ids", data_tvm)
+input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("int64"))
+module.set_input("input_ids", input_ids)
+attention_mask = tvm.nd.array((np.random.uniform(size=shape2)).astype("int64"))
+# module.set_input("attention_mask", attention_mask)
+# module.set_input("decoder_input_ids", input_ids)
 
 print("Evaluate inference time cost...")
-ftimer = module.module.time_evaluator("run", device, repeat=5, min_repeat_ms=500)
+ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
 prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
 print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
