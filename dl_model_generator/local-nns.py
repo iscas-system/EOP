@@ -22,7 +22,7 @@ class FastSoftmaxMutator(tvm.relay.ExprMutator):
 def FastSoftmax(fn, mod, device):
     return FastSoftmaxMutator().visit(fn)
 
-def get_network(name, batch_size, layout="NCHW", dtype="float32", hidden_size = 768, num_hidden_layers = 12, num_attention_heads = 12, intermediate_size = 3072, max_position_embeddings = 512):
+def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128, hidden_size = 768, num_hidden_layers = 12, num_attention_heads = 12, intermediate_size = 3072, max_position_embeddings = 512):
     """Get the symbol definition and random weight of a network"""
 
     # auto-scheduler prefers NHWC layout
@@ -35,7 +35,6 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", hidden_size = 
 
     input_shape = (batch_size,) + image_shape
     output_shape = (batch_size, 1000)
-    shape2 = ()
     if name.startswith("resnet-"):
         n_layer = int(name.split("-")[1])
         mod, params = relay.testing.resnet.get_workload(
@@ -74,7 +73,7 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", hidden_size = 
         import transformers  # pip3 install transformers==3.0
         os.environ['TOKENIZERS_PARALLELISM'] = 'false'
 
-        input_shape = [batch_size, 128]
+        input_shape = [batch_size, sequence]
 
         # if os.path.exists("bert-mod.relay"):
         #     print("Load relay model from file...")
@@ -120,7 +119,7 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", hidden_size = 
         import torch
         from transformers import GPT2Model, GPT2Config
         os.environ['TOKENIZERS_PARALLELISM'] = 'false'
-        input_shape = [batch_size, 128]
+        input_shape = [batch_size, sequence]
         
         configuration = GPT2Config(return_dict=False)
         model = GPT2Model(configuration)
@@ -129,8 +128,29 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", hidden_size = 
         scripted_model = torch.jit.trace(model, [A], strict=False).eval()
         shape_list = [(input_name, input_shape)]
         mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
-    elif name == 't5-small':
-        return 
+    elif name == 'Roberta':
+        import torch
+        from transformers import RobertaConfig, RobertaModel
+        configuration = RobertaConfig(return_dict=False)
+        model = RobertaModel(configuration).eval()
+        input_shape = [batch_size, sequence]
+        input_name = 'input_ids'
+        A = torch.randint(30000, input_shape)
+        scripted_model = torch.jit.trace(model, [A], strict=False)
+        shape_list = [(input_name, input_shape)]
+        mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
+    elif name == 'nasnetalarge':
+        import torch
+        import pretrainedmodels
+        from torch.autograd import Variable
+        model_name = 'nasnetalarge' # could be fbresnet152 or inceptionresnetv2
+        model = pretrainedmodels.__dict__[model_name](num_classes=1000, pretrained='imagenet').eval()
+        input_shape = [2, 3, 331, 331]
+        input = torch.randn(2, 3, 331, 331)
+        input_name = 'input0'
+        scripted_model = torch.jit.trace(model, [input], strict=False)
+        shape_list = [(input_name, input_shape)]
+        mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
         # import torch
         # from transformers import T5Model, T5Config, T5Tokenizer,T5ForConditionalGeneration
         # os.environ['TOKENIZERS_PARALLELISM'] = 'false'
@@ -173,25 +193,25 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", hidden_size = 
     #     )
     #     mod = tvm.IRModule.from_expr(net)
 
-    return mod, params, input_shape, output_shape,shape2
+    return mod, params, input_shape, output_shape
 
-network = "gpt2"
+network = "nasnetalarge"
 batch_size = 1
 layout = "NHWC"
 #target = tvm.target.Target("llvm -mcpu=core-avx2")
 # target = tvm.target.Target("llvm -mcpu=skylake-avx512")
 target = tvm.target.Target("cuda")
 dtype = "float32"
-mod, params, input_shape, output_shape,shape2 = get_network(network, batch_size, layout, dtype=dtype)
+mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
 
 with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
     lib = relay.build(mod, target=target, params=params)
 
 device = tvm.device(str(target), 0)
 module = graph_executor.GraphModule(lib["default"](device))
-input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("int64"))
-module.set_input("input_ids", input_ids)
-attention_mask = tvm.nd.array((np.random.uniform(size=shape2)).astype("int64"))
+input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
+module.set_input("input0", input_ids)
+# attention_mask = tvm.nd.array((np.random.uniform(size=shape2)).astype("int64"))
 # module.set_input("attention_mask", attention_mask)
 # module.set_input("decoder_input_ids", input_ids)
 
