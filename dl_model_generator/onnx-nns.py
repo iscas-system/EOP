@@ -16,6 +16,9 @@ from onnx.tools import update_model_dims
 
 base_path = '/root/github/onnx-models/'
 
+batch = 1
+sequence = 128
+
 def get_value_info_shape(value_info):
     return tuple([max(d.dim_value, 1) for d in value_info.type.tensor_type.shape.dim])
 
@@ -25,7 +28,9 @@ urls = [
     # 'https://github.com/onnx/models/raw/master/text/machine_comprehension/roberta/model/roberta-base-11.tar.gz',
     # XXX: Often segfaults
     # 'https://github.com/onnx/models/raw/master/text/machine_comprehension/gpt-2/model/gpt2-10.tar.gz',
-    'https://github.com/onnx/models/blob/master/text/machine_comprehension/t5/model/t5-decoder-with-lm-head-12.tar.gz'
+    # checked:
+    # 'https://github.com/onnx/models/blob/master/text/machine_comprehension/t5/model/t5-decoder-with-lm-head-12.tar.gz',
+    'https://github.com/onnx/models/blob/master/text/machine_comprehension/t5/model/t5-encoder-12.tar.gz'
 ]
 
 target = "llvm"
@@ -42,19 +47,23 @@ for url in urls:
         print(f'Downloading {url} ...')
         urlretrieve(url, archive)
         assert os.path.exists(archive)
+    else:
+        print('Already downloaded.')
 
     import tarfile
     tar = tarfile.open(archive, 'r:gz')
     for n in tar.getnames():
         if n.endswith('.onnx'):
-            model_file = n
-            name = os.path.dirname(n)
+            model_file = base_path + n.split('.onnx')[0] +'/' + n
+            name = os.path.dirname(model_file)
+            print('onnx location:' + model_file)
+            print('extraction path:' + name)
             break
 
     if not os.path.exists(model_file):
         print(f'Extracting {archive} ...')
         #subprocess.call(['tar', 'xzf', archive])
-        tar.extractall()
+        tar.extractall(name)
         assert os.path.exists(model_file)
 
     print(f'Loading {model_file} ...')
@@ -66,6 +75,12 @@ for url in urls:
     shape_dict = {}
     input_values = []
     inputs = {}
+    print("input data:")
+    for input in onnx_model.graph.input:
+        print(input)
+    print("output data:")
+    for out in onnx_model.graph.output:
+        print(out)
     if(len(glob.glob(os.path.join(name, 'test_data_set_*'))) > 0):
         test_data_set = glob.glob(os.path.join(name, 'test_data_set_*'))[0]
         assert os.path.exists(test_data_set)
@@ -81,19 +96,17 @@ for url in urls:
                 shape_dict[input.name] = x.shape
                 inputs[input.name] = tvm.nd.array(x, ctx)
         print(f'Input shapes: {shape_dict}')
-    else:
-        onnx_model = update_model_dims.update_inputs_outputs_dims(onnx_model, {'input_ids': [1, 128],'encoder_hidden_states': [1, 128,768]},{'hidden_states':[1, 128, 32128]})
-        for input in onnx_model.graph.input:
-            print(input)
-        for out in onnx_model.graph.output:
-            print(out)
-        batch = 1
-        sequence = 128
+    elif name.endswith('t5-decoder-with-lm-head'):
+        onnx_model = update_model_dims.update_inputs_outputs_dims(onnx_model, {'input_ids': [batch, sequence],'encoder_hidden_states': [batch, sequence,768]},{'hidden_states':[batch, sequence, 32128]})
         # shape_dict['input_ids'] = (batch,sequence)
         # shape_dict['encoder_hidden_states'] = (batch,sequence,768)
         # shape_dict['hidden_states'] = (batch,sequence,32128)
         inputs['input_ids'] = tvm.nd.array((np.random.uniform(size=(batch,sequence))).astype("int64"))
         inputs['encoder_hidden_states'] = tvm.nd.array((np.random.uniform(size=(batch,sequence,768))).astype("float32"))
+    elif name.endswith('t5-encoder'):
+        # print(dir(onnx_model.graph))
+        onnx_model = update_model_dims.update_inputs_outputs_dims(onnx_model, {'input_ids': [batch, sequence]},{'hidden_states':[batch, sequence, 768]})
+        inputs['input_ids'] = tvm.nd.array((np.random.uniform(size=(batch,sequence))).astype("int64"))
     try:
         print(f'Importing graph from ONNX to TVM Relay IR ...')
         mod, params = relay.frontend.from_onnx(onnx_model, shape_dict, freeze_params=True)
@@ -105,8 +118,11 @@ for url in urls:
             # vm_exec = relay.vm.compile(mod, target, params=params)
             module = graph_executor.GraphModule(lib["default"](dev))
         # vm = VirtualMachine(vm_exec, dev)
-        module.set_input("input_ids", inputs['input_ids'])
-        module.set_input("encoder_hidden_states", inputs['encoder_hidden_states'])
+        if name.endswith('t5-decoder-with-lm-head'):
+            module.set_input("input_ids", inputs['input_ids'])
+            module.set_input("encoder_hidden_states", inputs['encoder_hidden_states'])
+        elif name.endswith('t5-encoder'):
+            module.set_input("input_ids", inputs['input_ids'])
         print(f"Running inference...")
         ftimer = module.module.time_evaluator("run", dev, repeat=3, min_repeat_ms=500)
         prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
