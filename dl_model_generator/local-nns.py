@@ -151,6 +151,73 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
         scripted_model = torch.jit.trace(model, [input], strict=False)
         shape_list = [(input_name, input_shape)]
         mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
+    elif name == 'lstm' or name == 'rnn' or name == 'gru':
+        import mxnet as mx
+        from mxnet import gluon
+        from mxnet.gluon.model_zoo import vision
+        def verify(
+        mode,
+        seq_len,
+        input_size,
+        hidden_size,
+        num_layers,
+        batch=1,
+        init_states=True,
+        bidirectional=False,
+        ):
+            if mode == "rnn":
+                layer = gluon.rnn.RNN(hidden_size, num_layers, bidirectional=bidirectional)
+            elif mode == "gru":
+                layer = gluon.rnn.GRU(hidden_size, num_layers, bidirectional=bidirectional)
+            else:  # mode == "lstm"
+                layer = gluon.rnn.LSTM(hidden_size, num_layers, bidirectional=bidirectional)
+            num_states = 2 if mode == "lstm" else 1
+            layer.initialize()
+            layer.hybridize()
+
+            dtype = "float32"
+            directions = 2 if bidirectional else 1
+            data_np = np.random.uniform(size=(seq_len, batch, input_size)).astype(dtype)
+            data_mx = mx.nd.array(data_np)
+            inputs = {}
+            if init_states:
+                shape_dict = {"data0": data_np.shape}
+                inputs = {"data0": data_np}
+                state_shape = (num_layers * directions, batch, hidden_size)
+                states_np = []
+                states_mx = []
+                for i in range(num_states):
+                    s = np.random.uniform(size=state_shape).astype(dtype)
+                    states_np.append(s)
+                    states_mx.append(mx.nd.array(s))
+                    shape_dict["data%s" % (i + 1)] = s.shape
+                    inputs["data%s" % (i + 1)] = s
+                mx_out, mx_states = layer(data_mx, states_mx)
+                mx_res = [mx_out] + mx_states
+            else:
+                shape_dict = {"data": data_np.shape}
+                inputs = {"data": data_np}
+                mx_res = layer(data_mx)
+
+            mx_sym = layer._cached_graph[1]
+            mx_params = {}
+            for name, param in layer.collect_params().items():
+                mx_params[name] = param._reduce()
+            mod, params = relay.frontend.from_mxnet(mx_sym, shape=shape_dict, arg_params=mx_params)
+
+            target = tvm.target.Target("cuda")
+            with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
+                lib = relay.build(mod, target=target, params=params)
+            device = tvm.device(str(target), 0)
+            module = graph_executor.GraphModule(lib["default"](device))
+            for key in inputs:
+                module.set_input(key, inputs[key])
+            print("Evaluate inference time cost...")
+            ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
+            prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
+            print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
+            return mod, params, data_np.shape
+        mod, params, input_shape = verify(name, 128, 1024, 1024, 8,batch = batch_size)
         # import torch
         # from transformers import T5Model, T5Config, T5Tokenizer,T5ForConditionalGeneration
         # os.environ['TOKENIZERS_PARALLELISM'] = 'false'
@@ -195,27 +262,34 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
 
     return mod, params, input_shape, output_shape
 
-network = "nasnetalarge"
-batch_size = 1
-layout = "NHWC"
-#target = tvm.target.Target("llvm -mcpu=core-avx2")
-# target = tvm.target.Target("llvm -mcpu=skylake-avx512")
-target = tvm.target.Target("cuda")
-dtype = "float32"
-mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
+network = "gru"
+if network == "nasnetalarge":
+    batch_size = 1
+    layout = "NHWC"
+    #target = tvm.target.Target("llvm -mcpu=core-avx2")
+    # target = tvm.target.Target("llvm -mcpu=skylake-avx512")
+    target = tvm.target.Target("cuda")
+    dtype = "float32"
+    mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
 
-with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
-    lib = relay.build(mod, target=target, params=params)
+    with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
+        lib = relay.build(mod, target=target, params=params)
 
-device = tvm.device(str(target), 0)
-module = graph_executor.GraphModule(lib["default"](device))
-input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
-module.set_input("input0", input_ids)
-# attention_mask = tvm.nd.array((np.random.uniform(size=shape2)).astype("int64"))
-# module.set_input("attention_mask", attention_mask)
-# module.set_input("decoder_input_ids", input_ids)
+    device = tvm.device(str(target), 0)
+    module = graph_executor.GraphModule(lib["default"](device))
+    input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
+    module.set_input("input0", input_ids)
+    # attention_mask = tvm.nd.array((np.random.uniform(size=shape2)).astype("int64"))
+    # module.set_input("attention_mask", attention_mask)
+    # module.set_input("decoder_input_ids", input_ids)
 
-print("Evaluate inference time cost...")
-ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
-prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
-print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
+    print("Evaluate inference time cost...")
+    ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
+    prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
+    print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
+
+elif network == 'gru':
+    batch_size = 512
+    layout = "NHWC"
+    dtype = "float32"
+    mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
