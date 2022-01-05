@@ -151,6 +151,18 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
         scripted_model = torch.jit.trace(model, [input], strict=False)
         shape_list = [(input_name, input_shape)]
         mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
+    elif name.startswith('dpn'):
+        import torch
+        import pretrainedmodels
+        from torch.autograd import Variable
+        # print(pretrainedmodels.model_names)
+        model = pretrainedmodels.__dict__[name](num_classes=1000, pretrained='imagenet').eval()
+        input_shape = [128, 3, 224, 224]
+        input = torch.randn(128, 3, 224, 224)
+        input_name = 'input0'
+        scripted_model = torch.jit.trace(model, [input], strict=False)
+        shape_list = [(input_name, input_shape)]
+        mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
     elif name == 'lstm' or name == 'rnn' or name == 'gru':
         import mxnet as mx
         from mxnet import gluon
@@ -262,7 +274,7 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
 
     return mod, params, input_shape, output_shape
 
-network = "gru"
+network = "dpn68"
 if network == "nasnetalarge":
     batch_size = 1
     layout = "NHWC"
@@ -293,3 +305,20 @@ elif network == 'gru':
     layout = "NHWC"
     dtype = "float32"
     mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
+
+elif network == 'dpn68':
+    batch_size = 512
+    layout = "NHWC"
+    dtype = "float32"
+    target = tvm.target.Target("cuda")
+    mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
+    with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
+        lib = relay.build(mod, target=target, params=params)
+    device = tvm.device(str(target), 0)
+    module = graph_executor.GraphModule(lib["default"](device))
+    input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
+    module.set_input("input0", input_ids)
+    print("Evaluate inference time cost...")
+    ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
+    prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
+    print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
