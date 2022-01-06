@@ -5,6 +5,7 @@ import tvm
 from tvm import relay, auto_scheduler
 import tvm.relay.testing
 from tvm.contrib import graph_executor
+import neworkx_exporter
 
 os.environ['TVM_BACKTRACE']="1"
 
@@ -145,8 +146,8 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
         from torch.autograd import Variable
         model_name = 'nasnetalarge' # could be fbresnet152 or inceptionresnetv2
         model = pretrainedmodels.__dict__[model_name](num_classes=1000, pretrained='imagenet').eval()
-        input_shape = [2, 3, 331, 331]
-        input = torch.randn(2, 3, 331, 331)
+        input_shape = [batch_size, 3, 331, 331]
+        input = torch.randn(batch_size, 3, 331, 331)
         input_name = 'input0'
         scripted_model = torch.jit.trace(model, [input], strict=False)
         shape_list = [(input_name, input_shape)]
@@ -286,7 +287,6 @@ if network == "nasnetalarge":
 
     with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
         lib = relay.build(mod, target=target, params=params)
-
     device = tvm.device(str(target), 0)
     module = graph_executor.GraphModule(lib["default"](device))
     input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
@@ -314,11 +314,12 @@ elif network == 'dpn68':
     mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
     with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
         lib = relay.build(mod, target=target, params=params)
-    device = tvm.device(str(target), 0)
-    module = graph_executor.GraphModule(lib["default"](device))
-    input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
-    module.set_input("input0", input_ids)
-    print("Evaluate inference time cost...")
-    ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
-    prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
-    print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
+    print(print(lib.get_graph_json()))
+    # device = tvm.device(str(target), 0)
+    # module = graph_executor.GraphModule(lib["default"](device))
+    # input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
+    # module.set_input("input0", input_ids)
+    # print("Evaluate inference time cost...")
+    # ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
+    # prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
+    # print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))

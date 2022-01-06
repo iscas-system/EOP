@@ -43,7 +43,7 @@ with tvm.transform.PassContext(opt_level=3, disabled_pass=["AlterOpLayout"]):
    lib = relay.build(mod, target="llvm")
 #    json, lib, params = relay.build(mod, target="llvm")
 
-# print(lib.get_graph_json())
+print(lib.get_graph_json())
 func_metadata = lib.function_metadata  
 print(func_metadata)  
 # for func_name, finfo in func_metadata.items():
