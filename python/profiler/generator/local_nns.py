@@ -4,7 +4,8 @@ import numpy as np
 import tvm
 from tvm import relay, auto_scheduler
 import tvm.relay.testing
-from tvm.contrib import graph_executor
+# from tvm.contrib import graph_executor
+from tvm.contrib.debugger import debug_executor as graph_executor
 import neworkx_exporter
 
 os.environ['TVM_BACKTRACE']="1"
@@ -36,6 +37,7 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
 
     input_shape = (batch_size,) + image_shape
     output_shape = (batch_size, 1000)
+    inputs = {}
     if name.startswith("resnet-"):
         n_layer = int(name.split("-")[1])
         mod, params = relay.testing.resnet.get_workload(
@@ -129,7 +131,7 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
         scripted_model = torch.jit.trace(model, [A], strict=False).eval()
         shape_list = [(input_name, input_shape)]
         mod, params = relay.frontend.from_pytorch(scripted_model, shape_list)
-    elif name == 'Roberta':
+    elif name == 'roberta':
         import torch
         from transformers import RobertaConfig, RobertaModel
         configuration = RobertaConfig(return_dict=False)
@@ -217,20 +219,8 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
             for name, param in layer.collect_params().items():
                 mx_params[name] = param._reduce()
             mod, params = relay.frontend.from_mxnet(mx_sym, shape=shape_dict, arg_params=mx_params)
-
-            target = tvm.target.Target("cuda")
-            with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
-                lib = relay.build(mod, target=target, params=params)
-            device = tvm.device(str(target), 0)
-            module = graph_executor.GraphModule(lib["default"](device))
-            for key in inputs:
-                module.set_input(key, inputs[key])
-            print("Evaluate inference time cost...")
-            ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
-            prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
-            print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
-            return mod, params, data_np.shape
-        mod, params, input_shape = verify(name, 128, 1024, 1024, 8,batch = batch_size)
+            return mod, params, data_np.shape, inputs
+        mod, params, input_shape, inputs = verify(name, 128, 1024, 1024, 8,batch = batch_size)
         # import torch
         # from transformers import T5Model, T5Config, T5Tokenizer,T5ForConditionalGeneration
         # os.environ['TOKENIZERS_PARALLELISM'] = 'false'
@@ -273,53 +263,61 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
     #     )
     #     mod = tvm.IRModule.from_expr(net)
 
-    return mod, params, input_shape, output_shape
+    return mod, params, input_shape, output_shape,inputs
 
-network = "dpn68"
-if network == "nasnetalarge":
-    batch_size = 1
-    layout = "NHWC"
+network = "lstm"
+batch_size = 128
+layout = "NHWC"
+dtype = "float32"
+# target = tvm.target.Target("cuda")
+target = 'llvm'
+device = tvm.device(str(target), 0)
+if network == 'bert' or network == 'gpt2' or network == 'roberta':
+    mod, params, input_shape, output_shape,inputs = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
+    with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
+        lib = relay.build(mod, target=target, params=params)
+    module = graph_executor.create(lib.get_graph_json(),lib.get_lib(), device, dump_root = '/root/github/debug_dump/' + network)
+    input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
+    module.set_input("input_ids", input_ids)
+    print("Evaluate inference time cost...")
+    module.run()
+elif network == "nasnetalarge":
     #target = tvm.target.Target("llvm -mcpu=core-avx2")
     # target = tvm.target.Target("llvm -mcpu=skylake-avx512")
-    target = tvm.target.Target("cuda")
-    dtype = "float32"
-    mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
+    mod, params, input_shape, output_shape,inputs = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
 
     with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
         lib = relay.build(mod, target=target, params=params)
-    device = tvm.device(str(target), 0)
-    module = graph_executor.GraphModule(lib["default"](device))
+    
+    module = graph_executor.create(lib.get_graph_json(),lib.get_lib(), device, dump_root = '/root/github/debug_dump/' + network)
     input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
     module.set_input("input0", input_ids)
     # attention_mask = tvm.nd.array((np.random.uniform(size=shape2)).astype("int64"))
     # module.set_input("attention_mask", attention_mask)
     # module.set_input("decoder_input_ids", input_ids)
-
     print("Evaluate inference time cost...")
-    ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
-    prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
-    print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
+    module.run()
 
-elif network == 'gru':
-    batch_size = 512
-    layout = "NHWC"
-    dtype = "float32"
-    mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
-
-elif network == 'dpn68':
-    batch_size = 512
-    layout = "NHWC"
-    dtype = "float32"
-    target = tvm.target.Target("cuda")
-    mod, params, input_shape, output_shape = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
+elif network == 'lstm' or network == 'rnn' or network == 'gru':
+    mod, params, input_shape, output_shape,inputs = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
     with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
         lib = relay.build(mod, target=target, params=params)
-    print(print(lib.get_graph_json()))
-    # device = tvm.device(str(target), 0)
+    module = graph_executor.create(lib.get_graph_json(),lib.get_lib(), device, dump_root = '/root/github/debug_dump/' + network)
+    for key in inputs:
+        module.set_input(key, tvm.nd.array(inputs[key]).astype("float32"))
+    print("Evaluate inference time cost...")
+    module.run()
+
+elif network == 'dpn68':
+    mod, params, input_shape, output_shape,inputs = get_network(network, batch_size, layout, dtype=dtype, sequence=128)
+    with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
+        lib = relay.build(mod, target=target, params=params)
     # module = graph_executor.GraphModule(lib["default"](device))
-    # input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
-    # module.set_input("input0", input_ids)
-    # print("Evaluate inference time cost...")
+    module = graph_executor.create(lib.get_graph_json(),lib.get_lib(), device, dump_root = '/root/github/debug_dump/' + network)
+    input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
+    module.set_input("input0", input_ids)
+    print("Evaluate inference time cost...")
+    module.run()
     # ftimer = module.module.time_evaluator("run", device, repeat=3, min_repeat_ms=500)
     # prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
     # print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
