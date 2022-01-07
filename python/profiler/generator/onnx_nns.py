@@ -10,7 +10,8 @@ import onnx
 import numpy as np
 import tvm
 import tvm.relay as relay
-from tvm.contrib import graph_executor
+# from tvm.contrib import graph_executor
+from tvm.contrib.debugger import debug_executor as graph_executor
 from tvm.runtime.vm import VirtualMachine
 from onnx.tools import update_model_dims
 
@@ -29,14 +30,15 @@ urls = [
     # XXX: Often segfaults
     # 'https://github.com/onnx/models/raw/master/text/machine_comprehension/gpt-2/model/gpt2-10.tar.gz',
     # checked:
-    # 'https://github.com/onnx/models/blob/master/text/machine_comprehension/t5/model/t5-decoder-with-lm-head-12.tar.gz',
-    'https://github.com/onnx/models/blob/master/text/machine_comprehension/t5/model/t5-encoder-12.tar.gz'
+    'https://github.com/onnx/models/blob/master/text/machine_comprehension/t5/model/t5-decoder-with-lm-head-12.tar.gz'
+    # 'https://github.com/onnx/models/blob/master/text/machine_comprehension/t5/model/t5-encoder-12.tar.gz'
 ]
-
-target = "llvm"
-dev = tvm.device(target, 0)
-ctx = tvm.device(target, 0)
-
+target = tvm.target.Target("cuda")
+# target = "llvm"
+dev = tvm.device(str(target), 0)
+ctx = tvm.device(str(target), 0)
+network = ''
+name = ''
 summary = []
 for url in urls:
     print(f'==> {url} <==')
@@ -56,6 +58,7 @@ for url in urls:
         if n.endswith('.onnx'):
             model_file = base_path + n.split('.onnx')[0] +'/' + n
             name = os.path.dirname(model_file)
+            network = n.split('.')[0]
             print('onnx location:' + model_file)
             print('extraction path:' + name)
             break
@@ -75,12 +78,12 @@ for url in urls:
     shape_dict = {}
     input_values = []
     inputs = {}
-    print("input data:")
-    for input in onnx_model.graph.input:
-        print(input)
-    print("output data:")
-    for out in onnx_model.graph.output:
-        print(out)
+    # print("input data:")
+    # for input in onnx_model.graph.input:
+    #     print(input)
+    # print("output data:")
+    # for out in onnx_model.graph.output:
+    #     print(out)
     if(len(glob.glob(os.path.join(name, 'test_data_set_*'))) > 0):
         test_data_set = glob.glob(os.path.join(name, 'test_data_set_*'))[0]
         assert os.path.exists(test_data_set)
@@ -111,12 +114,13 @@ for url in urls:
         print(f'Importing graph from ONNX to TVM Relay IR ...')
         mod, params = relay.frontend.from_onnx(onnx_model, shape_dict, freeze_params=True)
         mod = relay.transform.DynamicToStatic()(mod)
-        lib = relay.build(mod, target=target, params=params)
 
         print(f'Compiling graph from Relay IR to {target} ...')
-        with tvm.transform.PassContext(opt_level=3):
+        with tvm.transform.PassContext(opt_level=0):
+            lib = relay.build(mod, target=target, params=params)
             # vm_exec = relay.vm.compile(mod, target, params=params)
-            module = graph_executor.GraphModule(lib["default"](dev))
+            # module = graph_executor.GraphModule(lib["default"](dev))
+            module = graph_executor.create(lib.get_graph_json(),lib.get_lib(), dev, dump_root = '/root/github/debug_dump/' + network)
         # vm = VirtualMachine(vm_exec, dev)
         if name.endswith('t5-decoder-with-lm-head'):
             module.set_input("input_ids", inputs['input_ids'])
@@ -124,9 +128,10 @@ for url in urls:
         elif name.endswith('t5-encoder'):
             module.set_input("input_ids", inputs['input_ids'])
         print(f"Running inference...")
-        ftimer = module.module.time_evaluator("run", dev, repeat=3, min_repeat_ms=500)
-        prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
-        print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
+        module.run()
+        # ftimer = module.module.time_evaluator("run", dev, repeat=3, min_repeat_ms=500)
+        # prof_res = np.array(ftimer().results) * 1e3  # convert to millisecond
+        # print("Mean inference time (std dev): %.2f ms (%.2f ms)" % (np.mean(prof_res), np.std(prof_res)))
     except KeyboardInterrupt:
         raise
     except Exception as ex:

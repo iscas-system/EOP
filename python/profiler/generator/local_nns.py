@@ -265,7 +265,7 @@ def get_network(name, batch_size, layout="NCHW", dtype="float32", sequence = 128
 
     return mod, params, input_shape, output_shape,inputs
 
-network = "lstm"
+network = "roberta"
 batch_size = 128
 layout = "NHWC"
 dtype = "float32"
@@ -277,7 +277,7 @@ if network == 'bert' or network == 'gpt2' or network == 'roberta':
     with tvm.transform.PassContext(opt_level=0, config={"relay.backend.use_auto_scheduler": False}):
         lib = relay.build(mod, target=target, params=params)
     module = graph_executor.create(lib.get_graph_json(),lib.get_lib(), device, dump_root = '/root/github/debug_dump/' + network)
-    input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("float32"))
+    input_ids = tvm.nd.array((np.random.uniform(size=input_shape)).astype("int64"))
     module.set_input("input_ids", input_ids)
     print("Evaluate inference time cost...")
     module.run()
@@ -304,7 +304,7 @@ elif network == 'lstm' or network == 'rnn' or network == 'gru':
         lib = relay.build(mod, target=target, params=params)
     module = graph_executor.create(lib.get_graph_json(),lib.get_lib(), device, dump_root = '/root/github/debug_dump/' + network)
     for key in inputs:
-        module.set_input(key, tvm.nd.array(inputs[key]).astype("float32"))
+        module.set_input(key, tvm.nd.array(inputs[key].astype("float32")))
     print("Evaluate inference time cost...")
     module.run()
 
