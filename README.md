@@ -89,3 +89,6 @@ DGL-PyTorch,
 3. index and shape expression: may denote dynamic shapes and expressions.
 4. data types: from int8 to float32.
 5. basic topi operators can be used as meta-operators.
+
+# data path
+Profile data are stored in /data.
