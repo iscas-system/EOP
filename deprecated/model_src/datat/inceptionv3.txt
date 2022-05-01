@@ -1,0 +1,969 @@
+tvmgen_default_fused_nn_conv2d_15      tvmgen_default_fused_nn_conv2d_15      1674.77    5.034    (1, 384, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_4       tvmgen_default_fused_nn_conv2d_4       1498.8     4.505    (1, 192, 71, 71)   2       1
+tvmgen_default_fused_nn_conv2d_25      tvmgen_default_fused_nn_conv2d_25      509.322    1.531    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_2       tvmgen_default_fused_nn_conv2d_2       476.196    1.431    (1, 64, 147, 147)  2       1
+tvmgen_default_fused_nn_conv2d_28      tvmgen_default_fused_nn_conv2d_28      466.097    1.401    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_29      tvmgen_default_fused_nn_conv2d_29      465.561    1.399    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_292     tvmgen_default_fused_nn_conv2d_29      443.036    1.332    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_291     tvmgen_default_fused_nn_conv2d_29      442.798    1.331    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_293     tvmgen_default_fused_nn_conv2d_29      442.713    1.331    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_283     tvmgen_default_fused_nn_conv2d_28      439.543    1.321    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_282     tvmgen_default_fused_nn_conv2d_28      438.848    1.319    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_281     tvmgen_default_fused_nn_conv2d_28      438.816    1.319    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_27      tvmgen_default_fused_nn_conv2d_27      378.821    1.139    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_251     tvmgen_default_fused_nn_conv2d_25      378.458    1.138    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_271     tvmgen_default_fused_nn_conv2d_27      378.17     1.137    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_371     tvmgen_default_fused_nn_conv2d_37      345.42     1.038    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_37      tvmgen_default_fused_nn_conv2d_37      333.359    1.002    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_26      tvmgen_default_fused_nn_conv2d_26      309.728    0.931    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_263     tvmgen_default_fused_nn_conv2d_26      309.612    0.931    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_262     tvmgen_default_fused_nn_conv2d_26      309.578    0.931    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_261     tvmgen_default_fused_nn_conv2d_26      309.052    0.929    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_242     tvmgen_default_fused_nn_conv2d_24      299.066    0.899    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_241     tvmgen_default_fused_nn_conv2d_24      298.888    0.898    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_243     tvmgen_default_fused_nn_conv2d_24      298.787    0.898    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_24      tvmgen_default_fused_nn_conv2d_24      298.299    0.897    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_20      tvmgen_default_fused_nn_conv2d_20      296.541    0.891    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_22      tvmgen_default_fused_nn_conv2d_22      295.911    0.889    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_171     tvmgen_default_fused_nn_conv2d_17      287.678    0.865    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_17      tvmgen_default_fused_nn_conv2d_17      286.301    0.861    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_174     tvmgen_default_fused_nn_conv2d_17      286.263    0.86     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_172     tvmgen_default_fused_nn_conv2d_17      286.201    0.86     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_175     tvmgen_default_fused_nn_conv2d_17      286.174    0.86     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_173     tvmgen_default_fused_nn_conv2d_17      285.697    0.859    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_177     tvmgen_default_fused_nn_conv2d_17      282.75     0.85     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_176     tvmgen_default_fused_nn_conv2d_17      282.45     0.849    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_1711    tvmgen_default_fused_nn_conv2d_17      268.255    0.806    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_1710    tvmgen_default_fused_nn_conv2d_17      267.533    0.804    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_178     tvmgen_default_fused_nn_conv2d_17      267.416    0.804    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_179     tvmgen_default_fused_nn_conv2d_17      267.154    0.803    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_41      tvmgen_default_fused_nn_conv2d_41      255.172    0.767    (1, 448, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_40      tvmgen_default_fused_nn_conv2d_40      254.756    0.766    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_1       tvmgen_default_fused_nn_conv2d_1       240.497    0.723    (1, 32, 147, 147)  2       1
+tvmgen_default_fused_nn_conv2d_30      tvmgen_default_fused_nn_conv2d_30      239.301    0.719    (1, 320, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_39      tvmgen_default_fused_nn_conv2d_39      227.491    0.684    (1, 320, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_7       tvmgen_default_fused_nn_conv2d_7       219.748    0.661    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_72      tvmgen_default_fused_nn_conv2d_7       219.455    0.66     (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_71      tvmgen_default_fused_nn_conv2d_7       219.371    0.659    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_232     tvmgen_default_fused_nn_conv2d_23      203.881    0.613    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_233     tvmgen_default_fused_nn_conv2d_23      203.76     0.612    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_231     tvmgen_default_fused_nn_conv2d_23      203.145    0.611    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_23      tvmgen_default_fused_nn_conv2d_23      203.031    0.61     (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_19      tvmgen_default_fused_nn_conv2d_19      199.087    0.598    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_21      tvmgen_default_fused_nn_conv2d_21      198.771    0.597    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_211     tvmgen_default_fused_nn_conv2d_21      198.643    0.597    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_191     tvmgen_default_fused_nn_conv2d_19      198.424    0.596    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_42      tvmgen_default_fused_nn_conv2d_42      188.705    0.567    (1, 192, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_18      tvmgen_default_fused_nn_conv2d_18      175.172    0.527    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_16      tvmgen_default_fused_nn_conv2d_16      175.016    0.526    (1, 96, 17, 17)    2       1
+tvmgen_default_fused_nn_conv2d_181     tvmgen_default_fused_nn_conv2d_18      174.176    0.524    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_nn_conv2d_31      tvmgen_default_fused_nn_conv2d_31      169.566    0.51     (1, 192, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_33      tvmgen_default_fused_nn_conv2d_33      147.297    0.443    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_36      tvmgen_default_fused_nn_conv2d_36      142.666    0.429    (1, 448, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_34      tvmgen_default_fused_nn_conv2d_34      142.252    0.428    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_342     tvmgen_default_fused_nn_conv2d_34      142.189    0.427    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_343     tvmgen_default_fused_nn_conv2d_34      141.918    0.427    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_341     tvmgen_default_fused_nn_conv2d_34      141.868    0.426    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_35      tvmgen_default_fused_nn_conv2d_35      135.731    0.408    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_352     tvmgen_default_fused_nn_conv2d_35      135.659    0.408    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_351     tvmgen_default_fused_nn_conv2d_35      135.626    0.408    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_353     tvmgen_default_fused_nn_conv2d_35      135.363    0.407    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_9       tvmgen_default_fused_nn_conv2d_9       127.047    0.382    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_92      tvmgen_default_fused_nn_conv2d_9       126.579    0.38     (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_91      tvmgen_default_fused_nn_conv2d_9       126.534    0.38     (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_38      tvmgen_default_fused_nn_conv2d_38      119.813    0.36     (1, 192, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_13      tvmgen_default_fused_nn_conv2d_13      108.546    0.326    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_133     tvmgen_default_fused_nn_conv2d_13      108.169    0.325    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_131     tvmgen_default_fused_nn_conv2d_13      108.078    0.325    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_132     tvmgen_default_fused_nn_conv2d_13      107.984    0.325    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_avg_pool2d_5   tvmgen_default_fused_nn_avg_pool2d_5   102.089    0.307    (1, 2048, 1, 1)    1       1
+tvmgen_default_fused_nn_conv2d_3       tvmgen_default_fused_nn_conv2d_3       99.581     0.299    (1, 80, 73, 73)    2       1
+tvmgen_default_fused_nn_conv2d_32      tvmgen_default_fused_nn_conv2d_32      98.008     0.295    (1, 320, 8, 8)     2       1
+tvmgen_default_fused_nn_conv2d_83      tvmgen_default_fused_nn_conv2d_8       95.237     0.286    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_81      tvmgen_default_fused_nn_conv2d_8       95.178     0.286    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_8       tvmgen_default_fused_nn_conv2d_8       95.092     0.286    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_82      tvmgen_default_fused_nn_conv2d_8       95.031     0.286    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_14      tvmgen_default_fused_nn_conv2d_14      91.046     0.274    (1, 48, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_11      tvmgen_default_fused_nn_conv2d_11      90.896     0.273    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_111     tvmgen_default_fused_nn_conv2d_11      90.447     0.272    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_112     tvmgen_default_fused_nn_conv2d_11      90.316     0.271    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d         tvmgen_default_fused_nn_conv2d         87.125     0.262    (1, 32, 149, 149)  2       1
+tvmgen_default_fused_nn_conv2d_12      tvmgen_default_fused_nn_conv2d_12      80.456     0.242    (1, 48, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_5       tvmgen_default_fused_nn_conv2d_5       76.068     0.229    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_51      tvmgen_default_fused_nn_conv2d_5       75.963     0.228    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_conv2d_6       tvmgen_default_fused_nn_conv2d_6       63.763     0.192    (1, 48, 35, 35)    2       1
+tvmgen_default_fused_nn_relu_2         tvmgen_default_fused_nn_relu_2         56.184     0.169    (1, 64, 147, 147)  1       1
+tvmgen_default_fused_add_6             tvmgen_default_fused_add_6             55.152     0.166    (1, 64, 147, 147)  2       1
+tvmgen_default_fused_nn_conv2d_10      tvmgen_default_fused_nn_conv2d_10      53.798     0.162    (1, 32, 35, 35)    2       1
+tvmgen_default_fused_multiply_3        tvmgen_default_fused_multiply_3        51.94      0.156    (1, 64, 147, 147)  2       1
+tvmgen_default_fused_nn_avg_pool2d_2   tvmgen_default_fused_nn_avg_pool2d_2   47.456     0.143    (1, 288, 35, 35)   1       1
+tvmgen_default_fused_nn_dense          tvmgen_default_fused_nn_dense          45.32      0.136    (1, 1000)          2       1
+tvmgen_default_fused_nn_avg_pool2d_1   tvmgen_default_fused_nn_avg_pool2d_1   43.257     0.13     (1, 256, 35, 35)   1       1
+tvmgen_default_fused_nn_max_pool2d     tvmgen_default_fused_nn_max_pool2d     42.585     0.128    (1, 64, 73, 73)    1       1
+tvmgen_default_fused_add_12            tvmgen_default_fused_add_12            40.646     0.122    (1, 192, 71, 71)   2       1
+tvmgen_default_fused_nn_relu_4         tvmgen_default_fused_nn_relu_4         40.559     0.122    (1, 192, 71, 71)   1       1
+tvmgen_default_fused_multiply_7        tvmgen_default_fused_multiply_7        37.206     0.112    (1, 192, 71, 71)   2       1
+tvmgen_default_fused_nn_avg_pool2d     tvmgen_default_fused_nn_avg_pool2d     34.458     0.104    (1, 192, 35, 35)   1       1
+tvmgen_default_fused_nn_avg_pool2d_32  tvmgen_default_fused_nn_avg_pool2d_3   34.409     0.103    (1, 768, 17, 17)   1       1
+tvmgen_default_fused_nn_avg_pool2d_31  tvmgen_default_fused_nn_avg_pool2d_3   34.371     0.103    (1, 768, 17, 17)   1       1
+tvmgen_default_fused_nn_avg_pool2d_3   tvmgen_default_fused_nn_avg_pool2d_3   32.933     0.099    (1, 768, 17, 17)   1       1
+tvmgen_default_fused_nn_avg_pool2d_33  tvmgen_default_fused_nn_avg_pool2d_3   32.384     0.097    (1, 768, 17, 17)   1       1
+tvmgen_default_fused_add_2             tvmgen_default_fused_add_2             31.784     0.096    (1, 32, 149, 149)  2       1
+tvmgen_default_fused_nn_relu           tvmgen_default_fused_nn_relu           31.763     0.095    (1, 32, 149, 149)  1       1
+tvmgen_default_fused_add_3             tvmgen_default_fused_add_3             31.534     0.095    (1, 32, 147, 147)  2       1
+tvmgen_default_fused_nn_max_pool2d_1   tvmgen_default_fused_nn_max_pool2d_1   31.262     0.094    (1, 192, 35, 35)   1       1
+tvmgen_default_fused_nn_relu_1         tvmgen_default_fused_nn_relu_1         30.705     0.092    (1, 32, 147, 147)  1       1
+tvmgen_default_fused_multiply_2        tvmgen_default_fused_multiply_2        26.124     0.079    (1, 32, 147, 147)  2       1
+tvmgen_default_fused_multiply          tvmgen_default_fused_multiply          25.854     0.078    (1, 32, 149, 149)  2       1
+tvmgen_default_fused_nn_softmax        tvmgen_default_fused_nn_softmax        23.873     0.072    (1, 1000)          1       1
+tvmgen_default_fused_concatenate_1     tvmgen_default_fused_concatenate_1     20.884     0.063    (1, 288, 35, 35)   4       1
+tvmgen_default_fused_nn_max_pool2d_2   tvmgen_default_fused_nn_max_pool2d_2   20.171     0.061    (1, 288, 17, 17)   1       1
+tvmgen_default_fused_concatenate_11    tvmgen_default_fused_concatenate_1     19.792     0.059    (1, 288, 35, 35)   4       1
+tvmgen_default_fused_concatenate       tvmgen_default_fused_concatenate       19.347     0.058    (1, 256, 35, 35)   4       1
+tvmgen_default_fused_multiply_5        tvmgen_default_fused_multiply_5        18.571     0.056    (1, 80, 73, 73)    2       1
+tvmgen_default_fused_add_9             tvmgen_default_fused_add_9             18.561     0.056    (1, 80, 73, 73)    2       1
+tvmgen_default_fused_nn_max_pool2d_3   tvmgen_default_fused_nn_max_pool2d_3   17.569     0.053    (1, 768, 8, 8)     1       1
+tvmgen_default_fused_nn_relu_3         tvmgen_default_fused_nn_relu_3         17.183     0.052    (1, 80, 73, 73)    1       1
+tvmgen_default_fused_concatenate_32    tvmgen_default_fused_concatenate_3     16.633     0.05     (1, 768, 17, 17)   4       1
+tvmgen_default_fused_concatenate_3     tvmgen_default_fused_concatenate_3     16.02      0.048    (1, 768, 17, 17)   4       1
+tvmgen_default_fused_concatenate_2     tvmgen_default_fused_concatenate_2     15.97      0.048    (1, 768, 17, 17)   3       1
+tvmgen_default_fused_nn_max_pool2d_4   tvmgen_default_fused_nn_max_pool2d_4   15.712     0.047    (1, 2048, 8, 8)    1       1
+tvmgen_default_fused_concatenate_31    tvmgen_default_fused_concatenate_3     15.434     0.046    (1, 768, 17, 17)   4       1
+tvmgen_default_fused_concatenate_33    tvmgen_default_fused_concatenate_3     14.965     0.045    (1, 768, 17, 17)   4       1
+tvmgen_default_fused_nn_avg_pool2d_4   tvmgen_default_fused_nn_avg_pool2d_4   12.828     0.039    (1, 1280, 8, 8)    1       1
+tvmgen_default_fused_concatenate_5     tvmgen_default_fused_concatenate_5     12.738     0.038    (1, 2048, 8, 8)    6       1
+tvmgen_default_fused_concatenate_51    tvmgen_default_fused_concatenate_5     12.687     0.038    (1, 2048, 8, 8)    6       1
+tvmgen_default_fused_multiply_15       tvmgen_default_fused_multiply_15       11.964     0.036    (1, 384, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_1310      tvmgen_default_fused_nn_relu_13        11.921     0.036    (1, 160, 17, 17)   1       1
+tvmgen_default_fused_multiply_12       tvmgen_default_fused_multiply_12       11.913     0.036    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_add_19            tvmgen_default_fused_add_19            11.89      0.036    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_multiply_124      tvmgen_default_fused_multiply_12       11.865     0.036    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_add_23            tvmgen_default_fused_add_23            11.827     0.036    (1, 384, 17, 17)   2       1
+tvmgen_default_fused_multiply_126      tvmgen_default_fused_multiply_12       11.76      0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_multiply_123      tvmgen_default_fused_multiply_12       11.757     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_multiply_101      tvmgen_default_fused_multiply_10       11.74      0.035    (1, 48, 35, 35)    2       1
+tvmgen_default_fused_add_192           tvmgen_default_fused_add_19            11.662     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_add_196           tvmgen_default_fused_add_19            11.662     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_multiply_121      tvmgen_default_fused_multiply_12       11.651     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_add_191           tvmgen_default_fused_add_19            11.635     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_multiply_127      tvmgen_default_fused_multiply_12       11.629     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_add_193           tvmgen_default_fused_add_19            11.626     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_relu_7         tvmgen_default_fused_nn_relu_7         11.625     0.035    (1, 96, 35, 35)    1       1
+tvmgen_default_fused_add_194           tvmgen_default_fused_add_19            11.612     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_multiply_125      tvmgen_default_fused_multiply_12       11.574     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_relu_9         tvmgen_default_fused_nn_relu_9         11.548     0.035    (1, 384, 17, 17)   1       1
+tvmgen_default_fused_add_195           tvmgen_default_fused_add_19            11.485     0.035    (1, 96, 35, 35)    2       1
+tvmgen_default_fused_nn_relu_72        tvmgen_default_fused_nn_relu_7         11.429     0.034    (1, 96, 35, 35)    1       1
+tvmgen_default_fused_nn_relu_74        tvmgen_default_fused_nn_relu_7         11.395     0.034    (1, 96, 35, 35)    1       1
+tvmgen_default_fused_nn_relu_75        tvmgen_default_fused_nn_relu_7         11.36      0.034    (1, 96, 35, 35)    1       1
+tvmgen_default_fused_nn_relu_73        tvmgen_default_fused_nn_relu_7         11.359     0.034    (1, 96, 35, 35)    1       1
+tvmgen_default_fused_nn_relu_71        tvmgen_default_fused_nn_relu_7         11.299     0.034    (1, 96, 35, 35)    1       1
+tvmgen_default_fused_nn_relu_76        tvmgen_default_fused_nn_relu_7         11.247     0.034    (1, 96, 35, 35)    1       1
+tvmgen_default_fused_nn_relu_62        tvmgen_default_fused_nn_relu_6         11.058     0.033    (1, 48, 35, 35)    1       1
+tvmgen_default_fused_multiply_98       tvmgen_default_fused_multiply_9        10.902     0.033    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_multiply_9        tvmgen_default_fused_multiply_9        10.878     0.033    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_20            tvmgen_default_fused_add_20            10.849     0.033    (1, 32, 35, 35)    2       1
+tvmgen_default_fused_add_13            tvmgen_default_fused_add_13            10.79      0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_multiply_10       tvmgen_default_fused_multiply_10       10.75      0.032    (1, 48, 35, 35)    2       1
+tvmgen_default_fused_add_16            tvmgen_default_fused_add_16            10.686     0.032    (1, 48, 35, 35)    2       1
+tvmgen_default_fused_nn_relu_11        tvmgen_default_fused_nn_relu_11        10.686     0.032    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_add_25            tvmgen_default_fused_add_25            10.685     0.032    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_96       tvmgen_default_fused_multiply_9        10.671     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_multiply_93       tvmgen_default_fused_multiply_9        10.662     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_multiply_18       tvmgen_default_fused_multiply_18       10.654     0.032    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_136           tvmgen_default_fused_add_13            10.633     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_133           tvmgen_default_fused_add_13            10.614     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_relu_5         tvmgen_default_fused_nn_relu_5         10.603     0.032    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_multiply_94       tvmgen_default_fused_multiply_9        10.599     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_multiply_99       tvmgen_default_fused_multiply_9        10.593     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_concatenate_4     tvmgen_default_fused_concatenate_4     10.592     0.032    (1, 1280, 8, 8)    3       1
+tvmgen_default_fused_multiply_91       tvmgen_default_fused_multiply_9        10.562     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_nn_relu_57        tvmgen_default_fused_nn_relu_5         10.562     0.032    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_multiply_910      tvmgen_default_fused_multiply_9        10.561     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_1311          tvmgen_default_fused_add_13            10.561     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_162           tvmgen_default_fused_add_16            10.556     0.032    (1, 48, 35, 35)    2       1
+tvmgen_default_fused_add_31            tvmgen_default_fused_add_31            10.549     0.032    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_97       tvmgen_default_fused_multiply_9        10.54      0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_132           tvmgen_default_fused_add_13            10.536     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_135           tvmgen_default_fused_add_13            10.532     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_137           tvmgen_default_fused_add_13            10.525     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_multiply_911      tvmgen_default_fused_multiply_9        10.517     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_138           tvmgen_default_fused_add_13            10.513     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_multiply_21       tvmgen_default_fused_multiply_21       10.509     0.032    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_add_139           tvmgen_default_fused_add_13            10.499     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_131           tvmgen_default_fused_add_13            10.491     0.032    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_134           tvmgen_default_fused_add_13            10.477     0.031    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_multiply_102      tvmgen_default_fused_multiply_10       10.471     0.031    (1, 48, 35, 35)    2       1
+tvmgen_default_fused_multiply_95       tvmgen_default_fused_multiply_9        10.47      0.031    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_multiply_92       tvmgen_default_fused_multiply_9        10.413     0.031    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_1310          tvmgen_default_fused_add_13            10.412     0.031    (1, 64, 35, 35)    2       1
+tvmgen_default_fused_add_161           tvmgen_default_fused_add_16            10.403     0.031    (1, 48, 35, 35)    2       1
+tvmgen_default_fused_multiply_185      tvmgen_default_fused_multiply_18       10.375     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_312           tvmgen_default_fused_add_31            10.365     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_add_259           tvmgen_default_fused_add_25            10.365     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_181      tvmgen_default_fused_multiply_18       10.363     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_255           tvmgen_default_fused_add_25            10.354     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_1816     tvmgen_default_fused_multiply_18       10.348     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_6         tvmgen_default_fused_nn_relu_6         10.345     0.031    (1, 48, 35, 35)    1       1
+tvmgen_default_fused_add_252           tvmgen_default_fused_add_25            10.334     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_257           tvmgen_default_fused_add_25            10.321     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_367           tvmgen_default_fused_add_36            10.318     0.031    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_multiply_189      tvmgen_default_fused_multiply_18       10.311     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_2510          tvmgen_default_fused_add_25            10.31      0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_182      tvmgen_default_fused_multiply_18       10.306     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_186      tvmgen_default_fused_multiply_18       10.302     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_314           tvmgen_default_fused_add_31            10.297     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_add_256           tvmgen_default_fused_add_25            10.292     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_47            tvmgen_default_fused_add_4             10.29      0.031    (64,)              2       1
+tvmgen_default_fused_add_313           tvmgen_default_fused_add_31            10.289     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_add_2523          tvmgen_default_fused_add_25            10.285     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_55        tvmgen_default_fused_nn_relu_5         10.284     0.031    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_multiply_168      tvmgen_default_fused_multiply_16       10.279     0.031    (384,)             2       1
+tvmgen_default_fused_nn_relu_58        tvmgen_default_fused_nn_relu_5         10.275     0.031    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_add_2511          tvmgen_default_fused_add_25            10.275     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_1810     tvmgen_default_fused_multiply_18       10.274     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_319           tvmgen_default_fused_add_31            10.269     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_divide_91         tvmgen_default_fused_divide_9          10.266     0.031    (320,)             2       1
+tvmgen_default_fused_multiply_183      tvmgen_default_fused_multiply_18       10.263     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_2513          tvmgen_default_fused_add_25            10.258     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_510       tvmgen_default_fused_nn_relu_5         10.253     0.031    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_multiply_1814     tvmgen_default_fused_multiply_18       10.244     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_318           tvmgen_default_fused_add_31            10.24      0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_53        tvmgen_default_fused_nn_relu_5         10.232     0.031    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_nn_relu_51        tvmgen_default_fused_nn_relu_5         10.231     0.031    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_nn_relu_54        tvmgen_default_fused_nn_relu_5         10.225     0.031    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_add_253           tvmgen_default_fused_add_25            10.223     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_219      tvmgen_default_fused_multiply_21       10.223     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_212      tvmgen_default_fused_multiply_21       10.222     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_add_3111          tvmgen_default_fused_add_31            10.221     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_1815     tvmgen_default_fused_multiply_18       10.221     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_511       tvmgen_default_fused_nn_relu_5         10.219     0.031    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_multiply_211      tvmgen_default_fused_multiply_21       10.218     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_267      tvmgen_default_fused_multiply_26       10.216     0.031    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_relu_56        tvmgen_default_fused_nn_relu_5         10.201     0.031    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_add_3110          tvmgen_default_fused_add_31            10.199     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_1811     tvmgen_default_fused_multiply_18       10.199     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_2514          tvmgen_default_fused_add_25            10.197     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_13        tvmgen_default_fused_nn_relu_13        10.193     0.031    (1, 160, 17, 17)   1       1
+tvmgen_default_fused_multiply_187      tvmgen_default_fused_multiply_18       10.191     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_215      tvmgen_default_fused_multiply_21       10.189     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_add_251           tvmgen_default_fused_add_25            10.188     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_317           tvmgen_default_fused_add_31            10.182     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_1812     tvmgen_default_fused_multiply_18       10.18      0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_214      tvmgen_default_fused_multiply_21       10.176     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_218      tvmgen_default_fused_multiply_21       10.174     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_213      tvmgen_default_fused_multiply_21       10.173     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_add_258           tvmgen_default_fused_add_25            10.165     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_315           tvmgen_default_fused_add_31            10.163     0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_188      tvmgen_default_fused_multiply_18       10.161     0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_254           tvmgen_default_fused_add_25            10.16      0.031    (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_52        tvmgen_default_fused_nn_relu_5         10.153     0.031    (1, 64, 35, 35)    1       1
+tvmgen_default_fused_multiply_2111     tvmgen_default_fused_multiply_21       10.15      0.031    (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_216      tvmgen_default_fused_multiply_21       10.142     0.03     (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_184      tvmgen_default_fused_multiply_18       10.139     0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_2110     tvmgen_default_fused_multiply_21       10.139     0.03     (1, 160, 17, 17)   2       1
+tvmgen_default_fused_multiply_217      tvmgen_default_fused_multiply_21       10.135     0.03     (1, 160, 17, 17)   2       1
+tvmgen_default_fused_add_2521          tvmgen_default_fused_add_25            10.134     0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_negative_56       tvmgen_default_fused_negative_5        10.128     0.03     (96,)              1       1
+tvmgen_default_fused_multiply_1813     tvmgen_default_fused_multiply_18       10.125     0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_2516          tvmgen_default_fused_add_25            10.125     0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_59        tvmgen_default_fused_nn_relu_5         10.121     0.03     (1, 64, 35, 35)    1       1
+tvmgen_default_fused_nn_relu_61        tvmgen_default_fused_nn_relu_6         10.12      0.03     (1, 48, 35, 35)    1       1
+tvmgen_default_fused_multiply_813      tvmgen_default_fused_multiply_8        10.12      0.03     (192,)             2       1
+tvmgen_default_fused_nn_relu_112       tvmgen_default_fused_nn_relu_11        10.096     0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_multiply_1817     tvmgen_default_fused_multiply_18       10.091     0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_2512          tvmgen_default_fused_add_25            10.089     0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_819      tvmgen_default_fused_multiply_8        10.088     0.03     (192,)             2       1
+tvmgen_default_fused_add_311           tvmgen_default_fused_add_31            10.086     0.03     (1, 160, 17, 17)   2       1
+tvmgen_default_fused_add_316           tvmgen_default_fused_add_31            10.085     0.03     (1, 160, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_115       tvmgen_default_fused_nn_relu_11        10.084     0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1110      tvmgen_default_fused_nn_relu_11        10.066     0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_multiply_1823     tvmgen_default_fused_multiply_18       10.052     0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_1824     tvmgen_default_fused_multiply_18       10.044     0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_119       tvmgen_default_fused_nn_relu_11        10.034     0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_139       tvmgen_default_fused_nn_relu_13        10.017     0.03     (1, 160, 17, 17)   1       1
+tvmgen_default_fused_add_2517          tvmgen_default_fused_add_25            10.015     0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_131       tvmgen_default_fused_nn_relu_13        9.999      0.03     (1, 160, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_113       tvmgen_default_fused_nn_relu_11        9.992      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_134       tvmgen_default_fused_nn_relu_13        9.978      0.03     (1, 160, 17, 17)   1       1
+tvmgen_default_fused_add_2515          tvmgen_default_fused_add_25            9.976      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_1825     tvmgen_default_fused_multiply_18       9.976      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_2520          tvmgen_default_fused_add_25            9.974      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_117       tvmgen_default_fused_nn_relu_11        9.972      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_116       tvmgen_default_fused_nn_relu_11        9.971      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_add_2518          tvmgen_default_fused_add_25            9.966      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_2524          tvmgen_default_fused_add_25            9.964      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_111       tvmgen_default_fused_nn_relu_11        9.963      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1311      tvmgen_default_fused_nn_relu_13        9.963      0.03     (1, 160, 17, 17)   1       1
+tvmgen_default_fused_add_2519          tvmgen_default_fused_add_25            9.953      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_1819     tvmgen_default_fused_multiply_18       9.95       0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_1820     tvmgen_default_fused_multiply_18       9.946      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_multiply_1818     tvmgen_default_fused_multiply_18       9.942      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_2525          tvmgen_default_fused_add_25            9.932      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_118       tvmgen_default_fused_nn_relu_11        9.928      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_multiply_1821     tvmgen_default_fused_multiply_18       9.921      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_add_2522          tvmgen_default_fused_add_25            9.912      0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_1113      tvmgen_default_fused_nn_relu_11        9.907      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_135       tvmgen_default_fused_nn_relu_13        9.903      0.03     (1, 160, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_138       tvmgen_default_fused_nn_relu_13        9.901      0.03     (1, 160, 17, 17)   1       1
+tvmgen_default_fused_multiply_1822     tvmgen_default_fused_multiply_18       9.9        0.03     (1, 192, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_114       tvmgen_default_fused_nn_relu_11        9.893      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1111      tvmgen_default_fused_nn_relu_11        9.882      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_136       tvmgen_default_fused_nn_relu_13        9.877      0.03     (1, 160, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_132       tvmgen_default_fused_nn_relu_13        9.869      0.03     (1, 160, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1112      tvmgen_default_fused_nn_relu_11        9.862      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1116      tvmgen_default_fused_nn_relu_11        9.844      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1122      tvmgen_default_fused_nn_relu_11        9.839      0.03     (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_133       tvmgen_default_fused_nn_relu_13        9.815      0.03     (1, 160, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1123      tvmgen_default_fused_nn_relu_11        9.81       0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_multiply_14       tvmgen_default_fused_multiply_14       9.806      0.029    (1, 32, 35, 35)    2       1
+tvmgen_default_fused_nn_relu_1114      tvmgen_default_fused_nn_relu_11        9.803      0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_137       tvmgen_default_fused_nn_relu_13        9.785      0.029    (1, 160, 17, 17)   1       1
+tvmgen_default_fused_divide_2          tvmgen_default_fused_divide_2          9.775      0.029    (80,)              2       1
+tvmgen_default_fused_nn_relu_1125      tvmgen_default_fused_nn_relu_11        9.775      0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1124      tvmgen_default_fused_nn_relu_11        9.734      0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_divide_5          tvmgen_default_fused_divide_5          9.704      0.029    (96,)              2       1
+tvmgen_default_fused_nn_relu_1118      tvmgen_default_fused_nn_relu_11        9.698      0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1121      tvmgen_default_fused_nn_relu_11        9.693      0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_1115      tvmgen_default_fused_nn_relu_11        9.689      0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_divide_7          tvmgen_default_fused_divide_7          9.688      0.029    (128,)             2       1
+tvmgen_default_fused_add_24            tvmgen_default_fused_add_24            9.676      0.029    (1, 96, 17, 17)    2       1
+tvmgen_default_fused_sqrt_3            tvmgen_default_fused_sqrt_3            9.672      0.029    (192,)             1       1
+tvmgen_default_fused_nn_relu_1119      tvmgen_default_fused_nn_relu_11        9.671      0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_multiply_19       tvmgen_default_fused_multiply_19       9.666      0.029    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_1120      tvmgen_default_fused_nn_relu_11        9.663      0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_divide_6          tvmgen_default_fused_divide_6          9.656      0.029    (384,)             2       1
+tvmgen_default_fused_nn_relu_8         tvmgen_default_fused_nn_relu_8         9.645      0.029    (1, 32, 35, 35)    1       1
+tvmgen_default_fused_multiply_17       tvmgen_default_fused_multiply_17       9.644      0.029    (1, 96, 17, 17)    2       1
+tvmgen_default_fused_divide            tvmgen_default_fused_divide            9.625      0.029    (32,)              2       1
+tvmgen_default_fused_divide_4          tvmgen_default_fused_divide_4          9.625      0.029    (48,)              2       1
+tvmgen_default_fused_nn_relu_1117      tvmgen_default_fused_nn_relu_11        9.616      0.029    (1, 192, 17, 17)   1       1
+tvmgen_default_fused_divide_1          tvmgen_default_fused_divide_1          9.605      0.029    (64,)              2       1
+tvmgen_default_fused_nn_relu_12        tvmgen_default_fused_nn_relu_12        9.589      0.029    (1, 128, 17, 17)   1       1
+tvmgen_default_fused_divide_8          tvmgen_default_fused_divide_8          9.585      0.029    (160,)             2       1
+tvmgen_default_fused_add_28            tvmgen_default_fused_add_28            9.577      0.029    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_divide_61         tvmgen_default_fused_divide_6          9.551      0.029    (384,)             2       1
+tvmgen_default_fused_divide_31         tvmgen_default_fused_divide_3          9.541      0.029    (192,)             2       1
+tvmgen_default_fused_divide_9          tvmgen_default_fused_divide_9          9.535      0.029    (320,)             2       1
+tvmgen_default_fused_sqrt_5            tvmgen_default_fused_sqrt_5            9.531      0.029    (96,)              1       1
+tvmgen_default_fused_divide_17         tvmgen_default_fused_divide_1          9.507      0.029    (64,)              2       1
+tvmgen_default_fused_nn_relu_10        tvmgen_default_fused_nn_relu_10        9.507      0.029    (1, 96, 17, 17)    1       1
+tvmgen_default_fused_nn_bias_add       tvmgen_default_fused_nn_bias_add       9.496      0.029    (1, 1000)          2       1
+tvmgen_default_fused_add_4             tvmgen_default_fused_add_4             9.495      0.029    (64,)              2       1
+tvmgen_default_fused_negative          tvmgen_default_fused_negative          9.492      0.029    (32,)              1       1
+tvmgen_default_fused_divide_19         tvmgen_default_fused_divide_1          9.484      0.029    (64,)              2       1
+tvmgen_default_fused_add_17            tvmgen_default_fused_add_17            9.47       0.028    (96,)              2       1
+tvmgen_default_fused_divide_53         tvmgen_default_fused_divide_5          9.469      0.028    (96,)              2       1
+tvmgen_default_fused_negative_1        tvmgen_default_fused_negative_1        9.465      0.028    (64,)              1       1
+tvmgen_default_fused_divide_51         tvmgen_default_fused_divide_5          9.459      0.028    (96,)              2       1
+tvmgen_default_fused_add_410           tvmgen_default_fused_add_4             9.454      0.028    (64,)              2       1
+tvmgen_default_fused_sqrt_1            tvmgen_default_fused_sqrt_1            9.453      0.028    (64,)              1       1
+tvmgen_default_fused_divide1           tvmgen_default_fused_divide            9.443      0.028    (32,)              2       1
+tvmgen_default_fused_multiply_4        tvmgen_default_fused_multiply_4        9.43       0.028    (64,)              2       1
+tvmgen_default_fused_divide_316        tvmgen_default_fused_divide_3          9.426      0.028    (192,)             2       1
+tvmgen_default_fused_add_106           tvmgen_default_fused_add_10            9.421      0.028    (192,)             2       1
+tvmgen_default_fused_divide_41         tvmgen_default_fused_divide_4          9.418      0.028    (48,)              2       1
+tvmgen_default_fused_add_7             tvmgen_default_fused_add_7             9.416      0.028    (80,)              2       1
+tvmgen_default_fused_divide_82         tvmgen_default_fused_divide_8          9.415      0.028    (160,)             2       1
+tvmgen_default_fused_divide_10         tvmgen_default_fused_divide_10         9.41       0.028    (448,)             2       1
+tvmgen_default_fused_divide2           tvmgen_default_fused_divide            9.406      0.028    (32,)              2       1
+tvmgen_default_fused_sqrt_6            tvmgen_default_fused_sqrt_6            9.403      0.028    (384,)             1       1
+tvmgen_default_fused_divide_55         tvmgen_default_fused_divide_5          9.393      0.028    (96,)              2       1
+tvmgen_default_fused_divide_52         tvmgen_default_fused_divide_5          9.386      0.028    (96,)              2       1
+tvmgen_default_fused_divide_42         tvmgen_default_fused_divide_4          9.38       0.028    (48,)              2       1
+tvmgen_default_fused_divide_36         tvmgen_default_fused_divide_3          9.38       0.028    (192,)             2       1
+tvmgen_default_fused_divide_37         tvmgen_default_fused_divide_3          9.376      0.028    (192,)             2       1
+tvmgen_default_fused_divide_14         tvmgen_default_fused_divide_1          9.372      0.028    (64,)              2       1
+tvmgen_default_fused_divide_92         tvmgen_default_fused_divide_9          9.369      0.028    (320,)             2       1
+tvmgen_default_fused_negative_4        tvmgen_default_fused_negative_4        9.367      0.028    (48,)              1       1
+tvmgen_default_fused_divide_32         tvmgen_default_fused_divide_3          9.364      0.028    (192,)             2       1
+tvmgen_default_fused_divide_56         tvmgen_default_fused_divide_5          9.353      0.028    (96,)              2       1
+tvmgen_default_fused_divide_33         tvmgen_default_fused_divide_3          9.352      0.028    (192,)             2       1
+tvmgen_default_fused_divide_71         tvmgen_default_fused_divide_7          9.351      0.028    (128,)             2       1
+tvmgen_default_fused_add               tvmgen_default_fused_add               9.348      0.028    (32,)              2       1
+tvmgen_default_fused_sqrt              tvmgen_default_fused_sqrt              9.348      0.028    (32,)              1       1
+tvmgen_default_fused_divide_54         tvmgen_default_fused_divide_5          9.347      0.028    (96,)              2       1
+tvmgen_default_fused_sqrt_4            tvmgen_default_fused_sqrt_4            9.346      0.028    (48,)              1       1
+tvmgen_default_fused_divide_111        tvmgen_default_fused_divide_1          9.343      0.028    (64,)              2       1
+tvmgen_default_fused_multiply_192      tvmgen_default_fused_multiply_19       9.343      0.028    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_divide_86         tvmgen_default_fused_divide_8          9.343      0.028    (160,)             2       1
+tvmgen_default_fused_sqrt_8            tvmgen_default_fused_sqrt_8            9.339      0.028    (160,)             1       1
+tvmgen_default_fused_negative_9        tvmgen_default_fused_negative_9        9.339      0.028    (320,)             1       1
+tvmgen_default_fused_divide_16         tvmgen_default_fused_divide_1          9.337      0.028    (64,)              2       1
+tvmgen_default_fused_divide_72         tvmgen_default_fused_divide_7          9.335      0.028    (128,)             2       1
+tvmgen_default_fused_sqrt_2            tvmgen_default_fused_sqrt_2            9.332      0.028    (80,)              1       1
+tvmgen_default_fused_add_171           tvmgen_default_fused_add_17            9.324      0.028    (96,)              2       1
+tvmgen_default_fused_negative_3        tvmgen_default_fused_negative_3        9.323      0.028    (192,)             1       1
+tvmgen_default_fused_divide_3          tvmgen_default_fused_divide_3          9.321      0.028    (192,)             2       1
+tvmgen_default_fused_add_5             tvmgen_default_fused_add_5             9.318      0.028    (64,)              2       1
+tvmgen_default_fused_divide_13         tvmgen_default_fused_divide_1          9.314      0.028    (64,)              2       1
+tvmgen_default_fused_add_173           tvmgen_default_fused_add_17            9.313      0.028    (96,)              2       1
+tvmgen_default_fused_add_18            tvmgen_default_fused_add_18            9.311      0.028    (96,)              2       1
+tvmgen_default_fused_divide_15         tvmgen_default_fused_divide_1          9.31       0.028    (64,)              2       1
+tvmgen_default_fused_divide_11         tvmgen_default_fused_divide_1          9.308      0.028    (64,)              2       1
+tvmgen_default_fused_divide_18         tvmgen_default_fused_divide_1          9.307      0.028    (64,)              2       1
+tvmgen_default_fused_add_21            tvmgen_default_fused_add_21            9.307      0.028    (384,)             2       1
+tvmgen_default_fused_divide_110        tvmgen_default_fused_divide_1          9.305      0.028    (64,)              2       1
+tvmgen_default_fused_divide_34         tvmgen_default_fused_divide_3          9.304      0.028    (192,)             2       1
+tvmgen_default_fused_divide_12         tvmgen_default_fused_divide_1          9.301      0.028    (64,)              2       1
+tvmgen_default_fused_divide_57         tvmgen_default_fused_divide_5          9.3        0.028    (96,)              2       1
+tvmgen_default_fused_multiply_194      tvmgen_default_fused_multiply_19       9.293      0.028    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_add_14            tvmgen_default_fused_add_14            9.285      0.028    (48,)              2       1
+tvmgen_default_fused_negative_5        tvmgen_default_fused_negative_5        9.282      0.028    (96,)              1       1
+tvmgen_default_fused_multiply_27       tvmgen_default_fused_multiply_27       9.277      0.028    (1, 448, 8, 8)     2       1
+tvmgen_default_fused_divide_315        tvmgen_default_fused_divide_3          9.276      0.028    (192,)             2       1
+tvmgen_default_fused_add_29            tvmgen_default_fused_add_29            9.271      0.028    (160,)             2       1
+tvmgen_default_fused_divide_81         tvmgen_default_fused_divide_8          9.271      0.028    (160,)             2       1
+tvmgen_default_fused_divide_311        tvmgen_default_fused_divide_3          9.271      0.028    (192,)             2       1
+tvmgen_default_fused_divide_112        tvmgen_default_fused_divide_1          9.27       0.028    (64,)              2       1
+tvmgen_default_fused_divide_88         tvmgen_default_fused_divide_8          9.27       0.028    (160,)             2       1
+tvmgen_default_fused_add_26            tvmgen_default_fused_add_26            9.268      0.028    (128,)             2       1
+tvmgen_default_fused_divide_811        tvmgen_default_fused_divide_8          9.268      0.028    (160,)             2       1
+tvmgen_default_fused_negative_2        tvmgen_default_fused_negative_2        9.267      0.028    (80,)              1       1
+tvmgen_default_fused_divide_84         tvmgen_default_fused_divide_8          9.265      0.028    (160,)             2       1
+tvmgen_default_fused_divide_74         tvmgen_default_fused_divide_7          9.262      0.028    (128,)             2       1
+tvmgen_default_fused_divide_85         tvmgen_default_fused_divide_8          9.259      0.028    (160,)             2       1
+tvmgen_default_fused_divide_67         tvmgen_default_fused_divide_6          9.258      0.028    (384,)             2       1
+tvmgen_default_fused_sqrt_19           tvmgen_default_fused_sqrt_1            9.253      0.028    (64,)              1       1
+tvmgen_default_fused_add_30            tvmgen_default_fused_add_30            9.251      0.028    (160,)             2       1
+tvmgen_default_fused_multiply_193      tvmgen_default_fused_multiply_19       9.247      0.028    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_multiply_191      tvmgen_default_fused_multiply_19       9.246      0.028    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_add_48            tvmgen_default_fused_add_4             9.242      0.028    (64,)              2       1
+tvmgen_default_fused_add_41            tvmgen_default_fused_add_4             9.24       0.028    (64,)              2       1
+tvmgen_default_fused_divide_318        tvmgen_default_fused_divide_3          9.24       0.028    (192,)             2       1
+tvmgen_default_fused_divide_83         tvmgen_default_fused_divide_8          9.237      0.028    (160,)             2       1
+tvmgen_default_fused_sqrt_41           tvmgen_default_fused_sqrt_4            9.236      0.028    (48,)              1       1
+tvmgen_default_fused_divide_87         tvmgen_default_fused_divide_8          9.235      0.028    (160,)             2       1
+tvmgen_default_fused_negative_10       tvmgen_default_fused_negative_10       9.232      0.028    (448,)             1       1
+tvmgen_default_fused_multiply_195      tvmgen_default_fused_multiply_19       9.229      0.028    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_add_281           tvmgen_default_fused_add_28            9.226      0.028    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_nn_relu_14        tvmgen_default_fused_nn_relu_14        9.226      0.028    (1, 320, 8, 8)     1       1
+tvmgen_default_fused_add_175           tvmgen_default_fused_add_17            9.225      0.028    (96,)              2       1
+tvmgen_default_fused_multiply_135      tvmgen_default_fused_multiply_13       9.224      0.028    (96,)              2       1
+tvmgen_default_fused_multiply_23       tvmgen_default_fused_multiply_23       9.224      0.028    (1, 320, 8, 8)     2       1
+tvmgen_default_fused_divide_101        tvmgen_default_fused_divide_10         9.223      0.028    (448,)             2       1
+tvmgen_default_fused_sqrt_7            tvmgen_default_fused_sqrt_7            9.219      0.028    (128,)             1       1
+tvmgen_default_fused_add_1             tvmgen_default_fused_add_1             9.218      0.028    (32,)              2       1
+tvmgen_default_fused_add_36            tvmgen_default_fused_add_36            9.218      0.028    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_divide_89         tvmgen_default_fused_divide_8          9.216      0.028    (160,)             2       1
+tvmgen_default_fused_divide_310        tvmgen_default_fused_divide_3          9.214      0.028    (192,)             2       1
+tvmgen_default_fused_add_176           tvmgen_default_fused_add_17            9.211      0.028    (96,)              2       1
+tvmgen_default_fused_negative_8        tvmgen_default_fused_negative_8        9.211      0.028    (160,)             1       1
+tvmgen_default_fused_add_8             tvmgen_default_fused_add_8             9.21       0.028    (80,)              2       1
+tvmgen_default_fused_negative_6        tvmgen_default_fused_negative_6        9.209      0.028    (384,)             1       1
+tvmgen_default_fused_divide_68         tvmgen_default_fused_divide_6          9.207      0.028    (384,)             2       1
+tvmgen_default_fused_divide_312        tvmgen_default_fused_divide_3          9.202      0.028    (192,)             2       1
+tvmgen_default_fused_multiply_252      tvmgen_default_fused_multiply_25       9.202      0.028    (1, 192, 8, 8)     2       1
+tvmgen_default_fused_divide_610        tvmgen_default_fused_divide_6          9.2        0.028    (384,)             2       1
+tvmgen_default_fused_add_282           tvmgen_default_fused_add_28            9.198      0.028    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_add_39            tvmgen_default_fused_add_39            9.197      0.028    (1, 448, 8, 8)     2       1
+tvmgen_default_fused_multiply_26       tvmgen_default_fused_multiply_26       9.195      0.028    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_divide_328        tvmgen_default_fused_divide_3          9.195      0.028    (192,)             2       1
+tvmgen_default_fused_divide_320        tvmgen_default_fused_divide_3          9.194      0.028    (192,)             2       1
+tvmgen_default_fused_multiply_1        tvmgen_default_fused_multiply_1        9.191      0.028    (32,)              2       1
+tvmgen_default_fused_sqrt_31           tvmgen_default_fused_sqrt_3            9.19       0.028    (192,)             1       1
+tvmgen_default_fused_add_34            tvmgen_default_fused_add_34            9.19       0.028    (1, 320, 8, 8)     2       1
+tvmgen_default_fused_sqrt_54           tvmgen_default_fused_sqrt_5            9.189      0.028    (96,)              1       1
+tvmgen_default_fused_negative_31       tvmgen_default_fused_negative_3        9.188      0.028    (192,)             1       1
+tvmgen_default_fused_add_285           tvmgen_default_fused_add_28            9.188      0.028    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_sqrt_9            tvmgen_default_fused_sqrt_9            9.187      0.028    (320,)             1       1
+tvmgen_default_fused_divide_73         tvmgen_default_fused_divide_7          9.186      0.028    (128,)             2       1
+tvmgen_default_fused_divide_324        tvmgen_default_fused_divide_3          9.186      0.028    (192,)             2       1
+tvmgen_default_fused_add_10            tvmgen_default_fused_add_10            9.183      0.028    (192,)             2       1
+tvmgen_default_fused_add_174           tvmgen_default_fused_add_17            9.179      0.028    (96,)              2       1
+tvmgen_default_fused_divide_65         tvmgen_default_fused_divide_6          9.179      0.028    (384,)             2       1
+tvmgen_default_fused_sqrt_53           tvmgen_default_fused_sqrt_5            9.178      0.028    (96,)              1       1
+tvmgen_default_fused_add_172           tvmgen_default_fused_add_17            9.174      0.028    (96,)              2       1
+tvmgen_default_fused_add_284           tvmgen_default_fused_add_28            9.174      0.028    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_divide_69         tvmgen_default_fused_divide_6          9.174      0.028    (384,)             2       1
+tvmgen_default_fused_sqrt_42           tvmgen_default_fused_sqrt_4            9.172      0.028    (48,)              1       1
+tvmgen_default_fused_sqrt_15           tvmgen_default_fused_sqrt_1            9.171      0.028    (64,)              1       1
+tvmgen_default_fused_divide_75         tvmgen_default_fused_divide_7          9.169      0.028    (128,)             2       1
+tvmgen_default_fused_divide_314        tvmgen_default_fused_divide_3          9.168      0.028    (192,)             2       1
+tvmgen_default_fused_divide_38         tvmgen_default_fused_divide_3          9.162      0.028    (192,)             2       1
+tvmgen_default_fused_divide_66         tvmgen_default_fused_divide_6          9.159      0.028    (384,)             2       1
+tvmgen_default_fused_multiply_20       tvmgen_default_fused_multiply_20       9.157      0.028    (128,)             2       1
+tvmgen_default_fused_sqrt_10           tvmgen_default_fused_sqrt_10           9.157      0.028    (448,)             1       1
+tvmgen_default_fused_divide_810        tvmgen_default_fused_divide_8          9.156      0.028    (160,)             2       1
+tvmgen_default_fused_add_214           tvmgen_default_fused_add_21            9.155      0.028    (384,)             2       1
+tvmgen_default_fused_add_22            tvmgen_default_fused_add_22            9.152      0.028    (384,)             2       1
+tvmgen_default_fused_nn_relu_17        tvmgen_default_fused_nn_relu_17        9.152      0.028    (1, 448, 8, 8)     1       1
+tvmgen_default_fused_sqrt_12           tvmgen_default_fused_sqrt_1            9.148      0.027    (64,)              1       1
+tvmgen_default_fused_add_32            tvmgen_default_fused_add_32            9.148      0.027    (320,)             2       1
+tvmgen_default_fused_divide_317        tvmgen_default_fused_divide_3          9.141      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_25       tvmgen_default_fused_multiply_25       9.14       0.027    (1, 192, 8, 8)     2       1
+tvmgen_default_fused_multiply_13       tvmgen_default_fused_multiply_13       9.138      0.027    (96,)              2       1
+tvmgen_default_fused_nn_relu_16        tvmgen_default_fused_nn_relu_16        9.134      0.027    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_divide_39         tvmgen_default_fused_divide_3          9.133      0.027    (192,)             2       1
+tvmgen_default_fused_sqrt_71           tvmgen_default_fused_sqrt_7            9.132      0.027    (128,)             1       1
+tvmgen_default_fused_divide_62         tvmgen_default_fused_divide_6          9.131      0.027    (384,)             2       1
+tvmgen_default_fused_add_15            tvmgen_default_fused_add_15            9.128      0.027    (48,)              2       1
+tvmgen_default_fused_add_27            tvmgen_default_fused_add_27            9.127      0.027    (128,)             2       1
+tvmgen_default_fused_nn_relu_123       tvmgen_default_fused_nn_relu_12        9.126      0.027    (1, 128, 17, 17)   1       1
+tvmgen_default_fused_sqrt_82           tvmgen_default_fused_sqrt_8            9.126      0.027    (160,)             1       1
+tvmgen_default_fused_divide_611        tvmgen_default_fused_divide_6          9.124      0.027    (384,)             2       1
+tvmgen_default_fused_nn_relu_122       tvmgen_default_fused_nn_relu_12        9.122      0.027    (1, 128, 17, 17)   1       1
+tvmgen_default_fused_divide_64         tvmgen_default_fused_divide_6          9.122      0.027    (384,)             2       1
+tvmgen_default_fused_negative_7        tvmgen_default_fused_negative_7        9.119      0.027    (128,)             1       1
+tvmgen_default_fused_sqrt_52           tvmgen_default_fused_sqrt_5            9.115      0.027    (96,)              1       1
+tvmgen_default_fused_add_183           tvmgen_default_fused_add_18            9.115      0.027    (96,)              2       1
+tvmgen_default_fused_sqrt_18           tvmgen_default_fused_sqrt_1            9.115      0.027    (64,)              1       1
+tvmgen_default_fused_divide_321        tvmgen_default_fused_divide_3          9.111      0.027    (192,)             2       1
+tvmgen_default_fused_add_101           tvmgen_default_fused_add_10            9.11       0.027    (192,)             2       1
+tvmgen_default_fused_add_283           tvmgen_default_fused_add_28            9.108      0.027    (1, 128, 17, 17)   2       1
+tvmgen_default_fused_add_111           tvmgen_default_fused_add_11            9.107      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_22       tvmgen_default_fused_multiply_22       9.106      0.027    (160,)             2       1
+tvmgen_default_fused_negative_42       tvmgen_default_fused_negative_4        9.104      0.027    (48,)              1       1
+tvmgen_default_fused_add_221           tvmgen_default_fused_add_22            9.103      0.027    (384,)             2       1
+tvmgen_default_fused_add_58            tvmgen_default_fused_add_5             9.102      0.027    (64,)              2       1
+tvmgen_default_fused_nn_relu_121       tvmgen_default_fused_nn_relu_12        9.102      0.027    (1, 128, 17, 17)   1       1
+tvmgen_default_fused_nn_relu_125       tvmgen_default_fused_nn_relu_12        9.1        0.027    (1, 128, 17, 17)   1       1
+tvmgen_default_fused_sqrt_111          tvmgen_default_fused_sqrt_1            9.099      0.027    (64,)              1       1
+tvmgen_default_fused_sqrt_61           tvmgen_default_fused_sqrt_6            9.096      0.027    (384,)             1       1
+tvmgen_default_fused_add_121           tvmgen_default_fused_add_1             9.095      0.027    (32,)              2       1
+tvmgen_default_fused_multiply_133      tvmgen_default_fused_multiply_13       9.095      0.027    (96,)              2       1
+tvmgen_default_fused_divide_35         tvmgen_default_fused_divide_3          9.093      0.027    (192,)             2       1
+tvmgen_default_fused_add_49            tvmgen_default_fused_add_4             9.091      0.027    (64,)              2       1
+tvmgen_default_fused_nn_relu_124       tvmgen_default_fused_nn_relu_12        9.085      0.027    (1, 128, 17, 17)   1       1
+tvmgen_default_fused_add_37            tvmgen_default_fused_add_37            9.083      0.027    (448,)             2       1
+tvmgen_default_fused_sqrt1             tvmgen_default_fused_sqrt              9.081      0.027    (32,)              1       1
+tvmgen_default_fused_sqrt_36           tvmgen_default_fused_sqrt_3            9.081      0.027    (192,)             1       1
+tvmgen_default_fused_divide_319        tvmgen_default_fused_divide_3          9.08       0.027    (192,)             2       1
+tvmgen_default_fused_divide_63         tvmgen_default_fused_divide_6          9.08       0.027    (384,)             2       1
+tvmgen_default_fused_nn_relu_15        tvmgen_default_fused_nn_relu_15        9.078      0.027    (1, 192, 8, 8)     1       1
+tvmgen_default_fused_sqrt_11           tvmgen_default_fused_sqrt_1            9.074      0.027    (64,)              1       1
+tvmgen_default_fused_add_112           tvmgen_default_fused_add_11            9.074      0.027    (192,)             2       1
+tvmgen_default_fused_divide_325        tvmgen_default_fused_divide_3          9.074      0.027    (192,)             2       1
+tvmgen_default_fused_sqrt_14           tvmgen_default_fused_sqrt_1            9.071      0.027    (64,)              1       1
+tvmgen_default_fused_add_33            tvmgen_default_fused_add_33            9.071      0.027    (320,)             2       1
+tvmgen_default_fused_divide_329        tvmgen_default_fused_divide_3          9.071      0.027    (192,)             2       1
+tvmgen_default_fused_negative_17       tvmgen_default_fused_negative_1        9.067      0.027    (64,)              1       1
+tvmgen_default_fused_add_56            tvmgen_default_fused_add_5             9.066      0.027    (64,)              2       1
+tvmgen_default_fused_add_182           tvmgen_default_fused_add_18            9.066      0.027    (96,)              2       1
+tvmgen_default_fused_sqrt_81           tvmgen_default_fused_sqrt_8            9.064      0.027    (160,)             1       1
+tvmgen_default_fused_negative1         tvmgen_default_fused_negative          9.06       0.027    (32,)              1       1
+tvmgen_default_fused_sqrt_51           tvmgen_default_fused_sqrt_5            9.06       0.027    (96,)              1       1
+tvmgen_default_fused_add_141           tvmgen_default_fused_add_14            9.055      0.027    (48,)              2       1
+tvmgen_default_fused_sqrt_56           tvmgen_default_fused_sqrt_5            9.054      0.027    (96,)              1       1
+tvmgen_default_fused_divide_612        tvmgen_default_fused_divide_6          9.051      0.027    (384,)             2       1
+tvmgen_default_fused_negative_61       tvmgen_default_fused_negative_6        9.05       0.027    (384,)             1       1
+tvmgen_default_fused_negative_15       tvmgen_default_fused_negative_1        9.049      0.027    (64,)              1       1
+tvmgen_default_fused_add_152           tvmgen_default_fused_add_15            9.047      0.027    (48,)              2       1
+tvmgen_default_fused_sqrt_72           tvmgen_default_fused_sqrt_7            9.047      0.027    (128,)             1       1
+tvmgen_default_fused_add_411           tvmgen_default_fused_add_4             9.044      0.027    (64,)              2       1
+tvmgen_default_fused_sqrt_37           tvmgen_default_fused_sqrt_3            9.043      0.027    (192,)             1       1
+tvmgen_default_fused_divide_323        tvmgen_default_fused_divide_3          9.041      0.027    (192,)             2       1
+tvmgen_default_fused_add_57            tvmgen_default_fused_add_5             9.039      0.027    (64,)              2       1
+tvmgen_default_fused_multiply_16       tvmgen_default_fused_multiply_16       9.037      0.027    (384,)             2       1
+tvmgen_default_fused_sqrt_311          tvmgen_default_fused_sqrt_3            9.037      0.027    (192,)             1       1
+tvmgen_default_fused_add_185           tvmgen_default_fused_add_18            9.036      0.027    (96,)              2       1
+tvmgen_default_fused_add_113           tvmgen_default_fused_add_11            9.035      0.027    (192,)             2       1
+tvmgen_default_fused_add2              tvmgen_default_fused_add               9.033      0.027    (32,)              2       1
+tvmgen_default_fused_multiply_11       tvmgen_default_fused_multiply_1        9.032      0.027    (32,)              2       1
+tvmgen_default_fused_sqrt_101          tvmgen_default_fused_sqrt_10           9.032      0.027    (448,)             1       1
+tvmgen_default_fused_negative2         tvmgen_default_fused_negative          9.029      0.027    (32,)              1       1
+tvmgen_default_fused_negative_41       tvmgen_default_fused_negative_4        9.029      0.027    (48,)              1       1
+tvmgen_default_fused_negative_75       tvmgen_default_fused_negative_7        9.028      0.027    (128,)             1       1
+tvmgen_default_fused_multiply_111      tvmgen_default_fused_multiply_11       9.027      0.027    (48,)              2       1
+tvmgen_default_fused_multiply_113      tvmgen_default_fused_multiply_11       9.026      0.027    (48,)              2       1
+tvmgen_default_fused_add_35            tvmgen_default_fused_add_35            9.026      0.027    (1, 192, 8, 8)     2       1
+tvmgen_default_fused_multiply_264      tvmgen_default_fused_multiply_26       9.026      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_366           tvmgen_default_fused_add_36            9.026      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_211           tvmgen_default_fused_add_21            9.025      0.027    (384,)             2       1
+tvmgen_default_fused_negative_72       tvmgen_default_fused_negative_7        9.024      0.027    (128,)             1       1
+tvmgen_default_fused_sqrt2             tvmgen_default_fused_sqrt              9.023      0.027    (32,)              1       1
+tvmgen_default_fused_sqrt_83           tvmgen_default_fused_sqrt_8            9.023      0.027    (160,)             1       1
+tvmgen_default_fused_add_371           tvmgen_default_fused_add_37            9.022      0.027    (448,)             2       1
+tvmgen_default_fused_sqrt_85           tvmgen_default_fused_sqrt_8            9.021      0.027    (160,)             1       1
+tvmgen_default_fused_divide_327        tvmgen_default_fused_divide_3          9.021      0.027    (192,)             2       1
+tvmgen_default_fused_sqrt_33           tvmgen_default_fused_sqrt_3            9.02       0.027    (192,)             1       1
+tvmgen_default_fused_multiply_6        tvmgen_default_fused_multiply_6        9.019      0.027    (80,)              2       1
+tvmgen_default_fused_negative_11       tvmgen_default_fused_negative_1        9.014      0.027    (64,)              1       1
+tvmgen_default_fused_negative_18       tvmgen_default_fused_negative_1        9.014      0.027    (64,)              1       1
+tvmgen_default_fused_divide_326        tvmgen_default_fused_divide_3          9.014      0.027    (192,)             2       1
+tvmgen_default_fused_negative_53       tvmgen_default_fused_negative_5        9.013      0.027    (96,)              1       1
+tvmgen_default_fused_sqrt_112          tvmgen_default_fused_sqrt_1            9.013      0.027    (64,)              1       1
+tvmgen_default_fused_negative_52       tvmgen_default_fused_negative_5        9.012      0.027    (96,)              1       1
+tvmgen_default_fused_add_44            tvmgen_default_fused_add_4             9.011      0.027    (64,)              2       1
+tvmgen_default_fused_negative_37       tvmgen_default_fused_negative_3        9.008      0.027    (192,)             1       1
+tvmgen_default_fused_divide_322        tvmgen_default_fused_divide_3          9.007      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_271      tvmgen_default_fused_multiply_27       9.007      0.027    (1, 448, 8, 8)     2       1
+tvmgen_default_fused_negative_54       tvmgen_default_fused_negative_5        9.006      0.027    (96,)              1       1
+tvmgen_default_fused_divide_313        tvmgen_default_fused_divide_3          9.006      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_232      tvmgen_default_fused_multiply_23       9.006      0.027    (1, 320, 8, 8)     2       1
+tvmgen_default_fused_add_117           tvmgen_default_fused_add_11            9.004      0.027    (192,)             2       1
+tvmgen_default_fused_add_38            tvmgen_default_fused_add_38            9.004      0.027    (448,)             2       1
+tvmgen_default_fused_negative_55       tvmgen_default_fused_negative_5        9.0        0.027    (96,)              1       1
+tvmgen_default_fused_add_45            tvmgen_default_fused_add_4             8.996      0.027    (64,)              2       1
+tvmgen_default_fused_add_511           tvmgen_default_fused_add_5             8.992      0.027    (64,)              2       1
+tvmgen_default_fused_sqrt_73           tvmgen_default_fused_sqrt_7            8.991      0.027    (128,)             1       1
+tvmgen_default_fused_sqrt_87           tvmgen_default_fused_sqrt_8            8.991      0.027    (160,)             1       1
+tvmgen_default_fused_sqrt_55           tvmgen_default_fused_sqrt_5            8.99       0.027    (96,)              1       1
+tvmgen_default_fused_sqrt_17           tvmgen_default_fused_sqrt_1            8.989      0.027    (64,)              1       1
+tvmgen_default_fused_add_142           tvmgen_default_fused_add_14            8.989      0.027    (48,)              2       1
+tvmgen_default_fused_add_261           tvmgen_default_fused_add_26            8.989      0.027    (128,)             2       1
+tvmgen_default_fused_nn_batch_flatten  tvmgen_default_fused_nn_batch_flatten  8.989      0.027    (1, 2048)          1       1
+tvmgen_default_fused_add1              tvmgen_default_fused_add               8.986      0.027    (32,)              2       1
+tvmgen_default_fused_add_46            tvmgen_default_fused_add_4             8.985      0.027    (64,)              2       1
+tvmgen_default_fused_add_1011          tvmgen_default_fused_add_10            8.985      0.027    (192,)             2       1
+tvmgen_default_fused_sqrt_92           tvmgen_default_fused_sqrt_9            8.985      0.027    (320,)             1       1
+tvmgen_default_fused_sqrt_86           tvmgen_default_fused_sqrt_8            8.984      0.027    (160,)             1       1
+tvmgen_default_fused_multiply_251      tvmgen_default_fused_multiply_25       8.984      0.027    (1, 192, 8, 8)     2       1
+tvmgen_default_fused_add_2911          tvmgen_default_fused_add_29            8.976      0.027    (160,)             2       1
+tvmgen_default_fused_sqrt_89           tvmgen_default_fused_sqrt_8            8.975      0.027    (160,)             1       1
+tvmgen_default_fused_add_369           tvmgen_default_fused_add_36            8.972      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_51            tvmgen_default_fused_add_5             8.971      0.027    (64,)              2       1
+tvmgen_default_fused_sqrt_75           tvmgen_default_fused_sqrt_7            8.971      0.027    (128,)             1       1
+tvmgen_default_fused_negative_311      tvmgen_default_fused_negative_3        8.97       0.027    (192,)             1       1
+tvmgen_default_fused_sqrt_315          tvmgen_default_fused_sqrt_3            8.97       0.027    (192,)             1       1
+tvmgen_default_fused_add_368           tvmgen_default_fused_add_36            8.97       0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_negative_101      tvmgen_default_fused_negative_10       8.969      0.027    (448,)             1       1
+tvmgen_default_fused_multiply_81       tvmgen_default_fused_multiply_8        8.967      0.027    (192,)             2       1
+tvmgen_default_fused_negative_316      tvmgen_default_fused_negative_3        8.967      0.027    (192,)             1       1
+tvmgen_default_fused_add_59            tvmgen_default_fused_add_5             8.966      0.027    (64,)              2       1
+tvmgen_default_fused_sqrt_32           tvmgen_default_fused_sqrt_3            8.965      0.027    (192,)             1       1
+tvmgen_default_fused_multiply_265      tvmgen_default_fused_multiply_26       8.965      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_negative_36       tvmgen_default_fused_negative_3        8.962      0.027    (192,)             1       1
+tvmgen_default_fused_add_108           tvmgen_default_fused_add_10            8.961      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_8        tvmgen_default_fused_multiply_8        8.96       0.027    (192,)             2       1
+tvmgen_default_fused_add_42            tvmgen_default_fused_add_4             8.959      0.027    (64,)              2       1
+tvmgen_default_fused_add_43            tvmgen_default_fused_add_4             8.959      0.027    (64,)              2       1
+tvmgen_default_fused_add_184           tvmgen_default_fused_add_18            8.957      0.027    (96,)              2       1
+tvmgen_default_fused_add_53            tvmgen_default_fused_add_5             8.955      0.027    (64,)              2       1
+tvmgen_default_fused_negative_33       tvmgen_default_fused_negative_3        8.955      0.027    (192,)             1       1
+tvmgen_default_fused_sqrt_38           tvmgen_default_fused_sqrt_3            8.953      0.027    (192,)             1       1
+tvmgen_default_fused_sqrt_811          tvmgen_default_fused_sqrt_8            8.953      0.027    (160,)             1       1
+tvmgen_default_fused_add_391           tvmgen_default_fused_add_39            8.952      0.027    (1, 448, 8, 8)     2       1
+tvmgen_default_fused_negative_12       tvmgen_default_fused_negative_1        8.951      0.027    (64,)              1       1
+tvmgen_default_fused_add_186           tvmgen_default_fused_add_18            8.951      0.027    (96,)              2       1
+tvmgen_default_fused_multiply_24       tvmgen_default_fused_multiply_24       8.95       0.027    (320,)             2       1
+tvmgen_default_fused_add_187           tvmgen_default_fused_add_18            8.948      0.027    (96,)              2       1
+tvmgen_default_fused_add_54            tvmgen_default_fused_add_5             8.945      0.027    (64,)              2       1
+tvmgen_default_fused_negative_85       tvmgen_default_fused_negative_8        8.944      0.027    (160,)             1       1
+tvmgen_default_fused_sqrt_314          tvmgen_default_fused_sqrt_3            8.944      0.027    (192,)             1       1
+tvmgen_default_fused_negative_35       tvmgen_default_fused_negative_3        8.943      0.027    (192,)             1       1
+tvmgen_default_fused_negative_51       tvmgen_default_fused_negative_5        8.942      0.027    (96,)              1       1
+tvmgen_default_fused_add_322           tvmgen_default_fused_add_32            8.942      0.027    (320,)             2       1
+tvmgen_default_fused_add_52            tvmgen_default_fused_add_5             8.941      0.027    (64,)              2       1
+tvmgen_default_fused_negative_82       tvmgen_default_fused_negative_8        8.941      0.027    (160,)             1       1
+tvmgen_default_fused_negative_86       tvmgen_default_fused_negative_8        8.941      0.027    (160,)             1       1
+tvmgen_default_fused_add_1015          tvmgen_default_fused_add_10            8.941      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_48       tvmgen_default_fused_multiply_4        8.94       0.027    (64,)              2       1
+tvmgen_default_fused_add_262           tvmgen_default_fused_add_26            8.94       0.027    (128,)             2       1
+tvmgen_default_fused_sqrt_39           tvmgen_default_fused_sqrt_3            8.939      0.027    (192,)             1       1
+tvmgen_default_fused_add_181           tvmgen_default_fused_add_18            8.938      0.027    (96,)              2       1
+tvmgen_default_fused_sqrt_84           tvmgen_default_fused_sqrt_8            8.938      0.027    (160,)             1       1
+tvmgen_default_fused_negative_112      tvmgen_default_fused_negative_1        8.935      0.027    (64,)              1       1
+tvmgen_default_fused_add_296           tvmgen_default_fused_add_29            8.934      0.027    (160,)             2       1
+tvmgen_default_fused_sqrt_316          tvmgen_default_fused_sqrt_3            8.934      0.027    (192,)             1       1
+tvmgen_default_fused_sqrt_35           tvmgen_default_fused_sqrt_3            8.933      0.027    (192,)             1       1
+tvmgen_default_fused_add_294           tvmgen_default_fused_add_29            8.93       0.027    (160,)             2       1
+tvmgen_default_fused_negative_81       tvmgen_default_fused_negative_8        8.929      0.027    (160,)             1       1
+tvmgen_default_fused_add_118           tvmgen_default_fused_add_11            8.929      0.027    (192,)             2       1
+tvmgen_default_fused_add_308           tvmgen_default_fused_add_30            8.927      0.027    (160,)             2       1
+tvmgen_default_fused_add_292           tvmgen_default_fused_add_29            8.925      0.027    (160,)             2       1
+tvmgen_default_fused_add_151           tvmgen_default_fused_add_15            8.924      0.027    (48,)              2       1
+tvmgen_default_fused_sqrt_57           tvmgen_default_fused_sqrt_5            8.923      0.027    (96,)              1       1
+tvmgen_default_fused_sqrt_318          tvmgen_default_fused_sqrt_3            8.923      0.027    (192,)             1       1
+tvmgen_default_fused_add_3011          tvmgen_default_fused_add_30            8.922      0.027    (160,)             2       1
+tvmgen_default_fused_negative_39       tvmgen_default_fused_negative_3        8.921      0.027    (192,)             1       1
+tvmgen_default_fused_sqrt_328          tvmgen_default_fused_sqrt_3            8.921      0.027    (192,)             1       1
+tvmgen_default_fused_add_2110          tvmgen_default_fused_add_21            8.92       0.027    (384,)             2       1
+tvmgen_default_fused_add_11            tvmgen_default_fused_add_1             8.918      0.027    (32,)              2       1
+tvmgen_default_fused_add_412           tvmgen_default_fused_add_4             8.918      0.027    (64,)              2       1
+tvmgen_default_fused_sqrt_88           tvmgen_default_fused_sqrt_8            8.917      0.027    (160,)             1       1
+tvmgen_default_fused_add_342           tvmgen_default_fused_add_34            8.917      0.027    (1, 320, 8, 8)     2       1
+tvmgen_default_fused_negative_13       tvmgen_default_fused_negative_1        8.915      0.027    (64,)              1       1
+tvmgen_default_fused_negative_19       tvmgen_default_fused_negative_1        8.915      0.027    (64,)              1       1
+tvmgen_default_fused_add_302           tvmgen_default_fused_add_30            8.915      0.027    (160,)             2       1
+tvmgen_default_fused_add_363           tvmgen_default_fused_add_36            8.915      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_multiply_122      tvmgen_default_fused_multiply_1        8.913      0.027    (32,)              2       1
+tvmgen_default_fused_sqrt_310          tvmgen_default_fused_sqrt_3            8.913      0.027    (192,)             1       1
+tvmgen_default_fused_negative_328      tvmgen_default_fused_negative_3        8.912      0.027    (192,)             1       1
+tvmgen_default_fused_multiply_41       tvmgen_default_fused_multiply_4        8.911      0.027    (64,)              2       1
+tvmgen_default_fused_add_271           tvmgen_default_fused_add_27            8.911      0.027    (128,)             2       1
+tvmgen_default_fused_add_119           tvmgen_default_fused_add_11            8.911      0.027    (192,)             2       1
+tvmgen_default_fused_add_306           tvmgen_default_fused_add_30            8.911      0.027    (160,)             2       1
+tvmgen_default_fused_add_107           tvmgen_default_fused_add_10            8.91       0.027    (192,)             2       1
+tvmgen_default_fused_negative_315      tvmgen_default_fused_negative_3        8.91       0.027    (192,)             1       1
+tvmgen_default_fused_negative_110      tvmgen_default_fused_negative_1        8.908      0.027    (64,)              1       1
+tvmgen_default_fused_negative_57       tvmgen_default_fused_negative_5        8.908      0.027    (96,)              1       1
+tvmgen_default_fused_add_104           tvmgen_default_fused_add_10            8.908      0.027    (192,)             2       1
+tvmgen_default_fused_add_297           tvmgen_default_fused_add_29            8.908      0.027    (160,)             2       1
+tvmgen_default_fused_negative_314      tvmgen_default_fused_negative_3        8.908      0.027    (192,)             1       1
+tvmgen_default_fused_add_364           tvmgen_default_fused_add_36            8.908      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_relu_171       tvmgen_default_fused_nn_relu_17        8.908      0.027    (1, 448, 8, 8)     1       1
+tvmgen_default_fused_add_304           tvmgen_default_fused_add_30            8.907      0.027    (160,)             2       1
+tvmgen_default_fused_multiply_45       tvmgen_default_fused_multiply_4        8.906      0.027    (64,)              2       1
+tvmgen_default_fused_add_510           tvmgen_default_fused_add_5             8.906      0.027    (64,)              2       1
+tvmgen_default_fused_negative_32       tvmgen_default_fused_negative_3        8.905      0.027    (192,)             1       1
+tvmgen_default_fused_add_103           tvmgen_default_fused_add_10            8.904      0.027    (192,)             2       1
+tvmgen_default_fused_add_293           tvmgen_default_fused_add_29            8.904      0.027    (160,)             2       1
+tvmgen_default_fused_add_2210          tvmgen_default_fused_add_22            8.904      0.027    (384,)             2       1
+tvmgen_default_fused_add_102           tvmgen_default_fused_add_10            8.902      0.027    (192,)             2       1
+tvmgen_default_fused_add_512           tvmgen_default_fused_add_5             8.901      0.027    (64,)              2       1
+tvmgen_default_fused_add_321           tvmgen_default_fused_add_32            8.9        0.027    (320,)             2       1
+tvmgen_default_fused_add_1111          tvmgen_default_fused_add_11            8.897      0.027    (192,)             2       1
+tvmgen_default_fused_add_116           tvmgen_default_fused_add_11            8.896      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_134      tvmgen_default_fused_multiply_13       8.895      0.027    (96,)              2       1
+tvmgen_default_fused_sqrt_91           tvmgen_default_fused_sqrt_9            8.895      0.027    (320,)             1       1
+tvmgen_default_fused_add_274           tvmgen_default_fused_add_27            8.894      0.027    (128,)             2       1
+tvmgen_default_fused_multiply_47       tvmgen_default_fused_multiply_4        8.893      0.027    (64,)              2       1
+tvmgen_default_fused_add_1116          tvmgen_default_fused_add_11            8.893      0.027    (192,)             2       1
+tvmgen_default_fused_sqrt_34           tvmgen_default_fused_sqrt_3            8.891      0.027    (192,)             1       1
+tvmgen_default_fused_nn_relu_163       tvmgen_default_fused_nn_relu_16        8.891      0.027    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_add_1010          tvmgen_default_fused_add_10            8.89       0.027    (192,)             2       1
+tvmgen_default_fused_add_309           tvmgen_default_fused_add_30            8.889      0.027    (160,)             2       1
+tvmgen_default_fused_sqrt_810          tvmgen_default_fused_sqrt_8            8.889      0.027    (160,)             1       1
+tvmgen_default_fused_add_109           tvmgen_default_fused_add_10            8.887      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_263      tvmgen_default_fused_multiply_26       8.887      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_352           tvmgen_default_fused_add_35            8.887      0.027    (1, 192, 8, 8)     2       1
+tvmgen_default_fused_sqrt_74           tvmgen_default_fused_sqrt_7            8.885      0.027    (128,)             1       1
+tvmgen_default_fused_sqrt_313          tvmgen_default_fused_sqrt_3            8.884      0.027    (192,)             1       1
+tvmgen_default_fused_negative_111      tvmgen_default_fused_negative_1        8.883      0.027    (64,)              1       1
+tvmgen_default_fused_add_114           tvmgen_default_fused_add_11            8.883      0.027    (192,)             2       1
+tvmgen_default_fused_negative_322      tvmgen_default_fused_negative_3        8.883      0.027    (192,)             1       1
+tvmgen_default_fused_nn_relu_141       tvmgen_default_fused_nn_relu_14        8.883      0.027    (1, 320, 8, 8)     1       1
+tvmgen_default_fused_negative_38       tvmgen_default_fused_negative_3        8.88       0.027    (192,)             1       1
+tvmgen_default_fused_add_1016          tvmgen_default_fused_add_10            8.88       0.027    (192,)             2       1
+tvmgen_default_fused_multiply_231      tvmgen_default_fused_multiply_23       8.88       0.027    (1, 320, 8, 8)     2       1
+tvmgen_default_fused_nn_relu_166       tvmgen_default_fused_nn_relu_16        8.88       0.027    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_negative_16       tvmgen_default_fused_negative_1        8.878      0.027    (64,)              1       1
+tvmgen_default_fused_negative_71       tvmgen_default_fused_negative_7        8.873      0.027    (128,)             1       1
+tvmgen_default_fused_multiply_222      tvmgen_default_fused_multiply_22       8.873      0.027    (160,)             2       1
+tvmgen_default_fused_sqrt_16           tvmgen_default_fused_sqrt_1            8.872      0.027    (64,)              1       1
+tvmgen_default_fused_nn_relu_142       tvmgen_default_fused_nn_relu_14        8.872      0.027    (1, 320, 8, 8)     1       1
+tvmgen_default_fused_add_1110          tvmgen_default_fused_add_11            8.87       0.027    (192,)             2       1
+tvmgen_default_fused_multiply_46       tvmgen_default_fused_multiply_4        8.869      0.027    (64,)              2       1
+tvmgen_default_fused_sqrt_317          tvmgen_default_fused_sqrt_3            8.869      0.027    (192,)             1       1
+tvmgen_default_fused_multiply_132      tvmgen_default_fused_multiply_13       8.868      0.027    (96,)              2       1
+tvmgen_default_fused_negative_312      tvmgen_default_fused_negative_3        8.868      0.027    (192,)             1       1
+tvmgen_default_fused_multiply_28       tvmgen_default_fused_multiply_28       8.868      0.027    (448,)             2       1
+tvmgen_default_fused_negative_310      tvmgen_default_fused_negative_3        8.867      0.027    (192,)             1       1
+tvmgen_default_fused_negative_67       tvmgen_default_fused_negative_6        8.867      0.027    (384,)             1       1
+tvmgen_default_fused_add_381           tvmgen_default_fused_add_38            8.867      0.027    (448,)             2       1
+tvmgen_default_fused_add_295           tvmgen_default_fused_add_29            8.866      0.027    (160,)             2       1
+tvmgen_default_fused_add_291           tvmgen_default_fused_add_29            8.864      0.027    (160,)             2       1
+tvmgen_default_fused_multiply_44       tvmgen_default_fused_multiply_4        8.863      0.027    (64,)              2       1
+tvmgen_default_fused_negative_34       tvmgen_default_fused_negative_3        8.86       0.027    (192,)             1       1
+tvmgen_default_fused_add_225           tvmgen_default_fused_add_22            8.86       0.027    (384,)             2       1
+tvmgen_default_fused_multiply_112      tvmgen_default_fused_multiply_11       8.858      0.027    (48,)              2       1
+tvmgen_default_fused_sqrt_323          tvmgen_default_fused_sqrt_3            8.858      0.027    (192,)             1       1
+tvmgen_default_fused_multiply_161      tvmgen_default_fused_multiply_16       8.858      0.027    (384,)             2       1
+tvmgen_default_fused_nn_relu_169       tvmgen_default_fused_nn_relu_16        8.858      0.027    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_sqrt_110          tvmgen_default_fused_sqrt_1            8.857      0.027    (64,)              1       1
+tvmgen_default_fused_multiply_137      tvmgen_default_fused_multiply_13       8.856      0.027    (96,)              2       1
+tvmgen_default_fused_add_105           tvmgen_default_fused_add_10            8.856      0.027    (192,)             2       1
+tvmgen_default_fused_add_265           tvmgen_default_fused_add_26            8.855      0.027    (128,)             2       1
+tvmgen_default_fused_add_303           tvmgen_default_fused_add_30            8.855      0.027    (160,)             2       1
+tvmgen_default_fused_sqrt_312          tvmgen_default_fused_sqrt_3            8.855      0.027    (192,)             1       1
+tvmgen_default_fused_add_301           tvmgen_default_fused_add_30            8.854      0.027    (160,)             2       1
+tvmgen_default_fused_negative_87       tvmgen_default_fused_negative_8        8.854      0.027    (160,)             1       1
+tvmgen_default_fused_add_3010          tvmgen_default_fused_add_30            8.854      0.027    (160,)             2       1
+tvmgen_default_fused_sqrt_326          tvmgen_default_fused_sqrt_3            8.854      0.027    (192,)             1       1
+tvmgen_default_fused_add_341           tvmgen_default_fused_add_34            8.853      0.027    (1, 320, 8, 8)     2       1
+tvmgen_default_fused_negative_83       tvmgen_default_fused_negative_8        8.852      0.027    (160,)             1       1
+tvmgen_default_fused_sqrt_324          tvmgen_default_fused_sqrt_3            8.852      0.027    (192,)             1       1
+tvmgen_default_fused_add_272           tvmgen_default_fused_add_27            8.851      0.027    (128,)             2       1
+tvmgen_default_fused_add_228           tvmgen_default_fused_add_22            8.85       0.027    (384,)             2       1
+tvmgen_default_fused_negative_73       tvmgen_default_fused_negative_7        8.849      0.027    (128,)             1       1
+tvmgen_default_fused_add_1114          tvmgen_default_fused_add_11            8.849      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_266      tvmgen_default_fused_multiply_26       8.849      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_299           tvmgen_default_fused_add_29            8.848      0.027    (160,)             2       1
+tvmgen_default_fused_negative_89       tvmgen_default_fused_negative_8        8.848      0.027    (160,)             1       1
+tvmgen_default_fused_negative_14       tvmgen_default_fused_negative_1        8.847      0.027    (64,)              1       1
+tvmgen_default_fused_multiply_268      tvmgen_default_fused_multiply_26       8.846      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_115           tvmgen_default_fused_add_11            8.845      0.027    (192,)             2       1
+tvmgen_default_fused_add_351           tvmgen_default_fused_add_35            8.845      0.027    (1, 192, 8, 8)     2       1
+tvmgen_default_fused_sqrt_13           tvmgen_default_fused_sqrt_1            8.843      0.027    (64,)              1       1
+tvmgen_default_fused_add_1112          tvmgen_default_fused_add_11            8.843      0.027    (192,)             2       1
+tvmgen_default_fused_negative_324      tvmgen_default_fused_negative_3        8.841      0.027    (192,)             1       1
+tvmgen_default_fused_sqrt_69           tvmgen_default_fused_sqrt_6            8.841      0.027    (384,)             1       1
+tvmgen_default_fused_add_3610          tvmgen_default_fused_add_36            8.84       0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_negative_88       tvmgen_default_fused_negative_8        8.838      0.027    (160,)             1       1
+tvmgen_default_fused_add_362           tvmgen_default_fused_add_36            8.838      0.027    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_relu_168       tvmgen_default_fused_nn_relu_16        8.838      0.027    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_sqrt_64           tvmgen_default_fused_sqrt_6            8.837      0.027    (384,)             1       1
+tvmgen_default_fused_add_217           tvmgen_default_fused_add_21            8.836      0.027    (384,)             2       1
+tvmgen_default_fused_multiply_165      tvmgen_default_fused_multiply_16       8.835      0.027    (384,)             2       1
+tvmgen_default_fused_add_263           tvmgen_default_fused_add_26            8.834      0.027    (128,)             2       1
+tvmgen_default_fused_multiply_227      tvmgen_default_fused_multiply_22       8.834      0.027    (160,)             2       1
+tvmgen_default_fused_multiply_162      tvmgen_default_fused_multiply_16       8.831      0.027    (384,)             2       1
+tvmgen_default_fused_sqrt_319          tvmgen_default_fused_sqrt_3            8.83       0.027    (192,)             1       1
+tvmgen_default_fused_negative_92       tvmgen_default_fused_negative_9        8.829      0.027    (320,)             1       1
+tvmgen_default_fused_negative_610      tvmgen_default_fused_negative_6        8.829      0.027    (384,)             1       1
+tvmgen_default_fused_multiply_202      tvmgen_default_fused_multiply_20       8.828      0.027    (128,)             2       1
+tvmgen_default_fused_sqrt_67           tvmgen_default_fused_sqrt_6            8.828      0.027    (384,)             1       1
+tvmgen_default_fused_add_307           tvmgen_default_fused_add_30            8.825      0.027    (160,)             2       1
+tvmgen_default_fused_negative_811      tvmgen_default_fused_negative_8        8.824      0.027    (160,)             1       1
+tvmgen_default_fused_add_1019          tvmgen_default_fused_add_10            8.822      0.027    (192,)             2       1
+tvmgen_default_fused_add_226           tvmgen_default_fused_add_22            8.822      0.027    (384,)             2       1
+tvmgen_default_fused_sqrt_322          tvmgen_default_fused_sqrt_3            8.821      0.027    (192,)             1       1
+tvmgen_default_fused_sqrt_610          tvmgen_default_fused_sqrt_6            8.821      0.027    (384,)             1       1
+tvmgen_default_fused_add_1129          tvmgen_default_fused_add_11            8.818      0.027    (192,)             2       1
+tvmgen_default_fused_multiply_131      tvmgen_default_fused_multiply_13       8.817      0.027    (96,)              2       1
+tvmgen_default_fused_nn_relu_161       tvmgen_default_fused_nn_relu_16        8.817      0.027    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_add_55            tvmgen_default_fused_add_5             8.815      0.026    (64,)              2       1
+tvmgen_default_fused_add_224           tvmgen_default_fused_add_22            8.815      0.026    (384,)             2       1
+tvmgen_default_fused_negative_84       tvmgen_default_fused_negative_8        8.811      0.026    (160,)             1       1
+tvmgen_default_fused_sqrt_66           tvmgen_default_fused_sqrt_6            8.809      0.026    (384,)             1       1
+tvmgen_default_fused_add_1013          tvmgen_default_fused_add_10            8.806      0.026    (192,)             2       1
+tvmgen_default_fused_add_1125          tvmgen_default_fused_add_11            8.805      0.026    (192,)             2       1
+tvmgen_default_fused_add_222           tvmgen_default_fused_add_22            8.805      0.026    (384,)             2       1
+tvmgen_default_fused_negative_329      tvmgen_default_fused_negative_3        8.805      0.026    (192,)             1       1
+tvmgen_default_fused_add_1113          tvmgen_default_fused_add_11            8.804      0.026    (192,)             2       1
+tvmgen_default_fused_add_1115          tvmgen_default_fused_add_11            8.803      0.026    (192,)             2       1
+tvmgen_default_fused_add_1117          tvmgen_default_fused_add_11            8.803      0.026    (192,)             2       1
+tvmgen_default_fused_nn_relu_1610      tvmgen_default_fused_nn_relu_16        8.803      0.026    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_add_361           tvmgen_default_fused_add_36            8.802      0.026    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_1018          tvmgen_default_fused_add_10            8.799      0.026    (192,)             2       1
+tvmgen_default_fused_add_227           tvmgen_default_fused_add_22            8.798      0.026    (384,)             2       1
+tvmgen_default_fused_add_1123          tvmgen_default_fused_add_11            8.797      0.026    (192,)             2       1
+tvmgen_default_fused_negative_313      tvmgen_default_fused_negative_3        8.796      0.026    (192,)             1       1
+tvmgen_default_fused_add_1024          tvmgen_default_fused_add_10            8.796      0.026    (192,)             2       1
+tvmgen_default_fused_negative_74       tvmgen_default_fused_negative_7        8.795      0.026    (128,)             1       1
+tvmgen_default_fused_multiply_86       tvmgen_default_fused_multiply_8        8.795      0.026    (192,)             2       1
+tvmgen_default_fused_add_298           tvmgen_default_fused_add_29            8.795      0.026    (160,)             2       1
+tvmgen_default_fused_add_1127          tvmgen_default_fused_add_11            8.795      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_82       tvmgen_default_fused_multiply_8        8.794      0.026    (192,)             2       1
+tvmgen_default_fused_sqrt_321          tvmgen_default_fused_sqrt_3            8.794      0.026    (192,)             1       1
+tvmgen_default_fused_sqrt_63           tvmgen_default_fused_sqrt_6            8.793      0.026    (384,)             1       1
+tvmgen_default_fused_add_2211          tvmgen_default_fused_add_22            8.792      0.026    (384,)             2       1
+tvmgen_default_fused_multiply_2611     tvmgen_default_fused_multiply_26       8.79       0.026    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_3611          tvmgen_default_fused_add_36            8.79       0.026    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_305           tvmgen_default_fused_add_30            8.789      0.026    (160,)             2       1
+tvmgen_default_fused_multiply_261      tvmgen_default_fused_multiply_26       8.789      0.026    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_264           tvmgen_default_fused_add_26            8.786      0.026    (128,)             2       1
+tvmgen_default_fused_add_177           tvmgen_default_fused_add_17            8.784      0.026    (96,)              2       1
+tvmgen_default_fused_add_2910          tvmgen_default_fused_add_29            8.784      0.026    (160,)             2       1
+tvmgen_default_fused_add_1026          tvmgen_default_fused_add_10            8.782      0.026    (192,)             2       1
+tvmgen_default_fused_negative_327      tvmgen_default_fused_negative_3        8.782      0.026    (192,)             1       1
+tvmgen_default_fused_add_1028          tvmgen_default_fused_add_10            8.778      0.026    (192,)             2       1
+tvmgen_default_fused_nn_relu_1611      tvmgen_default_fused_nn_relu_16        8.778      0.026    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_multiply_228      tvmgen_default_fused_multiply_22       8.777      0.026    (160,)             2       1
+tvmgen_default_fused_negative_810      tvmgen_default_fused_negative_8        8.776      0.026    (160,)             1       1
+tvmgen_default_fused_add_1121          tvmgen_default_fused_add_11            8.775      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_269      tvmgen_default_fused_multiply_26       8.775      0.026    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_add_1012          tvmgen_default_fused_add_10            8.772      0.026    (192,)             2       1
+tvmgen_default_fused_negative_64       tvmgen_default_fused_negative_6        8.771      0.026    (384,)             1       1
+tvmgen_default_fused_nn_relu_167       tvmgen_default_fused_nn_relu_16        8.771      0.026    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_sqrt_325          tvmgen_default_fused_sqrt_3            8.77       0.026    (192,)             1       1
+tvmgen_default_fused_add_1017          tvmgen_default_fused_add_10            8.769      0.026    (192,)             2       1
+tvmgen_default_fused_negative_318      tvmgen_default_fused_negative_3        8.769      0.026    (192,)             1       1
+tvmgen_default_fused_add_331           tvmgen_default_fused_add_33            8.768      0.026    (320,)             2       1
+tvmgen_default_fused_add_365           tvmgen_default_fused_add_36            8.768      0.026    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_nn_relu_151       tvmgen_default_fused_nn_relu_15        8.768      0.026    (1, 192, 8, 8)     1       1
+tvmgen_default_fused_nn_relu_164       tvmgen_default_fused_nn_relu_16        8.767      0.026    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_sqrt_65           tvmgen_default_fused_sqrt_6            8.764      0.026    (384,)             1       1
+tvmgen_default_fused_multiply_2610     tvmgen_default_fused_multiply_26       8.76       0.026    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_multiply_224      tvmgen_default_fused_multiply_22       8.759      0.026    (160,)             2       1
+tvmgen_default_fused_sqrt_329          tvmgen_default_fused_sqrt_3            8.757      0.026    (192,)             1       1
+tvmgen_default_fused_multiply_42       tvmgen_default_fused_multiply_4        8.755      0.026    (64,)              2       1
+tvmgen_default_fused_multiply_281      tvmgen_default_fused_multiply_28       8.754      0.026    (448,)             2       1
+tvmgen_default_fused_multiply_815      tvmgen_default_fused_multiply_8        8.753      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_226      tvmgen_default_fused_multiply_22       8.752      0.026    (160,)             2       1
+tvmgen_default_fused_multiply_229      tvmgen_default_fused_multiply_22       8.751      0.026    (160,)             2       1
+tvmgen_default_fused_multiply_49       tvmgen_default_fused_multiply_4        8.747      0.026    (64,)              2       1
+tvmgen_default_fused_add_1014          tvmgen_default_fused_add_10            8.745      0.026    (192,)             2       1
+tvmgen_default_fused_negative_325      tvmgen_default_fused_negative_3        8.745      0.026    (192,)             1       1
+tvmgen_default_fused_multiply_262      tvmgen_default_fused_multiply_26       8.744      0.026    (1, 384, 8, 8)     2       1
+tvmgen_default_fused_negative_68       tvmgen_default_fused_negative_6        8.744      0.026    (384,)             1       1
+tvmgen_default_fused_multiply_221      tvmgen_default_fused_multiply_22       8.743      0.026    (160,)             2       1
+tvmgen_default_fused_multiply_412      tvmgen_default_fused_multiply_4        8.739      0.026    (64,)              2       1
+tvmgen_default_fused_multiply_223      tvmgen_default_fused_multiply_22       8.739      0.026    (160,)             2       1
+tvmgen_default_fused_add_1126          tvmgen_default_fused_add_11            8.739      0.026    (192,)             2       1
+tvmgen_default_fused_add_218           tvmgen_default_fused_add_21            8.739      0.026    (384,)             2       1
+tvmgen_default_fused_add_1124          tvmgen_default_fused_add_11            8.737      0.026    (192,)             2       1
+tvmgen_default_fused_add_2212          tvmgen_default_fused_add_22            8.735      0.026    (384,)             2       1
+tvmgen_default_fused_nn_relu_152       tvmgen_default_fused_nn_relu_15        8.735      0.026    (1, 192, 8, 8)     1       1
+tvmgen_default_fused_add_273           tvmgen_default_fused_add_27            8.733      0.026    (128,)             2       1
+tvmgen_default_fused_add_1022          tvmgen_default_fused_add_10            8.732      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_411      tvmgen_default_fused_multiply_4        8.731      0.026    (64,)              2       1
+tvmgen_default_fused_add_1119          tvmgen_default_fused_add_11            8.731      0.026    (192,)             2       1
+tvmgen_default_fused_sqrt_62           tvmgen_default_fused_sqrt_6            8.726      0.026    (384,)             1       1
+tvmgen_default_fused_nn_relu_165       tvmgen_default_fused_nn_relu_16        8.726      0.026    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_multiply_225      tvmgen_default_fused_multiply_22       8.725      0.026    (160,)             2       1
+tvmgen_default_fused_negative_323      tvmgen_default_fused_negative_3        8.725      0.026    (192,)             1       1
+tvmgen_default_fused_add_1120          tvmgen_default_fused_add_11            8.724      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_204      tvmgen_default_fused_multiply_20       8.723      0.026    (128,)             2       1
+tvmgen_default_fused_multiply_84       tvmgen_default_fused_multiply_8        8.721      0.026    (192,)             2       1
+tvmgen_default_fused_negative_91       tvmgen_default_fused_negative_9        8.718      0.026    (320,)             1       1
+tvmgen_default_fused_negative_69       tvmgen_default_fused_negative_6        8.718      0.026    (384,)             1       1
+tvmgen_default_fused_add_229           tvmgen_default_fused_add_22            8.717      0.026    (384,)             2       1
+tvmgen_default_fused_add_1128          tvmgen_default_fused_add_11            8.715      0.026    (192,)             2       1
+tvmgen_default_fused_sqrt_327          tvmgen_default_fused_sqrt_3            8.714      0.026    (192,)             1       1
+tvmgen_default_fused_add_332           tvmgen_default_fused_add_33            8.713      0.026    (320,)             2       1
+tvmgen_default_fused_negative_326      tvmgen_default_fused_negative_3        8.712      0.026    (192,)             1       1
+tvmgen_default_fused_multiply_136      tvmgen_default_fused_multiply_13       8.71       0.026    (96,)              2       1
+tvmgen_default_fused_negative_317      tvmgen_default_fused_negative_3        8.71       0.026    (192,)             1       1
+tvmgen_default_fused_nn_relu_162       tvmgen_default_fused_nn_relu_16        8.708      0.026    (1, 384, 8, 8)     1       1
+tvmgen_default_fused_add_1029          tvmgen_default_fused_add_10            8.708      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_87       tvmgen_default_fused_multiply_8        8.706      0.026    (192,)             2       1
+tvmgen_default_fused_negative_62       tvmgen_default_fused_negative_6        8.706      0.026    (384,)             1       1
+tvmgen_default_fused_multiply_83       tvmgen_default_fused_multiply_8        8.705      0.026    (192,)             2       1
+tvmgen_default_fused_negative_321      tvmgen_default_fused_negative_3        8.703      0.026    (192,)             1       1
+tvmgen_default_fused_add_1020          tvmgen_default_fused_add_10            8.702      0.026    (192,)             2       1
+tvmgen_default_fused_sqrt_612          tvmgen_default_fused_sqrt_6            8.701      0.026    (384,)             1       1
+tvmgen_default_fused_negative_612      tvmgen_default_fused_negative_6        8.7        0.026    (384,)             1       1
+tvmgen_default_fused_multiply_814      tvmgen_default_fused_multiply_8        8.695      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_242      tvmgen_default_fused_multiply_24       8.695      0.026    (320,)             2       1
+tvmgen_default_fused_multiply_2211     tvmgen_default_fused_multiply_22       8.694      0.026    (160,)             2       1
+tvmgen_default_fused_add_1118          tvmgen_default_fused_add_11            8.694      0.026    (192,)             2       1
+tvmgen_default_fused_add_215           tvmgen_default_fused_add_21            8.694      0.026    (384,)             2       1
+tvmgen_default_fused_add_213           tvmgen_default_fused_add_21            8.69       0.026    (384,)             2       1
+tvmgen_default_fused_multiply_410      tvmgen_default_fused_multiply_4        8.688      0.026    (64,)              2       1
+tvmgen_default_fused_add_1023          tvmgen_default_fused_add_10            8.687      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_241      tvmgen_default_fused_multiply_24       8.685      0.026    (320,)             2       1
+tvmgen_default_fused_multiply_811      tvmgen_default_fused_multiply_8        8.681      0.026    (192,)             2       1
+tvmgen_default_fused_add_1122          tvmgen_default_fused_add_11            8.679      0.026    (192,)             2       1
+tvmgen_default_fused_add_2111          tvmgen_default_fused_add_21            8.679      0.026    (384,)             2       1
+tvmgen_default_fused_add_1021          tvmgen_default_fused_add_10            8.678      0.026    (192,)             2       1
+tvmgen_default_fused_sqrt_68           tvmgen_default_fused_sqrt_6            8.678      0.026    (384,)             1       1
+tvmgen_default_fused_multiply_203      tvmgen_default_fused_multiply_20       8.676      0.026    (128,)             2       1
+tvmgen_default_fused_multiply_88       tvmgen_default_fused_multiply_8        8.676      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_201      tvmgen_default_fused_multiply_20       8.674      0.026    (128,)             2       1
+tvmgen_default_fused_sqrt_611          tvmgen_default_fused_sqrt_6            8.674      0.026    (384,)             1       1
+tvmgen_default_fused_add_2112          tvmgen_default_fused_add_21            8.674      0.026    (384,)             2       1
+tvmgen_default_fused_multiply_43       tvmgen_default_fused_multiply_4        8.673      0.026    (64,)              2       1
+tvmgen_default_fused_add_1130          tvmgen_default_fused_add_11            8.67       0.026    (192,)             2       1
+tvmgen_default_fused_multiply_824      tvmgen_default_fused_multiply_8        8.668      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_167      tvmgen_default_fused_multiply_16       8.668      0.026    (384,)             2       1
+tvmgen_default_fused_multiply_810      tvmgen_default_fused_multiply_8        8.667      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_2210     tvmgen_default_fused_multiply_22       8.663      0.026    (160,)             2       1
+tvmgen_default_fused_add_1025          tvmgen_default_fused_add_10            8.663      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_164      tvmgen_default_fused_multiply_16       8.662      0.026    (384,)             2       1
+tvmgen_default_fused_negative_320      tvmgen_default_fused_negative_3        8.66       0.026    (192,)             1       1
+tvmgen_default_fused_negative_63       tvmgen_default_fused_negative_6        8.659      0.026    (384,)             1       1
+tvmgen_default_fused_negative_319      tvmgen_default_fused_negative_3        8.656      0.026    (192,)             1       1
+tvmgen_default_fused_add_275           tvmgen_default_fused_add_27            8.653      0.026    (128,)             2       1
+tvmgen_default_fused_sqrt_320          tvmgen_default_fused_sqrt_3            8.652      0.026    (192,)             1       1
+tvmgen_default_fused_multiply_1612     tvmgen_default_fused_multiply_16       8.65       0.026    (384,)             2       1
+tvmgen_default_fused_add_216           tvmgen_default_fused_add_21            8.649      0.026    (384,)             2       1
+tvmgen_default_fused_negative_65       tvmgen_default_fused_negative_6        8.648      0.026    (384,)             1       1
+tvmgen_default_fused_add_223           tvmgen_default_fused_add_22            8.642      0.026    (384,)             2       1
+tvmgen_default_fused_negative_611      tvmgen_default_fused_negative_6        8.64       0.026    (384,)             1       1
+tvmgen_default_fused_add_212           tvmgen_default_fused_add_21            8.637      0.026    (384,)             2       1
+tvmgen_default_fused_negative_66       tvmgen_default_fused_negative_6        8.632      0.026    (384,)             1       1
+tvmgen_default_fused_multiply_817      tvmgen_default_fused_multiply_8        8.631      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_89       tvmgen_default_fused_multiply_8        8.628      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_85       tvmgen_default_fused_multiply_8        8.613      0.026    (192,)             2       1
+tvmgen_default_fused_add_1027          tvmgen_default_fused_add_10            8.608      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_1610     tvmgen_default_fused_multiply_16       8.605      0.026    (384,)             2       1
+tvmgen_default_fused_multiply_818      tvmgen_default_fused_multiply_8        8.595      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_169      tvmgen_default_fused_multiply_16       8.594      0.026    (384,)             2       1
+tvmgen_default_fused_add_219           tvmgen_default_fused_add_21            8.589      0.026    (384,)             2       1
+tvmgen_default_fused_multiply_828      tvmgen_default_fused_multiply_8        8.573      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_166      tvmgen_default_fused_multiply_16       8.567      0.026    (384,)             2       1
+tvmgen_default_fused_multiply_1611     tvmgen_default_fused_multiply_16       8.555      0.026    (384,)             2       1
+tvmgen_default_fused_multiply_816      tvmgen_default_fused_multiply_8        8.553      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_825      tvmgen_default_fused_multiply_8        8.551      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_823      tvmgen_default_fused_multiply_8        8.546      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_163      tvmgen_default_fused_multiply_16       8.546      0.026    (384,)             2       1
+tvmgen_default_fused_multiply_205      tvmgen_default_fused_multiply_20       8.533      0.026    (128,)             2       1
+tvmgen_default_fused_multiply_822      tvmgen_default_fused_multiply_8        8.525      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_820      tvmgen_default_fused_multiply_8        8.516      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_826      tvmgen_default_fused_multiply_8        8.509      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_829      tvmgen_default_fused_multiply_8        8.504      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_812      tvmgen_default_fused_multiply_8        8.491      0.026    (192,)             2       1
+tvmgen_default_fused_multiply_821      tvmgen_default_fused_multiply_8        8.415      0.025    (192,)             2       1
+tvmgen_default_fused_multiply_827      tvmgen_default_fused_multiply_8        8.385      0.025    (192,)             2       1

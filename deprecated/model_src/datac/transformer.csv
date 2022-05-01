@@ -1,0 +1,8 @@
+op_name,running time percentage
+nn_dense,69.94399999999999
+nn_softmax,13.445
+nn_batch_matmul,3.209
+divide,1.1690000000000005
+transpose,1.2770000000000006
+add,4.511000000000003
+multiply,1.8239999999999994

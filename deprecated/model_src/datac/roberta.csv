@@ -1,0 +1,4 @@
+op_name,running time percentage
+nn_dense,93.23200000000003
+nn_softmax,2.163
+add,1.2389999999999974

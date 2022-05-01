@@ -1,0 +1,6 @@
+op_name,running time percentage
+nn_dense,15.878
+nn_conv2d,73.13499999999999
+nn_relu,4.645
+nn_bias_add,4.699000000000001
+nn_max_pool2d,1.3449999999999998
