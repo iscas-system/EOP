@@ -1,8 +1,11 @@
-# TVMProfiler
+# EOP
 
 # now
-For high level RelayIR, TVMProfiler can consturct computation graph and calculate each op's execution time and memory consumption.
+For high level RelayIR, EOP can construct computation graph (in deprecated/relayIR/relay_graph.py) and calculate each op's execution time consumption separately (in deprecated/relayIR/op_statistics.py). Detailed data are stored in csv format.
 
+Yuanjia Xu, Heng Wu, Wenbo Zhang, and Yi Hu. 2022. EOP: Efficient Operator Partition for Deep Learning Inference over Edge Servers. In Proceedings of the 18th ACM SIGPLAN/SIGOPS International Conference on Virtual Execution Environments (VEE ’22), March 1, 2022, Virtual, Switzerland. ACM, New York, NY, USA, 13 pages. https://doi.org/10.1145/3516807.3516820
+
+[The paper can be found here](sample-sigplan.pdf)
 # prerequest
 
 ```
